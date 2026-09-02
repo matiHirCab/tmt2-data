@@ -1,0 +1,12 @@
+{
+  "name": "tmt2-data",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Canonical data tooling for Pokémon Too Many Types 2 Showdown",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
