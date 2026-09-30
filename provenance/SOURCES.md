@@ -47,24 +47,23 @@ real ni contiene una base de datos directamente consultable.
   SRC-01; v1.5.2 se anuncia en SRC-02. No se ha comprobado su ejecución en un ROM.
 - **Revalidado en fuente primaria:** SRC-02, post #105, anuncia Mega Pidgeot
   Holy/Bird/Bird. No depende de la fila de spreadsheet aún no fijada. Preservar
-  orden/repetición; semántica de daño/STAB todavía pendiente. También hay notas
+  orden/repetición; semántica ROM de daño/STAB pendiente; adaptación Showdown aprobada. También hay notas
   oficiales sobre split/Pure y efectos modernos; alcance en
   [RULES_REFERENCE.md](../docs/RULES_REFERENCE.md).
 - **Pendiente:** stats completos, moves, habilidades/pasivas, ítems, learnsets,
   formas, valores de daño/STAB/inmunidad, interacción de duplicados y cuarto tipo,
   reglas de reset/cambio/switch; cobertura y licencias de assets/datos.
-- **Decisiones competitivas aún abiertas (TMT-02):** nivel, tamaño de equipo,
-  IVs y cláusulas. Gen9 fue elegido como padre de ingeniería en RULES_REFERENCE;
-  no identifica la generación/reglas del ROM. Singles privado/unranked con premades es
-  una propuesta de producto; no inferir nivel/tamaño desde el postgame 3v3.
+- **Decisiones competitivas aprobadas (TMT-02):** singles privado/unranked,
+  premades3v3, nivel50, IV31 y EV0. Gen9 fue elegido como padre de ingeniería en RULES_REFERENCE;
+  no identifica la generación/reglas del ROM. El formato es decisión del usuario; no inferir nivel/tamaño desde el postgame 3v3.
 - **Supuestos explícitos:** ninguno se promueve a hecho ROM. Que el hack use
-  Emerald/GBA no determina generación 3 de Showdown. El parche no cierra TMT-02
-  sin fuentes semánticas y casos oráculo. CI no depende de recibir el parche.
+  Emerald/GBA no determina generación 3 de Showdown. El parche no prueba semántica; la adaptación heredada
+  ahora está aprobada explícitamente, sin afirmación de fidelidad ROM. CI no depende de recibir el parche.
 - **Derechos/proveniencia:** no hay aprobación registrada de redistribución ni
   licencia seleccionada para el dataset; TMT-12 mantiene ese gate abierto.
 
 TMT-01 cierra el registro de fuentes/entrada con sus límites explícitos. TMT-02
-sigue pendiente de reglas y oráculos; datos de producción permanecen ausentes.
+se cierra como adaptación aprobada; datos de producción permanecen ausentes.
 
 ## Ampliación focalizada TMT-02
 
@@ -80,4 +79,5 @@ falló por túnel en la URL pública, sin eludir restricciones.
 
 La revisión del DoD de TMT-02 separa las seis filas de TMT-04 de los dos controles
 necesarios para un oráculo de reglas. Gen9 queda elegido por compatibilidad
-documentada y el código fijado; expected ROM de stats/daño y política siguen pendientes.
+documentada y el código fijado; la adaptación y el formato están aprobados; expected ROM de stats/daño
+quedan pendientes como fidelidad futura, no gate de este ticket.

@@ -16,9 +16,9 @@ de estos doce tickets.
 
 ## Alcance y forma de seguimiento
 
-Primer formato sugerido: singles privado, no clasificado, con equipos prefijados.
-**Es una propuesta competitiva**, no una regla demostrada del ROM. Nivel y tamaño
-de equipo se deciden en TMT-02; no inferir 3v3 de una actividad de postgame.
+Primer formato aprobado 2026-09-30: singles privado, no clasificado, dos equipos
+prefijados de 3, nivel50, IV31 y EV0. **Decisión competitiva del usuario**,
+no regla demostrada del ROM ni inferencia del postgame.
 Fuera del MVP: catálogo completo, ladder aleatoria, torneos y rediseño visual.
 Publicar una beta o desplegarla requiere autorización separada.
 
@@ -29,8 +29,8 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 
 | Etapa | Ticket | Prerrequisitos | Estado actual |
 | --- | --- | --- | --- |
-| 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Terminado: input registrado; mecánicas pendientes en TMT-02 |
-| 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Parcial: expected ROM ordinarios y política pendientes |
+| 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Terminado: input registrado; fidelidad ROM no demostrada |
+| 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Terminado: adaptación y formato aprobados |
 | 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Terminado: primera CI remota verificada |
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Pendiente |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Pendiente |
@@ -68,10 +68,15 @@ explícitamente desconocidos; sus límites no se resuelven por el nombre o CRC.
 
 ### TMT-02 — Reglas y casos de referencia
 
-**Prerrequisitos:** TMT-01. **Estado:** parcial/bloqueado: matriz y protocolos
-registrados; contrato acotado. Faltan expected ROM de stats/STAB/daño ordinario
-y política competitiva. Gen9 elegido como padre de ingeniería con justificación,
-no como generación ROM ni fidelidad demostrada. Las seis filas pertenecen a TMT-04.
+**Prerrequisitos:** TMT-01. **Estado:** terminado bajo adaptación aprobada.
+**Decisión de alcance del usuario, 2026-09-30:** formato recomendado aceptado con
+«El formato sirve»; usar Showdown explícitamente donde falte evidencia, registrar
+las diferencias pendientes y no prometer réplica exacta aceptado con «Si!».
+El DoD original abajo se conserva: fuente/caso esperado puede ser regla TMT2
+verificada o política de adaptación aprobada respaldada por código fijado y
+regresiones, distinguidas. No se exige oráculo mGBA para cerrar este contrato.
+Gen9 elegido como padre de ingeniería, no como generación ROM. Las seis filas,
+esquema y runtime parity pertenecen a TMT-04…06; sus gates siguen intactos.
 Definir casos mínimos de stats, no EVs, tipos ordenados/repetidos, STAB,
 efectividad/inmunidades, efectos y formas. Elegir base Showdown por evidencia de
 reglas y compatibilidad, **no** por ser GBA/Emerald. Separar reglas ROM de decisiones
@@ -85,8 +90,8 @@ REF-01…09, seis candidatos condicionales, controles heredados reproducibles y
 contrato mínimo. Casos de mecánicas excluidas no bloquean sets que no las usan,
 pero no se declaran resueltos. Definiciones de
 pasivas/datos y referencia legítima solicitadas en el mismo chat; no repetir BPS.
-Revisión por criterio en esa evidencia; DoD intacto. No se declara completo
-con expected heredados en lugar de expected ROM para las reglas iniciales.
+Revisión por criterio y expected de la adaptación aprobada en esa evidencia.
+No se afirma fidelidad ROM ni se inicia etapa2 por cerrar este ticket.
 
 ### TMT-03 — CI reproducible
 

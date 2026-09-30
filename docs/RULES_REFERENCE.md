@@ -1,9 +1,20 @@
 # TMT-02 — Reglas, base y casos de referencia
 
 Evidencia de [TMT-02 en el backlog único](ROADMAP.md#tmt-02--reglas-y-casos-de-referencia),
-no un segundo plan. Estado: **parcial: contrato inicial acotado; faltan expected ROM mínimos y política competitiva**.
+no un segundo plan. Estado: **terminado bajo el contrato de adaptación aprobado por el usuario**.
 Revisión 2026-09-30. Entrada fijada: SRC-05 v1.5.2 por SHA-256 en
 [registro de fuentes](../provenance/sources.json). Integridad BPS no demuestra reglas.
+
+## Alcance aprobado — 2026-09-30
+
+El usuario aceptó el formato recomendado con «El formato sirve» y aceptó con
+«Si!» usar Showdown donde falte evidencia, registrando diferencias para comprobar
+más adelante, sin prometer réplica exacta. Esta decisión cambia explícitamente el
+criterio de evidencia de TMT-02: las reglas documentadas TMT2 usan sus fuentes;
+las indocumentadas usan **política de adaptación + código Showdown fijado + expected
+heredados**, no expected ROM inventados. La aprobación consta en `userApprovals`
+del registro. No cambia los gates de datos/proveniencia ni autoriza etapa2/publicación.
+No hace falta mGBA, otro BPS, extracción de roster o runtime parity para cerrar este ticket.
 
 ## Matriz de evidencia
 
@@ -33,7 +44,7 @@ Fork revisado: servidor `2f5b273925862ac242b419086c1e7a8868b51da1` (pins actuale
 El mod hereda datos/scripts, no sólo una etiqueta de generación. Las diferencias
 siguientes se observaron en su Dex compilado; el callback de estados usa un harness
 sin habilidades, no un combate completo. `Future`/`Past` son flags de catálogo;
-existir en el Dex **no implica legalidad**. La matriz no es evidencia ROM.
+existir en el Dex **no implica legalidad**. La matriz no es evidencia ROM; respalda la base de la adaptación aprobada.
 
 | Base | Ghost→Steel | Waterfall/Bite | Burn por turno sobre 160 HP | Speed 100 con parálisis | Rapid Spin potencia | Protosynthesis | Mega Pidgeot |
 | --- | ---: | --- | ---: | ---: | ---: | --- | --- |
@@ -70,7 +81,7 @@ distinguen sólo por Ghost→Steel o split; Gen9 se elige por compatibilidad y m
 Excluir esos contenidos evita hacer depender esta selección de todas sus reglas.
 Ninguna base elimina la necesidad de catálogo TMT2, tipos nuevos, pasivas y noEV.
 
-Otros comportamientos heredados que requieren confrontación:
+Reglas heredadas aceptadas para la adaptación (contraste ROM futuro, opcional):
 
 - `sim/pokemon.ts` conserva `types` como array; `runEffectiveness` recorre cada
   entrada, incluidas repetidas. Con interacciones ordinarias el exponente se suma.
@@ -100,7 +111,7 @@ El probe exige los pins/árboles limpios y un build previo; no consulta upstream
 Un primer harness de diagnóstico omitía `chainModify` y falló; se corrigió antes de
 registrar la matriz. Logs locales ignorados: `.local/verification/tmt-02/`.
 
-## Especificaciones de oráculo reproducibles — todas pendientes
+## Especificaciones de contraste ROM futuro — pendientes, no gates de TMT-02
 
 Ejecutar por quien tenga una copia legítima v1.5.2; aquí no se aplican ni ejecutan
 ROMs. Cada caso debe registrar hash del parche, versión mostrada, build/config de
@@ -126,9 +137,9 @@ Formato de resultado esperado: `caseId`, `inputIdentity`, `setup`, `steps`,
 | REF-08 Prioridad/estados | Move de prioridad conocida contra move ordinario con speed invertida; repetir speed changes, empate, parálisis, burn y mega. Evitar habilidades desconocidas | Prioridad base, recálculo speed, desempate/RNG, reducción speed y chip burn; aislar efectos antes de combinarlos |
 | REF-09 Pasivas | Primero fijar texto oficial de cada pasiva. Pares mono/duplicado/triple, pasar a/desde tipo; move propio/ajeno, contacto, residual; habilidad/objeto superpuesto y supresión si legales | Trigger, magnitud, acumulación por tipo repetido, orden con STAB/ability/item, duration/reset. Sin definición, no diseñar resultado desde nombres como Fast o Fluffy |
 
-Tras medir, convertir cada resultado verificado en prueba de servidor/Dex y caso
-cliente/replay con la misma versión. Hasta entonces son protocolos pendientes,
-no tests de fidelidad aprobados. Casos mega/4ºtipo también alimentan TMT-08 sin
+Si se miden, convertir cada resultado verificado en prueba de servidor/Dex y caso
+cliente/replay con la misma versión. Son protocolos opcionales de fidelidad,
+no tests ejecutados ni requisito para la adaptación aprobada. Casos mega/4ºtipo también alimentan TMT-08 sin
 implementar esa etapa ahora.
 
 ## Semilla mínima recomendada y decisiones competitivas
@@ -141,11 +152,11 @@ No se han implementado legalidad ni mecánicas de etapa 2.
 
 | Regla | Estado / condición de aceptación |
 | --- | --- |
-| EV0; rechazar EVs no cero | NoEV documentado por creador; prohibición de formato propuesta. Fórmula de stats aún pendiente |
+| EV0; rechazar EVs no cero | NoEV documentado por creador y formato aprobado. Expected legalidad: EV0 aceptado, cualquier EV≠0 rechazado; implementación TMT-06 |
 | Tipos como array ordenado, sin deduplicar | Repetición documentada; conservar datos. No aprobar especies repetidas hasta REF-01/02 |
 | Chart por pareja de tipos | Cinco observaciones SRC-03 registradas abajo; verificar sólo las parejas usadas, con versión/proveniencia |
-| STAB y daño ordinario | Producto defensivo por entrada y STAB único ×1.5 son hipótesis heredadas; requiere oráculo, no hechos ROM |
-| Stats/categoría/moves | Seis base stats, naturaleza/IVs, categoría, potencia, precisión, PP, prioridad, flags y learnset verificados para cada set; no tomar valores del Dex base como ROM |
+| STAB y daño ordinario | Adaptación aprobada: STAB ×1.5 por pertenencia, sin acumular por repetición; producto defensivo por entrada, inmunidad aparte; expected en controles reproducibles |
+| Stats/categoría/moves | Fórmula Gen9 heredada con EV0 e IV31 explícitos. Categorías por move y callbacks/flags ordinarios del Dex fijado son adaptación; stats base y datos TMT2 personalizados requieren fuente en TMT-04, nunca sustituirlos silenciosamente por Mew/Dex base |
 | Efectos | Sólo abilities y pasivas inherentes verificadas. Ningún nombre garantiza ausencia de efectos. Usar inicialmente moves de un golpe sin secundarios/cambio de stats/tipos sólo si su definición lo confirma |
 | Legalidad inicial | Lista de sets comprobados, sin objetos si es legal, sin megas/Tera/Dynamax/Z, clima ni cambios de tipo. Excluir especie si no puede evitarse un efecto desconocido |
 
@@ -168,12 +179,12 @@ ordinarios ni abilities de Showdown a estos nombres. Buscar **una ability y uno 
 dos moves simples por especie**, no sus learnsets completos. Si una fila introduce
 Pure, pasiva desconocida, tipos repetidos u otra mecánica difícil, reemplazarla por
 una fila completa más simple; la lista no obliga a implementar esos efectos.
-La agrupación no es balance validado. Dos equipos de tres quedan sujetos a política.
+La agrupación no es balance validado. Dos equipos de tres están aprobados como política competitiva.
 Mega Pidgeot permanece candidato de oráculo futuro, excluido de esta semilla.
 
-### Referencia mínima que desbloquea reglas
+### Referencia mínima para contrastar fidelidad después (opcional)
 
-Para TMT-02 bastan **dos combatientes de referencia**, no seis filas completas.
+Para un contraste futuro bastan **dos combatientes de referencia**, no seis filas completas.
 Se necesita una ficha de cada uno: tipos ordenados, stats base y visibles, nivel,
 IV/naturaleza conocidos, ability/pasivas y definición de dos ataques disponibles
 (uno STAB y uno control noSTAB). Capturas legibles o fuente del creador vinculada
@@ -219,16 +230,47 @@ mantienen como casos pendientes para contenidos excluidos, **no bloqueos globale
 para seis sets que no los usen**. REF-09 sólo bloquea pasivas de esos seis sets.
 La representación de duplicados se preserva aun cuando esas especies se excluyan.
 
-| Política | Recomendación de producto | Pendiente antes de aceptar |
+| Política | Decisión aprobada | Límite |
 | --- | --- | --- |
-| Formato | Singles privado, unranked, dos premades | Confirmación del usuario; no ladder/cláusulas automáticas de OU |
-| Nivel | Proponer nivel fijo 50 para comparar; 100 es alternativa | Elección competitiva, no ROM universal. Battle Challenge 3v3/50 no define todo el juego |
-| Tamaño | Proponer 3 por equipo para primer combate (6 especies); 6v6 alternativa posterior | Usuario elige; no inferirlo del postgame |
-| IV/naturaleza | Controlar valores explícitos; IV31 como propuesta simplificadora, EV0 obligatorio por política noEV | IVs reales/stat oracle, efectos Hidden Power y naturalezas; nunca sustituir unknowns por 31 |
-| Legalidad | Lista permitida de sets comprobados; rechazar choices/EVs no soportados | Learnsets/abilities/items y mensajes claros; no heredar prohibiciones de ladder sin decisión |
-| Transformaciones | Sin Tera/Dynamax/Z ni mega no verificada en primera semilla | No hay autorización documental de esas reglas como formato TMT2 |
+| Formato | Singles privado, sin ranking, dos premades | Política del producto, no regla ROM |
+| Nivel/tamaño | Nivel50, 3 por equipo | No inferido del postgame; seis especies se verifican en TMT-04 |
+| IV/EV/naturaleza | IV31 explícito, EV0; naturaleza explícita por set | Fórmula heredada. No afirmar que IV31 sea universal en el juego |
+| Legalidad | Lista de sets comprobados, sin cláusulas de OU automáticas | Implementación y datos en TMT-04/06; rechazar elecciones no soportadas |
+| Transformaciones | Sin Tera/Dynamax/Z, mega ni cambios de tipo en primera semilla | Contenido excluido; protocolos de contraste permanecen pendientes |
 
-## Inspección estática del parche y cierre pendiente
+### Expected de la adaptación y regresiones
+
+Fuente ejecutable: fork servidor fijado, `sim/battle.ts` (`statModify`, `randomizer`),
+`sim/battle-actions.ts` (STAB/daño), `sim/pokemon.ts` (arrays/efectividad/inmunidad),
+`data/mods/gen9`/Dex raíz. Los paths pertenecen al SHA servidor citado arriba.
+Autoridad de usarlo donde falta documentación: aprobación del usuario, no ROM.
+
+- Stats ordinarios sin EV: HP = floor((2B+IV)×L/100)+L+10;
+  otros = floor((floor((2B+IV)×L/100)+5)×naturaleza), multiplicadores 1/1.1/0.9.
+  Casos normales pequeños del probe; excepciones de especie/overflow no autorizan
+  contenido TMT2 desconocido. Fixtures: base100/IV31/L50→HP175/stat120;
+  naturaleza positiva132/negativa108; IV0→HP160/stat105; L100→HP341/stat236.
+- STAB ordinario ×1.5 si el tipo del move pertenece al array; Fire/Fire no lo
+  duplica. Defensa recorre cada entrada, preservando orden y duplicados; inmunidad
+  se comprueba antes del daño, exponente acotado -6…6 por el motor heredado.
+  Diez casos ejecutados abajo incluyen ×2, ×4, ×8, ×0.5, ×0.25 e inmunidad.
+- Categoría por move; prioridad, RNG, redondeo, switch y callbacks **ordinarios**
+  Gen9 se heredan. Probe compara Waterfall/Bite y callbacks de estados por base;
+  RNG fijo [1,2,3,4] y no crítica hacen reproducibles los casos de daño.
+  Moves/abilities/pasivas TMT2 no documentados no se inventan ni autorizan por nombre.
+- Legalidad esperada: IV31/EV0/nivel50/3 miembros y sets permitidos; EV≠0,
+  especie/move/ability/objeto fuera de lista o transformación excluida→rechazo claro.
+  Son requisitos de implementación TMT-06, no tests del validador ya implementado.
+- Representación permite duplicados documentados. Su semántica por entrada es
+  adaptación explícita; primera semilla sigue excluyendo formas repetidas y efectos
+  desconocidos para limitar alcance. Añadir contenido exige datos y pruebas propios.
+
+No se exige entregar el catálogo de seis especies en TMT-02: esos valores, fuentes,
+referencias y esquema son exactamente TMT-04. El probe usa controles sintéticos y
+nunca los genera como producción. Pasivas custom desconocidas, Pure, megas, cuarto
+tipo, cambios de tipo y demás contenido fuera del contrato permanecen excluidos.
+
+## Inspección estática del parche y límites de fidelidad
 
 Se recorrieron descriptores del BPS sin aplicar ni reconstruir un ROM. SRC-05
 produce rangos de SourceRead=308, TargetRead=15685717, SourceCopy=9489478 y
@@ -242,39 +284,26 @@ No se extrajeron tablas ni se dedujeron mecánicas de cadenas/bytes sin etiqueta
 Se pueden establecer identidad, tamaños, CRC y estructura; no está justificado
 un extractor de stats/moves a partir de esos datos actuales.
 
-**Bloqueos de cierre TMT-02:** expected de stats y STAB/daño ordinario respaldados
-por fuente semántica del build o experimento mínimo; confirmar política competitiva.
-Los datos completos de seis candidatos son de **TMT-04**, no un bloqueo añadido
-al DoD de TMT-02. Dos fichas de controles sólo son inputs del experimento.
-No falta otro BPS. El stream BPS contiene instrucciones/literales sin mapa de
-símbolos verificado: CRC y offsets no identifican un cálculo ni el código activo.
-No basta citar el proyecto RHH de los créditos para afirmar qué commit/config usa
-este build. Ningún binario desconocido se ejecutó, ni se aplicó ROM.
+### Revisión del DoD bajo el alcance aprobado
 
-Pregunta concreta pendiente aquí: singles privado con premades 3v3/nivel50/IV31
-(recomendado) o 6v6/nivel100/IV31; EV0, sin ranking, cláusulas OU ni transformaciones.
-Los valores de nivel/tamaño/IV permanecen null hasta respuesta. La decisión del
-padre de ingeniería Gen9 sí queda registrada, separada de esa política.
+El DoD canónico no se borra: su interpretación de evidencia ahora incluye la
+adaptación autorizada el 2026-09-30. No se representa el consentimiento como
+observación ROM. Registro reproducible de hechos, políticas y expected arriba.
 
-### Revisión del DoD, sin cambiarlo
-
-| Criterio canónico | Estado | Evidencia / falta exacta |
+| Criterio canónico | Estado | Evidencia |
 | --- | --- | --- |
-| Matriz regla → fuente/oráculo → caso esperado | Parcial | NoEV, secuencia de tipos y split documentados; cinco parejas de chart. Expected heredados reproducibles de daño/stats. Falta expected ROM para stats y STAB/daño ordinario; no sustituirlo por tests Showdown |
-| Generación justificada | Cumplido como decisión de ingeniería | Gen9 seleccionado: chart moderno/split, efectos modernos mencionados y Dex raíz del fork fijado. No prueba generación/fidelidad del ROM |
-| Decisiones competitivas explícitas | Parcial | Recomendación y alternativa exactas; usuario aún no eligió nivel/tamaño/IV. No asumir aprobación |
-| Faltantes que impiden semilla identificados | Cumplido | TMT-04 necesita seis filas y sólo dependencias de los sets; fuentes/licencias pendientes. Es inventario, no entrega de catálogo en TMT-02 |
-| Sin conjeturas de duplicados/cuarto tipo/pasivas | Cumplido como límite del contrato | Representación preserva duplicados; REF-01…09 discriminan hipótesis. Especies repetidas, cambios de tipo, megas y efectos no verificados excluidos hasta evidencia; sin declarar expected ROM |
+| Matriz regla → fuente/oráculo → caso esperado | Cumplido para el contrato inicial | Hechos oficiales SRC-01/02/03; mecánicas indocumentadas como adaptación autorizada; 18 expected ejecutados sobre código fijado y reglas de legalidad especificadas |
+| Generación justificada | Cumplido | Gen9: chart moderno/split, efectos modernos mencionados y Dex raíz del fork; no inferencia de generación ROM |
+| Decisiones competitivas explícitas | Cumplido | Aprobación de singles privado, premades3v3/nivel50/IV31/EV0 |
+| Faltantes que impiden semilla identificados | Cumplido | TMT-04 necesita seis filas y sus dependencias verificadas; tipos/passives custom, procedencia/licencias pendientes. Catálogo no exigido en este ticket |
+| Sin conjeturas de duplicados/cuarto tipo/pasivas | Cumplido | Duplicados preservados; comportamiento heredado etiquetado adaptación. Contenido especial excluido; REF-01…09 son contraste futuro, no hechos establecidos |
 
-TMT-02 no requiere implementar runtime parity, legalidad, generación de catálogo,
-client Dex ni combate: TMT-04…06 lo hacen con este contrato. Tampoco exige resolver
-oráculos de contenido excluido. Sí necesita cerrar las expectativas de las reglas
-ordinarias que el contrato inicial usaría. Por eso no se marca terminado.
-
-Sin esos inputs se pueden ejecutar los controles heredados y CI ya existente;
-no empezar TMT-04 ni afirmar fidelidad. TMT-02 continúa parcial. TMT-03 conserva
-la CI remota verificada en [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md#publicación-autorizada-y-ci-remota).
-Derechos/proveniencia y publicación conservan sus gates del roadmap.
+**TMT-02 terminado como especificación de adaptación**, no juego implementado,
+catálogo verificado ni réplica fiel. Las preguntas previas sobre mGBA/política se
+superseden por estas dos aprobaciones; no se requiere reenviar BPS ni ejecutar
+mGBA. TMT-04 y posteriores siguen pendientes y no se iniciaron en este cambio.
+TMT-03 conserva CI remota verificada en STAGE_1_VALIDATION.md; permisos de
+publicación y derechos/proveniencia mantienen sus gates.
 
 ## Verificación de esta revisión
 
