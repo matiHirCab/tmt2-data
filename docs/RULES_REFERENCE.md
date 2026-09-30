@@ -1,7 +1,7 @@
 # TMT-02 — Reglas, base y casos de referencia
 
 Evidencia de [TMT-02 en el backlog único](ROADMAP.md#tmt-02--reglas-y-casos-de-referencia),
-no un segundo plan. Estado: **parcial: contrato inicial acotado; faltan filas de candidatos y oráculo mínimo**.
+no un segundo plan. Estado: **parcial: contrato inicial acotado; faltan expected ROM mínimos y política competitiva**.
 Revisión 2026-09-30. Entrada fijada: SRC-05 v1.5.2 por SHA-256 en
 [registro de fuentes](../provenance/sources.json). Integridad BPS no demuestra reglas.
 
@@ -56,16 +56,17 @@ existir en el Dex **no implica legalidad**. La matriz no es evidencia ROM.
   Protosynthesis/Quark Drive como actuales; retiene megas en el catálogo con
   legalidad específica. Tera/Dynamax/Z no están autorizados por esta evidencia.
 
-**Propuesta provisional de ingeniería: investigar Gen 9 como padre**, porque la
+**Decisión de ingeniería: Gen 9 como padre inicial**, porque la
 hoja del creador documenta Ghost→Steel ×1 (Gen3 heredada usa ×0.5), los anuncios
 requieren split y mencionan efectos modernos, y es el Dex raíz del fork
 (`data/scripts.ts`). Es minimizar reconstrucción, no afirmar fidelidad Gen 9.
-Gen 7 sigue alternativa si los oráculos favorecen su timing/valores. Decisión real
-`showdownBaseGeneration` permanece null. Para la primera semilla, cotejar stats,
+La decisión selecciona el motor heredado, no certifica sus valores como ROM.
+`showdownBaseGeneration` es 9; la fidelidad sigue sin demostrar. Cambiar de padre
+requiere evidencia de que overrides acotados no bastan; no se fija un gen ROM.
+Para la primera semilla, cotejar stats,
 STAB/daño, categorías y valores de los
 moves elegidos, chart y efectos inherentes de sus tipos/abilities. Gen6–9 no se
-distinguen sólo por Ghost→Steel o split; Gen9 sigue una elección de ingeniería
-condicionada. Burn, parálisis, Rapid Spin y mega timing sólo son gates si se usan.
+distinguen sólo por Ghost→Steel o split; Gen9 se elige por compatibilidad y menor reconstrucción. Burn, parálisis, Rapid Spin y mega timing sólo son gates si se usan.
 Excluir esos contenidos evita hacer depender esta selección de todas sus reglas.
 Ninguna base elimina la necesidad de catálogo TMT2, tipos nuevos, pasivas y noEV.
 
@@ -134,8 +135,9 @@ implementar esa etapa ahora.
 
 ### Contrato inicial acotado
 
-No exige resolver todo TMT2. Estos requisitos aplican sólo a los seis sets que se
-acepten; no se han implementado legalidad ni mecánicas de etapa 2.
+No exige resolver todo TMT2. Los requisitos de datos de esta tabla
+se ejecutan en TMT-04 para los sets aceptados; TMT-02 fija reglas y expectativas.
+No se han implementado legalidad ni mecánicas de etapa 2.
 
 | Regla | Estado / condición de aceptación |
 | --- | --- |
@@ -171,12 +173,14 @@ Mega Pidgeot permanece candidato de oráculo futuro, excluido de esta semilla.
 
 ### Referencia mínima que desbloquea reglas
 
-Primero aportar las filas oficiales/versionadas de esos candidatos (o seis
-alternativas más simples), definiciones de sus tipos/pasivas y sólo los moves y
-ability elegidos. Un export o capturas legibles de la documentación bastan como
-entrada de investigación; anotar fecha y versión, sin ROM/save. No pedir el BPS otra vez.
+Para TMT-02 bastan **dos combatientes de referencia**, no seis filas completas.
+Se necesita una ficha de cada uno: tipos ordenados, stats base y visibles, nivel,
+IV/naturaleza conocidos, ability/pasivas y definición de dos ataques disponibles
+(uno STAB y uno control noSTAB). Capturas legibles o fuente del creador vinculada
+a versión, más observaciones, bastan; no compartir ROM/save ni reenviar BPS.
+Las seis filas, dependencias y sets jugables se verifican posteriormente en TMT-04.
 
-Con esas filas, seleccionar **dos combatientes reales** y un estado restaurable
+Con esas dos fichas, seleccionar **dos combatientes reales** y un estado restaurable
 en una copia legítima v1.5.2/mGBA: stats visibles, nivel, naturaleza, tipos exactos,
 ability, sin objeto/campo/estado ni efecto sin verificar. Registrar un ataque STAB
 y un control noSTAB de categoría/potencia conocidas contra el mismo defensor,
@@ -188,6 +192,27 @@ separar producto defensivo de otra regla; documentar también una inmunidad acce
 Esto ejecuta los subconjuntos ordinarios de REF-01/02/07; REF-06 necesita stats base
 verificados y IV/naturaleza conocidos (dos niveles solos con IV desconocido no bastan).
 Si no hay par sin pasivas, documentar su efecto antes de usarlo como control.
+
+Entrega mínima del experimento (sin binarios):
+
+1. `referencia.txt`: SHA del BPS ya registrado, versión visible, mGBA/build,
+   hashes locales del estado restaurado, dos fichas con fuente de stats base y
+   valores IV conocidos. Capturas de stats/naturaleza/tipos/ability y descripción
+   de los dos moves; no hace falta documentar seis especies.
+2. `stats.csv`: especie, nivel, naturaleza, seis IVs, seis stats visibles, antes
+   y después de subir un nivel sin evolución. Contrastar la fórmula de stats
+   heredada y cada naturaleza; no identificarla sólo ajustando IVs desconocidos.
+3. `danio.csv`: ensayo, move, HPantes, HPdespués, crítica, estado/campo, orden.
+   Restaurar el mismo estado para cada ataque; registrar primero 20 repeticiones
+   sin crítica por move si no hay RNG controlado. Veinte muestras no garantizan
+   cubrir el rango: si las hipótesis siguen compatibles, el resultado es inconcluso.
+4. Una captura/log de inmunidad y el caso multitype elegido; anotar todas las
+   pasivas/abilities participantes. Una fuente oficial del código/fórmula vinculada
+   a este build puede sustituir las mediciones correspondientes.
+
+Sólo estos registros/capturas son necesarios aquí, no el ROM, el save ni otro BPS.
+El resultado debe discriminar stats, STAB ordinario y defensa multitype; registrar
+como desconocido cualquier caso no discriminado, nunca completar por analogía.
 
 REF-03/04/05, duplicados de REF-01/02 y las partes de estados/Pure de REF-07/08 se
 mantienen como casos pendientes para contenidos excluidos, **no bloqueos globales
@@ -217,14 +242,34 @@ No se extrajeron tablas ni se dedujeron mecánicas de cadenas/bytes sin etiqueta
 Se pueden establecer identidad, tamaños, CRC y estructura; no está justificado
 un extractor de stats/moves a partir de esos datos actuales.
 
-**Bloqueos mínimos:** filas y definiciones de seis sets simples vinculadas a la
-versión; oráculo ordinario de STAB/daño/inmunidad y fórmula de stats; elección del
-padre provisional y política del formato. No falta otro BPS. No se ha recibido un
-ROM/reference executable; no se solicitó compartirlo. La pregunta enviada aquí
-sobre singles privado, 3v3/nivel50/IV31 sigue **sin respuesta registrada**; los
-campos de decisión permanecen null. Es una recomendación de formato, no regla ROM.
-Se preguntó en este chat si el usuario puede ejecutar la prueba mínima en su copia
-legítima/mGBA o aportar sólo documentación; respuesta aún pendiente.
+**Bloqueos de cierre TMT-02:** expected de stats y STAB/daño ordinario respaldados
+por fuente semántica del build o experimento mínimo; confirmar política competitiva.
+Los datos completos de seis candidatos son de **TMT-04**, no un bloqueo añadido
+al DoD de TMT-02. Dos fichas de controles sólo son inputs del experimento.
+No falta otro BPS. El stream BPS contiene instrucciones/literales sin mapa de
+símbolos verificado: CRC y offsets no identifican un cálculo ni el código activo.
+No basta citar el proyecto RHH de los créditos para afirmar qué commit/config usa
+este build. Ningún binario desconocido se ejecutó, ni se aplicó ROM.
+
+Pregunta concreta pendiente aquí: singles privado con premades 3v3/nivel50/IV31
+(recomendado) o 6v6/nivel100/IV31; EV0, sin ranking, cláusulas OU ni transformaciones.
+Los valores de nivel/tamaño/IV permanecen null hasta respuesta. La decisión del
+padre de ingeniería Gen9 sí queda registrada, separada de esa política.
+
+### Revisión del DoD, sin cambiarlo
+
+| Criterio canónico | Estado | Evidencia / falta exacta |
+| --- | --- | --- |
+| Matriz regla → fuente/oráculo → caso esperado | Parcial | NoEV, secuencia de tipos y split documentados; cinco parejas de chart. Expected heredados reproducibles de daño/stats. Falta expected ROM para stats y STAB/daño ordinario; no sustituirlo por tests Showdown |
+| Generación justificada | Cumplido como decisión de ingeniería | Gen9 seleccionado: chart moderno/split, efectos modernos mencionados y Dex raíz del fork fijado. No prueba generación/fidelidad del ROM |
+| Decisiones competitivas explícitas | Parcial | Recomendación y alternativa exactas; usuario aún no eligió nivel/tamaño/IV. No asumir aprobación |
+| Faltantes que impiden semilla identificados | Cumplido | TMT-04 necesita seis filas y sólo dependencias de los sets; fuentes/licencias pendientes. Es inventario, no entrega de catálogo en TMT-02 |
+| Sin conjeturas de duplicados/cuarto tipo/pasivas | Cumplido como límite del contrato | Representación preserva duplicados; REF-01…09 discriminan hipótesis. Especies repetidas, cambios de tipo, megas y efectos no verificados excluidos hasta evidencia; sin declarar expected ROM |
+
+TMT-02 no requiere implementar runtime parity, legalidad, generación de catálogo,
+client Dex ni combate: TMT-04…06 lo hacen con este contrato. Tampoco exige resolver
+oráculos de contenido excluido. Sí necesita cerrar las expectativas de las reglas
+ordinarias que el contrato inicial usaría. Por eso no se marca terminado.
 
 Sin esos inputs se pueden ejecutar los controles heredados y CI ya existente;
 no empezar TMT-04 ni afirmar fidelidad. TMT-02 continúa parcial. TMT-03 conserva
@@ -236,13 +281,15 @@ Derechos/proveniencia y publicación conservan sus gates del roadmap.
 - `npm test`: 22 pasan; pruebas propias, no oráculos ROM.
 - `npm run typecheck`, `node --check tools/provenance/showdown-reference.mjs`,
   `git diff --check`: pasan.
-- `npm run source:showdown-reference -- --damage`: diez asserts sobre el motor
+- `npm run source:showdown-reference -- --damage`: 18 asserts (diez de daño y ocho de stats) sobre el motor
   Gen9 fijado. Mew sintético, nivel50/Hardy/IV31/EV0, No Ability, RNG [1,2,3,4],
   sin crítica. `setType` mantiene orden/repetición; inmunidad se verifica antes de
   `getDamage`. No ejecuta turno/move completo ni secundarios, y no usa catálogo TMT2.
   Ember: neutral16, STAB24 (también Fire/Fire y Water/Fire/Fire), debilidad32,
   duplicada64, triple128, resistencia8, duplicada4; Tackle inmune devuelve false.
-  Son expected **heredados**, no resultados del juego. Dos ejecuciones idénticas.
+  Stats con base100/EV0: nivel50/IV31 HP175/neutral120/+132/−108; IV0
+  HP160/neutral105; nivel100/IV31 HP341/neutral236. Son expected **heredados**,
+  no resultados del juego. Dos ejecuciones idénticas.
 - Probe sin flag: cinco bases; argumento inválido: código1 sin JSON de éxito.
 - Builds previos disponibles; no se modificaron forks ni pins. Suites completas,
   DNS y UI no repetidas por esta revisión de probe/documentación; evidencia baseline

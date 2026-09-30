@@ -171,16 +171,18 @@
   "pending": [
     "Version-bound rows and selected moves/ability/passives for six simple seed sets",
     "Ordinary damage/STAB/immunity and stat oracle; duplicates/fourth type deferred if excluded from seed",
-    "Evidence-based Showdown generation and competitive level/team-size decisions",
+    "Competitive level/team-size/IV decisions; ROM fidelity of selected Gen9 engineering baseline",
     "Source snapshot/version binding and redistribution rights",
     "Independent release-byte authenticity and origin of v1.4.0 Alt differences"
   ],
   "assumptions": [],
   "decisions": {
-    "showdownBaseGeneration": null,
+    "showdownBaseGeneration": 9,
     "level": null,
     "teamSize": null,
-    "suggestedFormat": "private-unranked-singles-premade-teams-not-a-ROM-fact"
+    "suggestedFormat": "private-unranked-singles-premade-teams-not-a-ROM-fact",
+    "iv": null,
+    "baseGenerationAuthority": "engineering-selection-not-ROM-generation"
   },
   "rights": {
     "datasetLicense": null,
@@ -271,11 +273,12 @@
   "ruleReference": {
     "ticket": "TMT-02",
     "document": "docs/RULES_REFERENCE.md",
-    "status": "partial-minimal-seed-contract-awaiting-rows-oracle-and-policy",
+    "status": "partial-initial-ROM-expectations-and-competitive-policy",
     "provisionalEngineeringCandidate": "gen9",
-    "chosenGeneration": null,
+    "chosenGeneration": 9,
     "romFidelityProven": false,
-    "scope": "six-simple-sets; unsupported-mechanics-excluded; docs/RULES_REFERENCE.md"
+    "scope": "six-simple-sets; unsupported-mechanics-excluded; docs/RULES_REFERENCE.md",
+    "generationEvidence": "SRC-01 split/modern effects; SRC-03 Ghost/Steel; pinned server root Dex; docs/RULES_REFERENCE.md"
   },
   "chartObservations": {
     "sourceId": "SRC-03",

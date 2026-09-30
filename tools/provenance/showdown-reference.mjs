@@ -32,7 +32,7 @@ try {
       paralysisCallbackFor100Speed: dex.conditions.get('par').onModifySpe.call(context, 100, pokemon),
     };
   });
-  let damageFixtures;
+  let damageFixtures, statFixtures;
   if (args.length) {
     const {Battle} = require(path.join(c.server, 'dist/sim/battle.js'));
     const cases = [
@@ -58,6 +58,24 @@ try {
       try {
         battle.makeChoices('team 1', 'team 1');
         const source = battle.p1.active[0], target = battle.p2.active[0];
+        if (!statFixtures) {
+          const stats = [
+            ['hp-iv31-level50', 'hp', 31, 50, 'Hardy', 175],
+            ['atk-iv31-level50', 'atk', 31, 50, 'Hardy', 120],
+            ['atk-positive-nature', 'atk', 31, 50, 'Adamant', 132],
+            ['spa-negative-nature', 'spa', 31, 50, 'Adamant', 108],
+            ['hp-iv0-level50', 'hp', 0, 50, 'Hardy', 160],
+            ['atk-iv0-level50', 'atk', 0, 50, 'Hardy', 105],
+            ['hp-iv31-level100', 'hp', 31, 100, 'Hardy', 341],
+            ['atk-iv31-level100', 'atk', 31, 100, 'Hardy', 236],
+          ];
+          statFixtures = stats.map(([id, stat, iv, level, nature, expected]) => {
+            const input = {...set(['splash']), level, nature}; input.ivs[stat] = iv;
+            const value = battle.statModify(source.species.baseStats, input, stat);
+            assert.equal(value, expected, `Pinned Showdown stat fixture ${id}`);
+            return {id, baseStat: 100, stat, iv, ev: 0, level, nature, value};
+          });
+        }
         source.setType([...attackerTypes], true); target.setType([...defenderTypes], true);
         assert.deepEqual(source.getTypes(), attackerTypes); assert.deepEqual(target.getTypes(), defenderTypes);
         const move = battle.dex.getActiveMove(moveId); move.willCrit = false;
@@ -70,5 +88,6 @@ try {
   }
   console.log(JSON.stringify({kind: 'inherited-showdown-reference-not-ROM-evidence',
     compiledBuildRequired: true, callbackHarnessNotFullBattle: true, rows,
-    ...(damageFixtures ? {damageFixtures, syntheticFixtureChecksPassed: damageFixtures.length} : {})}, null, 2));
+    ...(damageFixtures ? {damageFixtures, statFixtures,
+      syntheticFixtureChecksPassed: damageFixtures.length + statFixtures.length} : {})}, null, 2));
 } catch (error) { console.error(`[reference] ${error.message}`); process.exitCode = 1; }

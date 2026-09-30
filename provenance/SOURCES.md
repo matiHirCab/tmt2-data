@@ -53,8 +53,9 @@ real ni contiene una base de datos directamente consultable.
 - **Pendiente:** stats completos, moves, habilidades/pasivas, ítems, learnsets,
   formas, valores de daño/STAB/inmunidad, interacción de duplicados y cuarto tipo,
   reglas de reset/cambio/switch; cobertura y licencias de assets/datos.
-- **Decisiones competitivas aún abiertas (TMT-02):** generación base Showdown,
-  nivel, tamaño de equipo y cláusulas. Singles privado/unranked con premades es
+- **Decisiones competitivas aún abiertas (TMT-02):** nivel, tamaño de equipo,
+  IVs y cláusulas. Gen9 fue elegido como padre de ingeniería en RULES_REFERENCE;
+  no identifica la generación/reglas del ROM. Singles privado/unranked con premades es
   una propuesta de producto; no inferir nivel/tamaño desde el postgame 3v3.
 - **Supuestos explícitos:** ninguno se promueve a hecho ROM. Que el hack use
   Emerald/GBA no determina generación 3 de Showdown. El parche no cierra TMT-02
@@ -76,3 +77,7 @@ El [contrato inicial](../docs/RULES_REFERENCE.md#contrato-inicial-acotado) limit
 el input pendiente a seis sets simples y sus efectos, manteniendo los casos de
 contenido excluido como pendientes. La hoja sólo expuso chart; el navegador
 falló por túnel en la URL pública, sin eludir restricciones.
+
+La revisión del DoD de TMT-02 separa las seis filas de TMT-04 de los dos controles
+necesarios para un oráculo de reglas. Gen9 queda elegido por compatibilidad
+documentada y el código fijado; expected ROM de stats/daño y política siguen pendientes.
