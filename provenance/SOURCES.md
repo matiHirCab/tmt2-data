@@ -11,7 +11,7 @@ certificación de mecánicas**. `null` significa desconocido/no verificado, nunc
 | --- | --- | --- | --- |
 | SRC-01 | [Hilo oficial, Kobazco/Too Many Productions](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/) | Emerald US como base indicada; no EVs; hasta tres tipos; enlace a documentación del creador | Anuncio/documentación, no tabla exhaustiva ni oráculo de fórmulas |
 | SRC-02 | [Página 6, publicación #108](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6) | Anuncio v1.5.2 el 11 de marzo de 2026 | Última versión encontrada en las fuentes revisadas; no identidad del archivo del usuario |
-| SRC-03 | [Spreadsheet del creador enlazado por SRC-01](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing) | Documentación de tipos; investigación previa reportó Mega Pidgeot Holy/Bird/Bird | Documento mutable, sin export/snapshot/hash/versionado aprobado. La vista leída en esta sesión sólo expuso la tabla de tipos; no revalidó la fila de Mega Pidgeot |
+| SRC-03 | [Spreadsheet del creador enlazado por SRC-01](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing) | Documentación de tipos; fila de especies pendiente | Documento mutable, sin export/snapshot/hash/versionado aprobado. La vista leída en esta sesión sólo expuso la tabla de tipos; no revalidó la fila de Mega Pidgeot |
 | SRC-04 | [ZIP de referencia RA](https://github.com/RetroAchievements/RAPatches/raw/refs/heads/main/GBA/Hacks/Pokemon%20Emerald/37577-PokemonEmerald-TooManyTypes2.zip) | Metadatos BPS reportados por investigación previa (abajo) | Distribución de terceros, URL mutable; no se descargó de nuevo. No identifica el BPS del usuario ni demuestra permiso de redistribuirlo |
 | SRC-05 | BPS v1.5.2 adjunto por el usuario | Identidad SHA-256, estructura BPS1 y CRC del parche verificados | Nombre/CRC no autentican release del creador; ROM no aplicado |
 | SRC-06 / SRC-07 | BPS v1.4.0 y v1.4.0 Alt adjuntos | Identidades distintas, estructura/CRC verificados | Comparación solamente; significado de diferencias desconocido |
@@ -45,9 +45,11 @@ real ni contiene una base de datos directamente consultable.
 
 - **Verificado en fuente primaria:** no EVs y hasta tres tipos se anuncian en
   SRC-01; v1.5.2 se anuncia en SRC-02. No se ha comprobado su ejecución en un ROM.
-- **Observación documental previa conservada:** Mega Pidgeot Holy/Bird/Bird.
-  Preservar orden y repetición al diseñar el esquema; fila/snapshot y semántica de
-  daño/STAB todavía requieren verificación específica. No deduplicar por intuición.
+- **Revalidado en fuente primaria:** SRC-02, post #105, anuncia Mega Pidgeot
+  Holy/Bird/Bird. No depende de la fila de spreadsheet aún no fijada. Preservar
+  orden/repetición; semántica de daño/STAB todavía pendiente. También hay notas
+  oficiales sobre split/Pure y efectos modernos; alcance en
+  [RULES_REFERENCE.md](../docs/RULES_REFERENCE.md).
 - **Pendiente:** stats completos, moves, habilidades/pasivas, ítems, learnsets,
   formas, valores de daño/STAB/inmunidad, interacción de duplicados y cuarto tipo,
   reglas de reset/cambio/switch; cobertura y licencias de assets/datos.

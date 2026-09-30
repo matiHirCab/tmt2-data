@@ -53,3 +53,5 @@ Run `npm run workspace:doctor`, `npm run workspace:build`,
 `npm run workspace:test`, or `npm run workspace:dev` from this repository.
 See [reproducible setup, configuration, snapshots and limitations](docs/DEVELOPMENT.md).
 Coordination is implemented; production TMT2 data and game integration are not.
+
+TMT-02 evidence and pending oracle protocols: [docs/RULES_REFERENCE.md](docs/RULES_REFERENCE.md).

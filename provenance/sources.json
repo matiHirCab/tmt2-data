@@ -138,10 +138,33 @@
     {
       "id": "FACT-03",
       "claim": "Mega Pidgeot types Holy/Bird/Bird, ordered and repeated",
-      "status": "prior-research-observation-pending-row-snapshot",
+      "status": "verified-primary-statement",
       "sourceIds": [
-        "SRC-03"
+        "SRC-02"
       ],
+      "romOracleVerified": false,
+      "sourceLocator": "creator post #105, v1.5.0, page 6; reviewed 2026-09-30",
+      "rowSnapshotVerified": false
+    },
+    {
+      "id": "FACT-04",
+      "claim": "Physical/special split distinguished from Pure type-based categories by creator fixes",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01",
+        "SRC-02"
+      ],
+      "sourceLocator": "creator posts #6 and #105",
+      "romOracleVerified": false
+    },
+    {
+      "id": "FACT-05",
+      "claim": "Creator changelogs mention Protosynthesis/Quark Drive fixes and sans Magic Guard",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01"
+      ],
+      "sourceLocator": "creator posts #6 and #9",
       "romOracleVerified": false
     }
   ],
@@ -244,5 +267,13 @@
     "headerSizeAndCrcMatchAllUploads": true,
     "actualBaseRomVerified": false,
     "authorAuthenticityVerified": false
+  },
+  "ruleReference": {
+    "ticket": "TMT-02",
+    "document": "docs/RULES_REFERENCE.md",
+    "status": "partial-blocked-oracles-and-policy",
+    "provisionalEngineeringCandidate": "gen9",
+    "chosenGeneration": null,
+    "romFidelityProven": false
   }
 }
