@@ -29,7 +29,10 @@ npm ci
 npm run workspace:doctor
 npm test
 npm run typecheck
+npm run integration:generate
 npm run workspace:build
+npm run integration:check
+npm run integration:test
 npm run workspace:test
 npm run workspace:dev
 ```
@@ -38,7 +41,8 @@ npm run workspace:dev
 ports, minimum Node and installed dependency sentinels; it prints Node/npm/Git
 versions, dataset status and missing client runtime assets. It is not a full
 dependency-integrity audit.
-`workspace:build` builds server then client. `workspace:test` runs this repository's
+`workspace:build` checks the shared catalog, builds the server, generates indexes
+from that exact local server HEAD, then builds the client. `workspace:test` runs this repository's
 tests/typecheck then each fork's `npm test` (including its lint/typecheck lifecycle).
 Failures stop the sequence and produce a nonzero exit status.
 Build/test/dev and manifest write/check share an exclusive `.local/operation.lock`
@@ -50,21 +54,28 @@ remove only the stale lock after verifying that operation and its children ended
 Locks are never stolen automatically; releasing an old lock does not delete a
 replacement lock. A symlinked `.local` directory is rejected.
 
-**Client build scope:** only `node build`, using already available local runtime
-data. The client data directory is generated and Git-ignored, **not checked in**;
-a clean checkout has none of these files. Doctor reports `clientAssets: incomplete`,
-and dev warns with the missing paths. READY means HTTP readiness only, not complete
-assets or a playable TMT2 build.
-The coordination CLI accepts no extra build arguments. It never calls `full`,
-`indexes`, `learnsets` or `minidex`: current index tooling clones/pulls upstream
-Smogon and uses the base Dex. This slice does not regenerate or claim synchronized
-TMT2 client data. A future data build must explicitly pin its input and select the
-correct mod Dex before it can join this workflow.
+**Client build scope:** local `build-indexes --server PATH --commit FULL_SHA`, then
+normal `node build`, including the seed runtime. No clone/pull or revision switch.
+The index builder requires explicit pinned inputs, a compiled server, and the
+registered mod; missing arguments/mods fail instead of fetching upstream. It
+builds normal-format tables separately from the bounded mod table. Its cache
+records source and output hashes; `--fresh` forces regeneration. The catalog and
+runtime each verify both canonical dataset and derived-table hashes.
+
+Generated public assets remain ignored. Text, species/move/ability data and
+search/teambuilder tables now come from the local pinned checkout. Other assets,
+including graphics.js, commands.js, chat-formatter.js and sprite/logo/audio
+resources, can remain absent or use remote fallbacks; doctor reports them.
+READY is HTTP readiness, not a playable battle certificate. `full`, `minidex` and
+other independent upstream generators are not invoked by coordination.
 
 `workspace:dev` checks both ports, builds, starts the server and a small static
 client HTTP service on loopback, and waits for both HTTP readiness endpoints.
 Open the printed READY URL, normally:
 `http://127.0.0.1:8080/testclient-new.html?~~localhost:8000`.
+The isolated catalog view is `http://127.0.0.1:8080/tmt2-seed.html`; it renders all
+six names/types, filters by every type slot, and displays dataset identity.
+The hidden format is deliberately absent from public challenge/search menus.
 The server bootstrap changes bind address/port/SSL/watchconfig only in memory.
 It loads the user's other server settings unchanged. This is the existing Showdown
 test client; remote assets/login features may still require internet access.
@@ -136,11 +147,32 @@ fixture only. Full commands, sets, boundaries and results are in
 Stop `workspace:dev` with Ctrl-C and wait for process-group cleanup. On the data
 repository, review `git diff` and remove only files from this slice (see the change
 report), or revert its commit if committed. Do not use a workspace-wide reset.
-Fork sources are unchanged; builds can produce ignored outputs/configs/logs.
-Delete `.local/compatibility.json` to discard the snapshot; preserve personal
-configuration and installed dependencies as desired. Returning to the previous
-branch alone does not remove uncommitted files: preserve or selectively remove
-this slice first.
+Fork changes live on separate feature branches. After stopping services, switch
+all three repositories back to their previous branches only with clean working
+trees; the feature commits remain available. For an already shared change, review
+coordinated reverts instead of reset/clean. Ignored build outputs may persist;
+remove only reviewed generated outputs if needed, preserving configs/dependencies.
+Delete `.local/compatibility.json` to discard a snapshot.
+
+## Integration pins and eventual review order
+
+`provenance/inheritance-pins.json` pins the original server facts used by the
+seed. `ci/pins.json` pins the consumer integration revisions. Generation rejects
+changes to inherited fact files from the original pin; it does not silently
+re-extract a different Dex. Catalog metadata carries version, dataset hash,
+derived catalog hash and original base commit, with no circular consumer/self SHA.
+The protocol record `tmt2data` checks version and both hashes in battle/replay
+parsing. Unsupported seed records fail instead of falling back to upstream data.
+Full EV/IV legality, battle engine internal moves, damage and effect certification
+remain TMT-06; hidden format construction is not a completed battle.
+
+No publication is performed by these commands. When separately authorized,
+publish the server/client branches first so the commits in `ci/pins.json` are
+fetchable, then review the data change with those exact revisions. If consumer
+merges squash/rebase them, repin the reviewed merge commits and rerun core before
+merging data; otherwise preserve the reviewed commits. Never force-push to repair
+pins. Exact current branches/commits and local evidence are recorded in
+[RULES_REFERENCE.md](RULES_REFERENCE.md#tmt-05--integracion-local-aislada).
 
 ## Implementation backlog
 

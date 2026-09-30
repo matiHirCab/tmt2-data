@@ -64,7 +64,7 @@ export function validateSeed(d, {allowFixture = false} = {}) {
   };
   evidence(d.rules.source, 'rules');
   if(d.rules.source!=='policy') bad('Rules must cite the approved adaptation policy');
-  const pins=JSON.parse(fs.readFileSync(new URL('../../ci/pins.json',import.meta.url)));
+  const pins=JSON.parse(fs.readFileSync(new URL('../../provenance/inheritance-pins.json',import.meta.url)));
   const inherited=maps.sources.get('showdown');
   if(!inherited || inherited.kind!=='showdown' || inherited.version!==pins.server.commit) bad('Showdown source must use the approved exact server commit');
   else if(inherited.sha256!==stableHash(inheritedPayload(d))) bad('Inherited snapshot hash mismatch');

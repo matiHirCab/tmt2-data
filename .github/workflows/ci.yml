@@ -48,6 +48,7 @@ jobs:
           repository: matiHirCab/Pokemon-Too-Many-Types-2
           ref: ${{ steps.pins.outputs.server_sha }}
           path: Pokemon-Too-Many-Types-2
+          fetch-depth: 0 # inherited-source guard needs the pinned original ancestor
           persist-credentials: false
           clean: false
           set-safe-directory: false

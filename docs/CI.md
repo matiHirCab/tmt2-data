@@ -6,7 +6,8 @@ This document describes verification, not another backlog. CI needs no ROM/BPS.
 ## Pins and permissions
 
 [ci/pins.json](../ci/pins.json) fixes Node 24.19.0, npm 11.9.0 and the two fork
-commits previously compared against baseline. The data repository is the exact
+reviewed consumer integration commits. `provenance/inheritance-pins.json` separately
+fixes the original inherited data revision. The data repository is the exact
 GitHub event checkout (the PR merge candidate on pull_request, event commit on
 push); the resulting manifest records all three actual HEADs. No self-referential
 data-commit pin is hardcoded. Pin updates require reviewed evidence; commands
@@ -14,7 +15,9 @@ reject mismatched/dirty sibling sources instead of pulling or resetting them.
 
 [ci.yml](../.github/workflows/ci.yml) uses Ubuntu 24.04, exact action commit SHAs
 (reviewed v6 tags of actions/checkout and actions/setup-node), and `contents: read`
-only. It has no custom secrets, write token, pull_request_target, environment,
+only. Server checkout includes full history so the inherited-source guard can
+compare the original pinned ancestor; checked-out HEAD remains the exact consumer pin.
+It has no custom secrets, write token, pull_request_target, environment,
 deployment, PR creation or repository-permission mutation. Checkout credentials
 are not persisted; clean/reset and global safe-directory edits are disabled.
 The built-in read token only fetches public repository inputs. No cache of generated
@@ -60,18 +63,23 @@ remotely as part of implementing these files locally.
 `ci:core` reuses process supervision and the exclusive workspace lock. It runs:
 
 1. All data/coordination/CI tests and data TypeScript check.
-2. Normal server and client builds at the pins (no full/index data generator).
+2. Bounded seed validation, catalog drift checks, server build, explicit offline
+   client index generation from the pinned server/mod, normal client/runtime build,
+   and cross-repository identity/isolation checks.
 3. Server lint, TypeScript and simulator/server/lib/tools/random-battle tests using
    its configured suite, preserving the upstream `(slow)` exclusion and separating
    exactly two live-DNS tests (below). `--forbid-only` catches accidental focusing.
 4. Client `npm test`: normal build, client/build-tools typechecks, lint and tests.
-   On a clean checkout generated data is absent: baseline is 21 passes/3 skips,
-   with the 22-test BattleTextParser suite not instantiated. This is not the
-   45-test asset-enabled result and not production data validation.
+   Local index generation now instantiates the 22-test BattleTextParser suite and
+   asset-dependent tests previously skipped. Six new client integration tests cover
+   routing, protocol drift, search/type rendering and unsafe generator inputs.
+   One inherited explicit skip remains; see the dated evidence in RULES_REFERENCE.
 5. Source manifest generated twice and checked for identical bytes/content; exact
    commits/dirty flags printed in logs. Then real coordinated dev lifecycle:
    HTTP and WS `updateuser`, reject concurrent build/manifest operations, SIGTERM
-   exit 143, lock removed and ports reusable. Local unit tests cover SIGINT,
+   exit 143, lock removed and ports reusable. Startup has a bounded 240-second
+   budget including a cold offline index build (previous 90-second budget only
+   covered normal builds). Local unit tests cover SIGINT,
    failure paths and stubborn descendants. No playable TMT2 battle is claimed.
 
 The exact names separated into `ci:network` are:
@@ -86,11 +94,10 @@ original 2000ms timeout. There are no mocks or global DNS/hosts/security changes
 [Baseline evidence](BASELINE_COMPARISON.md) shows both failures without our tooling.
 CI logs and job summaries state that core does **not** execute these two cases.
 
-The optional client news refresh may warn if PHP is unavailable. Missing runtime
-assets and blocked remote fallback can leave UI labels incomplete; doctor/dev
-report this explicitly. No pipeline downloads unpinned Smogon data to mask it.
-Runtime-generated local data, assets, mechanics and battle/replay/browser coverage
-will be added through the canonical tickets, not guessed in this stage.
+The optional client news refresh may warn if PHP is unavailable. Graphics and
+other resources can still be absent or require remote fallback, reported by doctor.
+The pinned offline pipeline restores data/text labels without downloading Smogon.
+No full battle, no-EV runtime or exact ROM fidelity is certified by integration CI.
 
 ## Failure handling and evidence
 

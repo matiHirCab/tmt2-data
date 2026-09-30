@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import {config, preflight, lockWorkspace, manifest, writeSnapshot, supervise, root} from '../workspace/core.mjs';
+import {config, preflight, lockWorkspace, git, manifest, writeSnapshot, supervise, root} from '../workspace/core.mjs';
+import {assertGenerated} from '../integration/cli.mjs';
 import {verifyPins} from './pins.mjs';
 import {coreGrep, networkGrep, networkTests} from './policy.mjs';
 const node = (cwd, args, label) => ({file: process.execPath, args, cwd, label});
@@ -13,6 +14,7 @@ try {
   try {
     console.log(`CI mode: ${mode}. Live-network tests ${mode === 'core' ? 'NOT RUN here; separate diagnostic' : 'RUN with real exit status'}:`);
     console.log(networkTests.join('\n'));
+    if(mode==='core')assertGenerated(c);
     const commands = mode === 'network' ? [
       node(c.server, ['node_modules/mocha/bin/mocha.js', '--no-config', 'test/main.js', 'test/server/ip-tools.js',
         '--grep', networkGrep, '--reporter', 'spec', '--timeout', '2000', '--exit'], 'live DNS diagnostics (not mocked)'),
@@ -21,7 +23,9 @@ try {
       npm(c.data, ['run', 'typecheck'], 'data typecheck'),
       npm(c.data, ['run', 'seed:validate'], 'selected bounded seed contract (fixtures cannot pass production)'),
       node(c.server, ['build'], 'pinned server build'),
-      node(c.client, ['build'], 'pinned client normal build; no index/data pulls'),
+      node(c.client, ['build-tools/build-indexes','--server',c.server,'--commit',git(c.server,'rev-parse','HEAD')], 'offline pinned normal indexes plus bounded TMT2 table'),
+      node(c.client, ['build'], 'pinned client build and local seed runtime'),
+      node(c.data, ['tools/integration/verify.mjs'], 'cross-repository catalog/version and Dex isolation'),
       npm(c.server, ['run', 'lint'], 'server lint'),
       npm(c.server, ['run', 'tsc'], 'server typecheck'),
       node(c.server, ['node_modules/mocha/bin/mocha.js', '--grep', coreGrep, '--forbid-only'], 'server tests excluding exactly two live DNS cases and upstream (slow)'),

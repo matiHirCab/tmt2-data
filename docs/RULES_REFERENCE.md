@@ -412,3 +412,107 @@ No hay CI remota nueva, publicación ni trabajo TMT-05/06.
 **Checklist TMT-04:** seis especies, dos sets completos 3v3, dependencias con
 procedencia, tipos ordenados/duplicados, esquema/validador, fixture separado y
 hashes reproducibles cumplidos bajo adaptación aprobada; fidelidad ROM no probada.
+
+## TMT-05 — Integracion local aislada
+
+Implementación local 2026-09-30 bajo la adaptación ya aprobada. No amplía el
+catálogo ni certifica TMT-06/TMT-07. La semilla, fuentes y equipos TMT-04 no cambian.
+
+`tools/integration/catalog.mjs` valida la semilla y produce el mismo JSON en
+`server/data/mods/gen9tmt2seed/catalog.json` y `client/tmt2/catalog.json`.
+Versión0.1.0, hash del dataset
+`9a3b47cd2b6dc682f6750827487ffed634fa51cf61b6e3431939c1fd60fa94c0`;
+el hash derivado adicional cubre seed+tablas. Arrays preservan orden/repetición:
+Pidgeot tiene tres slots Bird, nunca `addedType`. No se generan callbacks.
+El pin original de hechos se conserva en `provenance/inheritance-pins.json`;
+consumer commits en `ci/pins.json` no entran en el hash del catálogo, evitando
+un ciclo de SHA propio. Cambios a inputs heredados requieren revisión/versionado.
+
+Servidor: mod aislado `gen9tmt2seed`, formato `[Gen 9] TMT2 Seed` oculto/no rated,
+cláusula heredada que desactiva Terastallization, construcción de Battle y guardas de pertenencia de especies/abilities/moves/items.
+Dex expone sólo seis especies, once moves, cinco abilities, `none` y los 24 tipos;
+366 parejas del chart coinciden con la semilla. Gen9OU conserva Pidgeot Normal/Flying.
+Callbacks ordinarios siguen heredados. `|tmt2data|version|datasetHash|catalogHash`
+identifica el contrato; estos tres campos se validan en el parser cliente/replay.
+
+Cliente: `Dex.forFormat`/`Dex.mod`, tier/gen de batalla/replay, búsquedas y las rutas
+del teambuilder usan explícitamente el mod. Sin catálogo/mod se rechaza la operación;
+no fallback silencioso al upstream. Búsqueda de tipos incluye el tercer slot y
+renderiza duplicados. El pipeline de indexes exige checkout local y SHA exacto,
+rechaza fuentes servidor sucias y comprueba el mod antes de producir su tabla; mantiene tablas ordinarias separadas.
+No clone/pull ni artículos opcionales de otro checkout. Cache verifica hashes de
+inputs y outputs; `--fresh` fuerza generación. El runtime local verifica ambos
+hashes y rechaza symlinks de outputs; el generador compartido además protege
+archivos ajenos por marca de ownership. Locks nunca se roban.
+
+### Revisiones compatibles y comprobación
+
+| Repo | Rama local | HEAD consumidor |
+| --- | --- | --- |
+| server | `feat/tmt05-hidden-mod` | `79614d93b69a05cac53c3ed6681be4f2a1395635` |
+| client | `feat/tmt05-client-dex` | `aa0a1fc9958b5c24e5f542313ab061762266a5cb` |
+| data | `feat/tmt05-local-integration` | commit final del cambio; manifest registra HEAD real |
+
+```sh
+npm run integration:generate
+npm run integration:check
+npm run workspace:build
+npm run integration:assets
+npm run integration:test
+npm test
+npm run typecheck
+npm run ci:core
+npm run workspace:manifest:write
+npm run workspace:manifest:check
+```
+
+Verificación visual local: `/tmt2-seed.html` muestra seis especies, nombres/tipos
+correctos y Bird/Bird/Bird; filtro Cat devuelve Eevee/Floragato; recarga conserva
+identidad. Cliente normal muestra etiquetas Format/Team y resuelve el Dex correcto.
+Esto no prueba combate completo; snapshot inicial aún mostraba Connecting.
+Faltan recursos gráficos/audio y algunos scripts auxiliares; doctor los reporta.
+PHP ausente produce un aviso de noticias opcionales. No se descargan para ocultarlo.
+
+**Límites:** pertenencia al catálogo no es legalidad final. Enforcement EV0/IV31,
+engine internal moves (p. ej. Struggle), daño/inmunidades/STAB/efectos y prueba de
+combate completo permanecen TMT-06/07. Pasivos custom, megas, cuarto tipo y resto del
+catálogo siguen excluidos; no afirmación de fidelidad ROM. DNS/slow permanecen
+separados/excluidos según CI; no se presentan como aprobados. CI remota de estas
+ramas no se ejecuta hasta autorización de publicación. Orden de eventual revisión
+y rollback seguro: [DEVELOPMENT.md](DEVELOPMENT.md#integration-pins-and-eventual-review-order).
+
+**Resultado final local:** `npm run ci:core` exit0 con 37 tests propios (sin skips),
+server2368 passed/74 pending y client51 passed/1 skip heredado. Builds, lint
+sin warnings, typechecks de los tres repos, seed gate e integración pasan.
+Smoke HTTP/WS pasa; operaciones concurrentes rechazadas, SIGTERM143, lock eliminado
+y puertos liberados. Dos DNS y slow no ejecutados, CI remota no ejecutada.
+Regeneración compartida dos veces mantiene catálogos idénticos y forks limpios;
+`--fresh` preserva los 16 hashes de índices. Preparación del seed con los nuevos
+consumer pins sigue idéntica al snapshot TMT-04. La vista final se verificó de
+nuevo en Chromium: seis filas, tres Bird, Cat=Eevee/Floragato, reload y cero errores
+JS; captura temporal fuera del repositorio (no asset distribuido).
+
+Primer core detectó uso prohibido de `assert.ok` en el nuevo test server:
+corregido a `assert()` y pasa con el harness real. Un intento focalizado con
+`--require test/main.js` falló antes de ejecutar tests (`before is not defined`);
+se reemplazó por la suite configurada. El core intermedio agotó startup90s al
+invalidarse cache durante revisión; el presupuesto acotado ahora incluye cold
+indexes240s, y core final/lifecycle pasan. No se ocultaron tests fallidos.
+
+**Checklist TMT-05:** generación byte-identical; misma versión/dataset/tabla en
+ambos consumidores; seis especies y todas las dependencias/chart coincidentes;
+formato oculto construido; routing Dex/battle/replay/search/teambuilder probado;
+tercer tipo/duplicados visibles; errores por ausencia/fallback/drift/outputs
+inseguros; gen9 ordinario aislado; CI-core y browser local aprobados. Implementado
+local, pendiente autorización de publicación y CI remota. No trabajo TMT-06/07.
+
+Revisión final de aislamiento: Terastallization, excluida por TMT-02, se desactiva
+mediante `Terastal Clause` existente. Test focalizado con la configuración real
+pasa3/3 y verifica la regla registrada. No añade callbacks ni mecánicas nuevas.
+
+CI de publicación detectó dos defectos de checkout limpio: historia servidor
+shallow insuficiente para el guard de procedencia y carpeta pública data ausente.
+Se conserva el guard y se descarga historia en CI; el builder crea data/text sólo
+después de rechazar symlinks. Fixture aislado sin data produjo los mismos 16 hashes,
+y symlink de índice se rechazó conservando archivo personal. Client51/1skip y
+propios37/typecheck pasan; resultado remoto final se registra en los checks PR5.

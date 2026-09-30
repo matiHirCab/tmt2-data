@@ -24,7 +24,7 @@ try {
     });
     child.once('error', reject);
     child.once('exit', code => reject(Error(`dev exited before READY: ${code}`)));
-  }), 90000, 'dev startup timed out');
+  }), 240000, 'dev startup timed out (including offline index generation)');
   for (const url of [`http://127.0.0.1:${c.clientPort}/testclient-new.html`, `http://127.0.0.1:${c.serverPort}/showdown/info`]) {
     assert.equal((await fetch(url, {signal: AbortSignal.timeout(5000)})).status, 200);
   }

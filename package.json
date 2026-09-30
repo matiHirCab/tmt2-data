@@ -19,7 +19,11 @@
     "source:inspect": "node tools/provenance/inspect-bps.mjs",
     "source:showdown-reference": "node tools/provenance/showdown-reference.mjs",
     "seed:validate": "node tools/data/cli.mjs",
-    "seed:prepare": "node tools/import/prepare-seed.mjs"
+    "seed:prepare": "node tools/import/prepare-seed.mjs",
+    "integration:generate": "node tools/integration/cli.mjs generate",
+    "integration:check": "node tools/integration/cli.mjs check",
+    "integration:test": "node tools/integration/verify.mjs",
+    "integration:assets": "node tools/integration/assets.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

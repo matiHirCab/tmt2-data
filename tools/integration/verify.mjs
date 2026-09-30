@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {config,preflight} from '../workspace/core.mjs';
+import {assertGenerated} from './cli.mjs';
+const c=config();preflight(c);
+assertGenerated(c);
+const catalog=JSON.parse(fs.readFileSync(path.join(c.client,'tmt2/catalog.json')));
+const {Dex}=createRequire(import.meta.url)(path.join(c.server,'dist/sim/dex.js'));
+const mod=Dex.forFormat(catalog.metadata.formatID);
+assert.equal(mod.currentMod,catalog.metadata.modID);
+for(const s of catalog.seed.species)assert.deepEqual(mod.species.get(s.id).types,catalog.table.species[s.id].types);
+assert.equal(mod.species.get('Mew').exists,false);
+assert.deepEqual(Dex.forFormat('gen9ou').species.get('Pidgeot').types,['Normal','Flying']);
+console.log('TMT-05 cross-repository identity and isolated server catalog passed; client protocol/search tests run in client suite.');
