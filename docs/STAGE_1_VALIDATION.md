@@ -32,13 +32,35 @@ Entorno: Node 24.19.0, npm 11.9.0, Git 2.52.0. Pins de forks y herramientas en c
 - Manifiesto generado/recalculado idéntico; smoke real HTTP/WS, rechazo de comandos
   simultáneos, SIGTERM 143, lock eliminado y puertos liberados.
 - `actionlint .github/workflows/ci.yml`: sin errores. Se usó el binario oficial
-  actionlint v1.7.7, con SHA-256 cotejado contra checksums del release. El comando
-  `go` disponible aquí no era el compilador Go, por lo que no se utilizó para instalarlo.
+  actionlint v1.7.7, con SHA-256 cotejado contra checksums del release.
 - Sintaxis Node y `git diff --check`: verificados antes del commit final.
 
-Instalación limpia y diagnóstico DNS separados: resultados finales se registran
-al completar la verificación de los checkouts temporales; no declarados aprobados
-por anticipado.
+### Instalación limpia y diagnósticos separados
+
+Se crearon tres worktrees temporales separados, con datos en el commit de
+implementación `3fa03a8` y los dos forks en sus pins exactos. En cada uno se ejecutó
+`npm ci --no-audit --no-fund`, sin reutilizar node_modules del workspace: las tres
+instalaciones terminaron con código 0. Después, `npm run ci:core` en ese checkout
+limpio terminó con código 0, reproduciendo **16 / 2365 / 21** tests aprobados y los
+mismos pendientes/omisiones arriba indicados, manifiesto y ciclo de vida incluidos.
+El ajuste final de descubrimiento de tests en `workspace:test` se verificó con
+`node --test` (16 pasan); no cambia el perfil CI probado.
+
+`npm run ci:network` terminó con **código 2**, dos fallos reales:
+
+- `IP tools should resolve 127.0.0.1 to localhost`: respuesta `ip6-localhost` frente
+  a `localhost` esperado.
+- `IP tools should resolve unknown IPs correctly`: timeout de 2000 ms.
+
+Son los mismos casos reproducidos anteriormente sobre el baseline sin cambios,
+con evidencia en [BASELINE_COMPARISON.md](BASELINE_COMPARISON.md). No se declararon
+aprobados, no se modificaron DNS ni tests upstream. El workflow permite ejecutarlos
+explícitamente y conserva el fallo del job. El core excluye sólo esos dos casos y
+los `(slow)` que ya excluía upstream.
+
+Logs locales (ignorados por Git): `.local/verification/stage-1/`. Tras el commit
+final se regenera el manifiesto dos veces y se comprueba igualdad y HEAD actual;
+el manifiesto es un artefacto local, no una certificación de datos de producción.
 
 ## Límites del estado
 
