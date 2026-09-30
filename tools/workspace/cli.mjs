@@ -42,7 +42,7 @@ try {
       if (command === 'build') process.exitCode = await supervise(builds);
       if (command === 'test') {
         process.exitCode = await supervise([
-          node(c.data, ['--test', 'tests/workspace.test.mjs'], 'coordination tests'),
+          node(c.data, ['--test'], 'data, coordination and CI tests'),
           node(c.data, ['node_modules/typescript/bin/tsc', '--noEmit'], 'data typecheck'),
           {file: 'npm', args: ['test'], cwd: c.server, label: 'server lint, tests, typecheck'},
           {file: 'npm', args: ['test'], cwd: c.client, label: 'client build, typecheck, lint, tests'},

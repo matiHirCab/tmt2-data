@@ -1,0 +1,89 @@
+name: Workspace CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+    inputs:
+      network_diagnostics:
+        description: Also run the two live DNS tests (real failures fail the diagnostic job)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workspace-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  workspace:
+    name: Workspace (${{ matrix.mode }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.network_diagnostics && '["core","network"]' || '["core"]') }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: tmt2-data
+    steps:
+      - name: Checkout the data commit under test
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, reviewed 2026-09-30
+        with:
+          path: tmt2-data
+          persist-credentials: false
+          clean: false
+          set-safe-directory: false
+      - name: Read and validate exact pins (no network)
+        id: pins
+        run: node tools/ci/pins.mjs outputs
+      - name: Checkout pinned server
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: matiHirCab/Pokemon-Too-Many-Types-2
+          ref: ${{ steps.pins.outputs.server_sha }}
+          path: Pokemon-Too-Many-Types-2
+          persist-credentials: false
+          clean: false
+          set-safe-directory: false
+      - name: Checkout pinned client
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: matiHirCab/Pokemon-Too-Many-Types-2-client
+          ref: ${{ steps.pins.outputs.client_sha }}
+          path: Pokemon-Too-Many-Types-2-client
+          persist-credentials: false
+          clean: false
+          set-safe-directory: false
+      - name: Set exact Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, reviewed 2026-09-30
+        with:
+          node-version: ${{ steps.pins.outputs.node }}
+          package-manager-cache: false
+      - name: Set exact npm
+        env:
+          NPM_VERSION: ${{ steps.pins.outputs.npm }}
+        run: npm install --global "npm@$NPM_VERSION" --ignore-scripts --no-audit --no-fund
+      - name: Verify checkout and tool pins before installation
+        run: node tools/ci/pins.mjs verify
+      - name: Install all three lockfiles
+        run: |
+          npm ci --no-audit --no-fund
+          npm ci --prefix ../Pokemon-Too-Many-Types-2 --no-audit --no-fund
+          npm ci --prefix ../Pokemon-Too-Many-Types-2-client --no-audit --no-fund
+      - name: Run the selected CI profile
+        env:
+          CI: true
+          CI_MODE: ${{ matrix.mode }}
+        run: npm run "ci:$CI_MODE"
+      - name: Explain scope and exclusions even on failure
+        if: always()
+        env:
+          CI_MODE: ${{ matrix.mode }}
+        run: |
+          node -e 'const fs=require("fs"); fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Profile: ${process.env.CI_MODE}. Core does NOT run the two named live-DNS tests; use workflow_dispatch network_diagnostics=true to run them with real exit status. Upstream slow tests remain excluded. Missing client assets can skip upstream tests. This is coordination CI, not production data validation or TMT2 gameplay. See docs/CI.md and docs/BASELINE_COMPARISON.md.\n`);'

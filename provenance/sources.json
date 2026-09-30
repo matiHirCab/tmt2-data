@@ -1,0 +1,279 @@
+{
+  "schemaVersion": 1,
+  "ticket": "TMT-01",
+  "reviewedOn": "2026-09-30",
+  "status": "source-registration-complete-mechanics-pending",
+  "productionValidated": false,
+  "sources": [
+    {
+      "id": "SRC-01",
+      "authority": "creator-primary",
+      "url": "https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/",
+      "review": "read-2026-09-30",
+      "snapshotSha256": null
+    },
+    {
+      "id": "SRC-02",
+      "authority": "creator-primary",
+      "url": "https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6",
+      "review": "post-108-read-2026-09-30",
+      "snapshotSha256": null
+    },
+    {
+      "id": "SRC-03",
+      "authority": "creator-linked-mutable-document",
+      "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing",
+      "review": "type-chart-view-read; species-observation-from-prior-research",
+      "snapshotSha256": null
+    },
+    {
+      "id": "SRC-04",
+      "authority": "third-party-patch-distribution",
+      "url": "https://github.com/RetroAchievements/RAPatches/raw/refs/heads/main/GBA/Hacks/Pokemon%20Emerald/37577-PokemonEmerald-TooManyTypes2.zip",
+      "review": "prior-research-handoff; not-downloaded-this-task",
+      "snapshotSha256": null,
+      "repositoryCommit": null
+    },
+    {
+      "id": "SRC-05",
+      "authority": "user-supplied-file",
+      "url": null,
+      "review": "bytes-received-and-inspected-2026-09-30",
+      "snapshotSha256": "722bcd1f0d186284509d41cfbfc0c697b350a1c9cb836962d3bd3e4be8b5e3da"
+    },
+    {
+      "id": "SRC-06",
+      "authority": "user-supplied-file",
+      "url": null,
+      "review": "bytes-received-and-inspected-2026-09-30",
+      "snapshotSha256": "1d3ce9e640e7cf0811afcea12a6239a7975360cb4ba062a8b5f33d78310449ad"
+    },
+    {
+      "id": "SRC-07",
+      "authority": "user-supplied-file",
+      "url": null,
+      "review": "bytes-received-and-inspected-2026-09-30",
+      "snapshotSha256": "04c4ed24c670e5b384fcefe4dfa1e0aed370a90bcf1a4fd957a0a71e1780c54b"
+    },
+    {
+      "id": "SRC-08",
+      "authority": "user-supplied-base-description",
+      "url": null,
+      "review": "read-as-evidence-not-instructions-2026-09-30",
+      "snapshotSha256": "295c8420b9ba47cf3cceb78a6c36b95b596aba48772972f5637482cb50a368a5"
+    }
+  ],
+  "release": {
+    "latestFoundVersion": "1.5.2",
+    "announcementDate": "2026-03-11",
+    "sourceId": "SRC-02",
+    "userPatchMatches": null,
+    "userPatchVersionEvidence": "User filename says v1.5.2; sizes and source/target CRC32 match prior RA reference; author/release byte identity not independently authenticated."
+  },
+  "userPatch": {
+    "sourceId": "SRC-05",
+    "requestedFilename": "Pokemon Emerald - Too Many Types 2 (v1.5.2) (kobazco).bps",
+    "status": "received-structure-and-integrity-verified",
+    "sha256": "722bcd1f0d186284509d41cfbfc0c697b350a1c9cb836962d3bd3e4be8b5e3da",
+    "sizeBytes": 19574303,
+    "patchCrc32": "4402A029",
+    "metadata": {
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sourceSizeBytes": 16777216,
+    "sourceCrc32": "1F1C08FB",
+    "targetSizeBytes": 33554432,
+    "targetCrc32": "D25FBCCC",
+    "referenceMatch": {
+      "reportedSizesAndSourceTargetCrc32": true,
+      "exactReferenceBytes": null,
+      "limitation": "No reference-patch SHA256 available; matching CRC fields do not prove byte identity or author authenticity."
+    },
+    "filename": "Pokemon Emerald - Too Many Types 2 (v1.5.2) (kobazco).bps",
+    "format": "BPS1",
+    "patchCrcVerified": true,
+    "structureVerified": true,
+    "actions": {
+      "sourceRead": 12,
+      "targetRead": 461260,
+      "sourceCopy": 185723,
+      "targetCopy": 701258
+    },
+    "applied": false,
+    "sourceRomVerified": false,
+    "targetRomVerified": false
+  },
+  "referencePatch": {
+    "sourceId": "SRC-04",
+    "evidence": "reported-by-prior-research-worker",
+    "sha256": null,
+    "patchCrc32": null,
+    "sourceSizeBytes": 16777216,
+    "sourceCrc32": "1F1C08FB",
+    "targetSizeBytes": 33554432,
+    "targetCrc32": "D25FBCCC",
+    "applied": false,
+    "identifiesUserPatch": false
+  },
+  "claims": [
+    {
+      "id": "FACT-01",
+      "claim": "No EVs",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01"
+      ],
+      "romOracleVerified": false
+    },
+    {
+      "id": "FACT-02",
+      "claim": "Up to three species types",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01"
+      ],
+      "romOracleVerified": false
+    },
+    {
+      "id": "FACT-03",
+      "claim": "Mega Pidgeot types Holy/Bird/Bird, ordered and repeated",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-02"
+      ],
+      "romOracleVerified": false,
+      "sourceLocator": "creator post #105, v1.5.0, page 6; reviewed 2026-09-30",
+      "rowSnapshotVerified": false
+    },
+    {
+      "id": "FACT-04",
+      "claim": "Physical/special split distinguished from Pure type-based categories by creator fixes",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01",
+        "SRC-02"
+      ],
+      "sourceLocator": "creator posts #6 and #105",
+      "romOracleVerified": false
+    },
+    {
+      "id": "FACT-05",
+      "claim": "Creator changelogs mention Protosynthesis/Quark Drive fixes and sans Magic Guard",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01"
+      ],
+      "sourceLocator": "creator posts #6 and #9",
+      "romOracleVerified": false
+    }
+  ],
+  "pending": [
+    "Complete seed stats, moves, abilities/passives, items, learnsets and forms",
+    "Damage, immunity, repeated-type STAB and fourth-type reference cases",
+    "Evidence-based Showdown generation and competitive level/team-size decisions",
+    "Source snapshot/version binding and redistribution rights",
+    "Independent release-byte authenticity and origin of v1.4.0 Alt differences"
+  ],
+  "assumptions": [],
+  "decisions": {
+    "showdownBaseGeneration": null,
+    "level": null,
+    "teamSize": null,
+    "suggestedFormat": "private-unranked-singles-premade-teams-not-a-ROM-fact"
+  },
+  "rights": {
+    "datasetLicense": null,
+    "redistributionApproved": false
+  },
+  "comparisonPatches": [
+    {
+      "sourceId": "SRC-06",
+      "versionLabel": "1.4.0",
+      "role": "comparison-only-not-selected",
+      "filename": "Pokemon Emerald - Too Many Types 2 (v1.4.0) (kobazco).bps",
+      "format": "BPS1",
+      "sizeBytes": 19555012,
+      "sha256": "1d3ce9e640e7cf0811afcea12a6239a7975360cb4ba062a8b5f33d78310449ad",
+      "patchCrc32": "6E6598A2",
+      "patchCrcVerified": true,
+      "structureVerified": true,
+      "metadata": {
+        "sizeBytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceSizeBytes": 16777216,
+      "sourceCrc32": "1F1C08FB",
+      "targetSizeBytes": 33554432,
+      "targetCrc32": "ABB50931",
+      "actions": {
+        "sourceRead": 14,
+        "targetRead": 459292,
+        "sourceCopy": 185200,
+        "targetCopy": 698585
+      },
+      "applied": false,
+      "sourceRomVerified": false,
+      "targetRomVerified": false
+    },
+    {
+      "sourceId": "SRC-07",
+      "versionLabel": "1.4.0",
+      "role": "comparison-only-not-selected",
+      "filename": "Pokemon Emerald - Too Many Types 2 (v1.4.0) (kobazco) (Alt).bps",
+      "format": "BPS1",
+      "sizeBytes": 19555012,
+      "sha256": "04c4ed24c670e5b384fcefe4dfa1e0aed370a90bcf1a4fd957a0a71e1780c54b",
+      "patchCrc32": "C16EF1F2",
+      "patchCrcVerified": true,
+      "structureVerified": true,
+      "metadata": {
+        "sizeBytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "sourceSizeBytes": 16777216,
+      "sourceCrc32": "1F1C08FB",
+      "targetSizeBytes": 33554432,
+      "targetCrc32": "FBCE22F3",
+      "actions": {
+        "sourceRead": 14,
+        "targetRead": 459292,
+        "sourceCopy": 185200,
+        "targetCopy": 698585
+      },
+      "applied": false,
+      "sourceRomVerified": false,
+      "targetRomVerified": false
+    }
+  ],
+  "selectedInput": {
+    "sourceId": "SRC-05",
+    "versionLabel": "1.5.2",
+    "versionLabelAuthority": "user-upload-filename-and-prior-reference-metadata",
+    "sha256": "722bcd1f0d186284509d41cfbfc0c697b350a1c9cb836962d3bd3e4be8b5e3da",
+    "productionDataset": false
+  },
+  "baseDescription": {
+    "sourceId": "SRC-08",
+    "filename": "readme.txt",
+    "sizeBytes": 380,
+    "sha256": "295c8420b9ba47cf3cceb78a6c36b95b596aba48772972f5637482cb50a368a5",
+    "declaredFilename": "Pokemon - Emerald Version (USA, Europe).gba",
+    "declaredSizeBytes": 16777216,
+    "declaredCrc32": "1F1C08FB",
+    "declaredMd5": "605B89B67018ABCEA91E693A4DD25BE3",
+    "declaredSha1": "F3AE088181BF583E55DAF962A92BB46F4F1D07B7",
+    "declaredSha256": "A9DEC84DFE7F62AB2220BAFAEF7479DA0929D066ECE16A6885F6226DB19085AF",
+    "headerSizeAndCrcMatchAllUploads": true,
+    "actualBaseRomVerified": false,
+    "authorAuthenticityVerified": false
+  },
+  "ruleReference": {
+    "ticket": "TMT-02",
+    "document": "docs/RULES_REFERENCE.md",
+    "status": "partial-blocked-oracles-and-policy",
+    "provisionalEngineeringCandidate": "gen9",
+    "chosenGeneration": null,
+    "romFidelityProven": false
+  }
+}

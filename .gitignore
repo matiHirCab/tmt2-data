@@ -18,3 +18,10 @@ Desktop.ini
 # Local coordination settings and compatibility snapshots
 workspace.local.json
 .local/
+
+# User patch / ROM inputs stay local; provenance records contain metadata only.
+*.bps
+*.gba
+*.gbc
+*.gb
+*.nds

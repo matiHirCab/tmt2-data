@@ -138,20 +138,10 @@ configuration and installed dependencies as desired. Returning to the previous
 branch alone does not remove uncommitted files: preserve or selectively remove
 this slice first.
 
-## Proposed next slice (not implemented)
+## Implementation backlog
 
-Add a separately reviewed, explicitly experimental registration smoke-test mod in
-server `data/mods/` plus a hidden/unrated custom format. Choose and document its
-base generation explicitly, without claiming ROM mechanics. Test format-to-mod
-resolution, battle construction and a protocol round trip with ordinary inherited
-data. In the client, wire the same format ID to the appropriate mod Dex, tables,
-search and teambuilder selection; prove that a custom format does not silently use
-the base Dex. Design the pinned local server-data input for index generation before
-replacing any upstream source URL. Keep this registration work separate from the
-coordination change.
-
-Actual TMT2 facts and mechanics remain pending verified provenance: duplicate
-Holy/Bird/Bird typing, permanent multiple types, no EVs and special passives.
-Do not deduplicate types without evidence, replace the damage engine, or use
-transient `addedType` as a permanent third species type. Battle callbacks remain
-handwritten in the server.
+Follow only [ROADMAP.md](ROADMAP.md) for implementation stages, ticket prerequisites
+and status. The former next-slice registration proposal is superseded by TMT-05,
+which now depends on a verified seed (TMT-04); it is not an independent task.
+Use [CI.md](CI.md) for reproducible verification and the explicit DNS diagnostic
+split. Historical test results remain evidence, not competing implementation plans.
