@@ -3,6 +3,7 @@ import path from 'node:path';
 import net from 'node:net';
 import {execFileSync} from 'node:child_process';
 import {config, preflight, manifest, datasetIdentity, supervise, root, lockWorkspace, writeSnapshot, clientAssetStatus} from './core.mjs';
+import {assertGenerated} from '../integration/cli.mjs';
 import {readSeed} from '../data/validate.mjs';
 const [command, ...extra] = process.argv.slice(2);
 const commands = ['doctor', 'build', 'test', 'dev', 'manifest:write', 'manifest:check', 'data:validate'];
@@ -41,10 +42,15 @@ try {
   } else {
     const release = lockWorkspace();
     try {
-      const builds = [node(c.server, ['build'], 'server build'), node(c.client, ['build'], 'client normal build (no runtime data generation or upstream indexes)')];
+      if(['build','dev'].includes(command))assertGenerated(c);
+      const builds = [node(c.server, ['build'], 'server build'),
+        node(c.client, ['build-tools/build-indexes','--server',c.server,'--commit',execFileSync('git',['rev-parse','HEAD'],{cwd:c.server,encoding:'utf8'}).trim()], 'offline pinned indexes and TMT2 table'),
+        node(c.client, ['build'], 'client build and local bounded catalog')];
       if (command === 'build') process.exitCode = await supervise(builds);
       if (command === 'test') {
         process.exitCode = await supervise([
+          ...builds,
+          node(c.data, ['tools/integration/verify.mjs'], 'integration identity'),
           node(c.data, ['--test'], 'data, coordination and CI tests'),
           node(c.data, ['node_modules/typescript/bin/tsc', '--noEmit'], 'data typecheck'),
           {file: 'npm', args: ['test'], cwd: c.server, label: 'server lint, tests, typecheck'},
@@ -53,7 +59,7 @@ try {
       }
       if (command === 'dev') {
         const assets = clientAssetStatus(c);
-        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. Normal build does not generate these; testclient may attempt remote fallbacks. This is not a complete TMT2 client.`);
+        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. Pinned local indexes are generated; these remaining assets may use remote fallbacks. This is not a complete TMT2 client.`);
         await free(c.serverPort); await free(c.clientPort);
         const result = await supervise(builds);
         if (result) process.exitCode = result;

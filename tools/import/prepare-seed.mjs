@@ -4,12 +4,13 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {config, preflight, root} from '../workspace/core.mjs';
 import {verifyPins} from '../ci/pins.mjs';
+import {inheritedSources} from '../integration/cli.mjs';
 import {stableHash, serializeSeed, inheritedPayload, validateSeed} from '../data/validate.mjs';
 try {
   const args=process.argv.slice(2); const fixture=args[0]==='--fixture'; if(fixture)args.shift();
   if(args.length!==2 || args[0]!=='--output') throw Error('Usage: prepare-seed.mjs [--fixture] --output NEW.json');
-  const c=config(); preflight(c); verifyPins(c);
-  const expected=JSON.parse(fs.readFileSync(path.join(root,'ci/pins.json')));
+  const c=config(); preflight(c); verifyPins(c); inheritedSources(c);
+  const expected=JSON.parse(fs.readFileSync(path.join(root,'provenance/inheritance-pins.json')));
   const {Dex}=createRequire(import.meta.url)(path.join(c.server,'dist/sim/dex.js')); const dex=Dex.mod('gen9');
   const creatorRows=JSON.parse(fs.readFileSync(path.join(root,'provenance/seed-types.json')));
   const selected=JSON.parse(fs.readFileSync(path.join(root,'overrides/seed-selection.json')));

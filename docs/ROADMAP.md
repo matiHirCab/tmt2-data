@@ -33,7 +33,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Terminado: adaptación y formato aprobados |
 | 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Terminado: primera CI remota verificada |
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Completado: seed acotado de adaptación, esquema y validación |
-| 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Pendiente |
+| 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Implementado local (pendiente CI remoto) |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Pendiente |
 | 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Pendiente |
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Pendiente |
@@ -130,16 +130,23 @@ rotas o desconocidos presentados como hechos; fixtures de prueba etiquetados apa
 `provenance/seed-chart.json`, `tests/seed.test.mjs` y
 [contrato/validación](RULES_REFERENCE.md#tmt-04--esquema-y-semilla-acotada).
 El seed seleccionado supera su contrato; fixtures no pueden sustituirlo.
-TMT-05 permanece pendiente: no hay mod jugable ni catálogo completo.
+Al cierre de TMT-04 aún no había integración; TMT-05 registra ahora el mod oculto.
+No hay catálogo completo ni certificación de mecánicas jugables.
 
 ### TMT-05 — Mod, formato oculto y Dex cliente integrados
 
-**Prerrequisitos:** TMT-04. **Estado:** pendiente.
+**Prerrequisitos:** TMT-04. **Estado:** implementado local (pendiente CI remoto).
 **DoD:** formato oculto/mod y cliente consumen el mismo catálogo/versión; generación
 local determinista con inputs fijados; `Dex.forFormat`, tablas, búsqueda y selección
 de formato usan el mod correcto. Pruebas detectan fallback al Dex base. Cambiar una
 URL de upstream no basta; no pipeline dependiente sólo de datos Smogon.
-**Evidencia:** pendiente; no ejecutar la antigua propuesta INTEGRATION-1 por separado.
+**Evidencia:** generador/guards `tools/integration/`, `tests/integration.test.mjs`,
+commits de ambos forks fijados en `ci/pins.json` y
+[contrato/checks de integración](RULES_REFERENCE.md#tmt-05--integracion-local-aislada).
+Mismo catálogo/version/hash, checks de drift/base fallback, tablas/búsqueda/Dex,
+parser battle/replay, browser local y CI-core. TMT-06/07 permanecen pendientes;
+construcción del formato no certifica daño/no-EVs ni un combate terminado.
+La antigua propuesta INTEGRATION-1 no se ejecuta por separado.
 
 ### TMT-06 — Mecánicas semilla, no EVs y legalidad
 
