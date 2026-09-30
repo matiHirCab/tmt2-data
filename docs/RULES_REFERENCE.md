@@ -429,7 +429,7 @@ consumer commits en `ci/pins.json` no entran en el hash del catálogo, evitando
 un ciclo de SHA propio. Cambios a inputs heredados requieren revisión/versionado.
 
 Servidor: mod aislado `gen9tmt2seed`, formato `[Gen 9] TMT2 Seed` oculto/no rated,
-construcción de Battle y guardas de pertenencia de especies/abilities/moves/items.
+cláusula heredada que desactiva Terastallization, construcción de Battle y guardas de pertenencia de especies/abilities/moves/items.
 Dex expone sólo seis especies, once moves, cinco abilities, `none` y los 24 tipos;
 366 parejas del chart coinciden con la semilla. Gen9OU conserva Pidgeot Normal/Flying.
 Callbacks ordinarios siguen heredados. `|tmt2data|version|datasetHash|catalogHash`
@@ -449,7 +449,7 @@ archivos ajenos por marca de ownership. Locks nunca se roban.
 
 | Repo | Rama local | HEAD consumidor |
 | --- | --- | --- |
-| server | `feat/tmt05-hidden-mod` | `0bf1d31022f29dd048988a926e1ecaf274c4c1cf` |
+| server | `feat/tmt05-hidden-mod` | `79614d93b69a05cac53c3ed6681be4f2a1395635` |
 | client | `feat/tmt05-client-dex` | `8e19677c1362b03dff1b30210511504b15ac676c` |
 | data | `feat/tmt05-local-integration` | commit final del cambio; manifest registra HEAD real |
 
@@ -505,3 +505,7 @@ formato oculto construido; routing Dex/battle/replay/search/teambuilder probado;
 tercer tipo/duplicados visibles; errores por ausencia/fallback/drift/outputs
 inseguros; gen9 ordinario aislado; CI-core y browser local aprobados. Implementado
 local, pendiente autorización de publicación y CI remota. No trabajo TMT-06/07.
+
+Revisión final de aislamiento: Terastallization, excluida por TMT-02, se desactiva
+mediante `Terastal Clause` existente. Test focalizado con la configuración real
+pasa3/3 y verifica la regla registrada. No añade callbacks ni mecánicas nuevas.
