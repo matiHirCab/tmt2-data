@@ -33,7 +33,7 @@ jobs:
         working-directory: tmt2-data
     steps:
       - name: Checkout the data commit under test
-        uses: actions/checkout@de23441a48e516b6c34aea4fa41551a30e30af803 # v6, reviewed 2026-09-30
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, reviewed 2026-09-30
         with:
           path: tmt2-data
           persist-credentials: false
@@ -43,7 +43,7 @@ jobs:
         id: pins
         run: node tools/ci/pins.mjs outputs
       - name: Checkout pinned server
-        uses: actions/checkout@de23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: matiHirCab/Pokemon-Too-Many-Types-2
           ref: ${{ steps.pins.outputs.server_sha }}
@@ -52,7 +52,7 @@ jobs:
           clean: false
           set-safe-directory: false
       - name: Checkout pinned client
-        uses: actions/checkout@de23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           repository: matiHirCab/Pokemon-Too-Many-Types-2-client
           ref: ${{ steps.pins.outputs.client_sha }}
