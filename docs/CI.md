@@ -15,7 +15,9 @@ reject mismatched/dirty sibling sources instead of pulling or resetting them.
 
 [ci.yml](../.github/workflows/ci.yml) uses Ubuntu 24.04, exact action commit SHAs
 (reviewed v6 tags of actions/checkout and actions/setup-node), and `contents: read`
-only. It has no custom secrets, write token, pull_request_target, environment,
+only. Server checkout includes full history so the inherited-source guard can
+compare the original pinned ancestor; checked-out HEAD remains the exact consumer pin.
+It has no custom secrets, write token, pull_request_target, environment,
 deployment, PR creation or repository-permission mutation. Checkout credentials
 are not persisted; clean/reset and global safe-directory edits are disabled.
 The built-in read token only fetches public repository inputs. No cache of generated
