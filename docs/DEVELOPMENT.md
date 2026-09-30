@@ -115,18 +115,18 @@ runtime behavior. Stop manual edits/fork commands while taking a snapshot; the
 lock excludes other coordination operations, not arbitrary external writers. Dirty trees are visible and content-sensitive, not represented
 as clean commits. Commit/clean the intended changes before sharing release pins.
 
-A bounded candidate dataset now exists at `normalized/seed.json`, selected by
-default; a config `dataset` overrides it. It is **incomplete** while creator type
-rows are absent. Doctor/manifest show `bounded-seed-incomplete`, not successful
-production validation. `seedValidated` may become true only after the seed contract
+A bounded adaptation dataset now exists at `normalized/seed.json`, selected by
+default; a config `dataset` overrides it. Its selected contract passes; doctor/manifest show
+`bounded-seed-validated`, not full production certification. `seedValidated` may become true only after the seed contract
 passes; `productionValidated`/`fullCatalogValidated` remain false because full
 catalog and gameplay fidelity are outside this slice. Legacy identity documents
 remain `identified-unvalidated`. Fixture files can never pass selected seed validation.
 
 `npm run seed:validate` and `workspace:data:validate` run schema and semantic checks
-for the bounded contract; current draft exits1 with exact missing type rows. No
+for the bounded contract; the selected seed exits0, while fixtures/missing data
+exit1. No
 empty generator or automatic type fallback. `npm run seed:prepare -- --output NEW.json`
-extracts dependencies from the already-built pinned server into a new draft file,
+extracts dependencies from the already-built pinned server into a new validated seed file,
 never overwriting existing files or fetching data. `--fixture` makes a labeled test
 fixture only. Full commands, sets, boundaries and results are in
 [RULES_REFERENCE.md](RULES_REFERENCE.md#tmt-04--esquema-y-semilla-acotada).

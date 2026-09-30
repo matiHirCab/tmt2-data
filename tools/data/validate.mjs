@@ -39,7 +39,7 @@ function shape(s, v, at, errors) {
 }
 export function inheritedPayload(d) {
   return {species:d.species.map(s=>({...s,types:undefined,fieldSources:undefined})),
-    moves:d.moves,abilities:d.abilities,types:d.types,chart:d.chart.filter(p=>p.source==='showdown')};
+    moves:d.moves,abilities:d.abilities,types:d.types.filter(t=>t.fieldSources.id==='showdown'),chart:d.chart.filter(p=>p.source==='showdown')};
 }
 export function validateSeed(d, {allowFixture = false} = {}) {
   const errors = []; shape(schema, d, '$', errors);
@@ -73,6 +73,10 @@ export function validateSeed(d, {allowFixture = false} = {}) {
   if(!chartSource || chartSource.kind!=='creator' || chartSource.sha256!==stableHash(register.chartObservations)) bad('Creator chart evidence hash mismatch');
   const policy=maps.sources.get('policy');
   if(!policy || policy.kind!=='policy' || policy.sha256!==stableHash(register.userApprovals)) bad('Approved policy evidence hash mismatch');
+  const seedChart=JSON.parse(fs.readFileSync(new URL('../../provenance/seed-chart.json',import.meta.url)));
+  const seedSource=maps.sources.get('seedchart');
+  if(!seedSource || seedSource.kind!=='creator' || seedSource.sha256!==stableHash(seedChart)) bad('Seed chart evidence hash mismatch');
+  for(const p of d.chart.filter(p=>p.source==='seedchart')) if(!seedChart.pairs.some(q=>q.attacker===p.attacker && q.defender===p.defender && q.multiplier===p.multiplier)) bad('Seed chart contradicts registered observation');
   for(const p of d.chart.filter(p=>p.source==='creatorchart')) {
     if(!register.chartObservations.pairs.some(q=>q.attacker.toLowerCase()===p.attacker && q.defender.toLowerCase()===p.defender && q.multiplier===p.multiplier)) bad('Chart pair contradicts registered creator observation');
   }
@@ -83,6 +87,11 @@ export function validateSeed(d, {allowFixture = false} = {}) {
     }
     for (const field of Object.keys(r.fieldSources)) if (!(field in r) || field === 'fieldSources') bad(`${kind}.${r.id}: unused provenance field ${field}`);
     if (kind === 'types' && r.passive === 'unsupported-custom') bad(`type ${r.id}: custom passive unsupported`);
+    if(kind==='types' && r.fieldSources.id==='creatorspecies'){
+      const rows=JSON.parse(fs.readFileSync(new URL('../../provenance/seed-types.json',import.meta.url)));
+      if(!rows.rows.some(row=>row.types.includes(r.id)) || r.name!==r.id[0].toUpperCase()+r.id.slice(1) || r.fieldSources.name!=='creatorspecies' || r.passive!=='none-adaptation') bad('Custom identity must match registered creator labels and adaptation passive policy');
+    }
+    if(kind==='types' && r.passive==='none-adaptation' && r.fieldSources.passive!=='policy') bad('Undocumented passive must cite adaptation policy');
     if (kind === 'species') {
       if (!r.types) bad(`species ${r.id}: creator type row missing`);
       else {
@@ -115,7 +124,7 @@ export function validateSeed(d, {allowFixture = false} = {}) {
       for (const id of set.moves) {
         exists('moves',id,'team'); const move=maps.moves.get(id);
         if (sp && !sp.learnset.includes(id)) bad(`illegal move ${id} for ${sp.id}`);
-        if (move && move.category !== 'Status') for (const defender of d.species) for (const type of defender.types ?? []) {
+        if (move) for (const defender of d.species) for (const type of defender.types ?? []) {
           if (!pairs.has(`${move.type}/${type}`)) bad(`missing chart pair ${move.type}/${type}`);
         }
       }

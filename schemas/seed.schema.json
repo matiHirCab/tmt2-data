@@ -223,6 +223,7 @@
         "passive": {
           "enum": [
             "ordinary-gen9",
+            "none-adaptation",
             "unsupported-custom",
             "fixture"
           ]

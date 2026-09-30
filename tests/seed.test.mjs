@@ -11,8 +11,7 @@ const fail=(d,regex)=>{const r=check(d);assert.equal(r.valid,false);assert.match
 const rehash=d=>{d.sources.find(s=>s.id==='showdown').sha256=stableHash(inheritedPayload(d));};
 test('bounded seed fixture is valid, six complete sets; fixture never production',()=>{
  assert.equal(check(fixture).valid,true);assert.equal(validateSeed(fixture).valid,false);
- assert.equal(validateSeed(selected).valid,false);
- assert.match(validateSeed(selected).errors.join('\n'),/creator type row missing/);
+ assert.equal(validateSeed(selected).valid,true);
  assert.equal(selected.kind,'production');assert.equal(fixture.kind,'test-fixture');
 });
 test('seed schema rejects missing keys, extra keys, invalid stats and malformed IDs',()=>{
@@ -42,9 +41,9 @@ test('hash stable across object key order and sensitive to bytes, arrays and dat
  const d=Object.fromEntries(Object.entries(fixture).reverse());assert.equal(stableHash(d),stableHash(fixture));
  d.teams=structuredClone(d.teams).reverse();assert.notEqual(stableHash(d),stableHash(fixture));
 });
-test('selected seed CLI fails explicitly on missing creator rows; fixture CLI cannot pass production',()=>{
- for(const file of ['normalized/seed.json','tests/fixtures/seed.json']){
-  const r=spawnSync(process.execPath,['tools/data/cli.mjs',file],{encoding:'utf8'});assert.equal(r.status,1);assert.match(r.stdout,/"valid": false/);
+test('selected seed CLI passes bounded production; fixture cannot pass production',()=>{
+ for(const [file,status] of [['normalized/seed.json',0],['tests/fixtures/seed.json',1]]){
+  const r=spawnSync(process.execPath,['tools/data/cli.mjs',file],{encoding:'utf8'});assert.equal(r.status,status);
  }
 });
 
@@ -53,4 +52,27 @@ test('chart coverage, team completeness and creator attribution cannot be fabric
  d=clone();d.teams[1].sets[2].species='rattata';fail(d,/duplicate premade species|unused roster/);
  d=clone();d.kind='production';d.sources.find(s=>s.id==='fixture').kind='creator';fail(d,/no matching registered creator row/);
  d=clone();d.rules.source='showdown';fail(d,/approved adaptation policy/);
+});
+
+test('production preserves primary-sheet types, triple Bird and explicit passive adaptation',()=>{
+ const p=selected.species.find(s=>s.id==='pidgeot');assert.deepEqual(p.types,['bird','bird','bird']);
+ assert.equal(selected.species.some(s=>s.id==='koffing'),false);
+ assert.deepEqual(selected.species.find(s=>s.id==='nosepass').types,['rock']);
+ const rows=JSON.parse(fs.readFileSync(new URL('../provenance/seed-types.json',import.meta.url)));
+ assert.match(rows.rows.find(s=>s.id==='pidgeot').locator,/C24:E24/);
+ assert.equal(selected.types.find(s=>s.id==='bird').passive,'none-adaptation');
+ const d=structuredClone(selected);d.types.find(s=>s.id==='bird').fieldSources.passive='creatorspecies';fail(d,/adaptation policy/);
+});
+test('bounded chart uses primary cells without neutral fallback, including status coverage',()=>{
+ assert.equal(selected.chart.find(p=>p.attacker==='rock'&&p.defender==='bird').multiplier**3,8);
+ for(const attack of ['rock','electric']){
+  const d=structuredClone(selected);d.chart=d.chart.filter(p=>!(p.attacker===attack&&p.defender==='bird'));fail(d,/missing chart pair/);
+ }
+ const d=structuredClone(selected);d.chart.find(p=>p.source==='seedchart').multiplier=0;fail(d,/contradicts/);
+});
+
+test('production cannot omit or reorder creator types or promote unknown evidence',()=>{
+ let d=structuredClone(selected);d.species[0].types=null;fail(d,/creator type row missing/);
+ d=structuredClone(selected);d.species.find(s=>s.id==='floragato').types.reverse();fail(d,/no matching registered creator row/);
+ d=structuredClone(selected);d.sources.find(s=>s.id==='creatorspecies').kind='unknown';fail(d,/unresolved evidence/);
 });

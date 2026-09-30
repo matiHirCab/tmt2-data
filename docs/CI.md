@@ -101,6 +101,5 @@ Source snapshots exclude ignored outputs/config; stop manual writers for a stabl
 snapshot. See [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md) for exact current results.
 
 TMT-04 adds selected bounded seed validation after own tests/typecheck, before
-fork builds. `normalized/seed.json` is currently an explicit incomplete draft;
-core fails there until creator type rows are registered. Fixture success cannot
-bypass that gate. The validator runs offline against committed schema/evidence/pins.
+fork builds. `normalized/seed.json` now passes its bounded adaptation contract, including
+registered creator rows and chart coverage. Fixture success cannot bypass that gate. The validator runs offline against committed schema/evidence/pins.

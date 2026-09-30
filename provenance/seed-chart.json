@@ -1,0 +1,387 @@
+{
+  "sourceId": "SRC-03",
+  "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing",
+  "observedOn": "2026-09-30",
+  "versionBinding": null,
+  "orientation": "attacker row / defender column; auxiliary A-C retained",
+  "pairs": [
+    {
+      "attacker": "normal",
+      "defender": "rat",
+      "multiplier": 1,
+      "cell": "BN3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "boring",
+      "multiplier": 0.5,
+      "cell": "AE3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "cat",
+      "multiplier": 1,
+      "cell": "AF3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "water",
+      "multiplier": 1,
+      "cell": "O3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "frog",
+      "multiplier": 1,
+      "cell": "AS3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "grass",
+      "multiplier": 1,
+      "cell": "P3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "magic",
+      "multiplier": 1,
+      "cell": "BI3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "bird",
+      "multiplier": 1,
+      "cell": "AC3"
+    },
+    {
+      "attacker": "normal",
+      "defender": "rock",
+      "multiplier": 0.5,
+      "cell": "I3"
+    },
+    {
+      "attacker": "dark",
+      "defender": "rat",
+      "multiplier": 1,
+      "cell": "BN20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "boring",
+      "multiplier": 1,
+      "cell": "AE20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "cat",
+      "multiplier": 1,
+      "cell": "AF20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "water",
+      "multiplier": 1,
+      "cell": "O20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "frog",
+      "multiplier": 1,
+      "cell": "AS20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "grass",
+      "multiplier": 1,
+      "cell": "P20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "magic",
+      "multiplier": 1,
+      "cell": "BI20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "bird",
+      "multiplier": 1,
+      "cell": "AC20"
+    },
+    {
+      "attacker": "dark",
+      "defender": "rock",
+      "multiplier": 1,
+      "cell": "I20"
+    },
+    {
+      "attacker": "water",
+      "defender": "rat",
+      "multiplier": 1,
+      "cell": "BN14"
+    },
+    {
+      "attacker": "water",
+      "defender": "boring",
+      "multiplier": 2,
+      "cell": "AE14"
+    },
+    {
+      "attacker": "water",
+      "defender": "cat",
+      "multiplier": 2,
+      "cell": "AF14"
+    },
+    {
+      "attacker": "water",
+      "defender": "water",
+      "multiplier": 0.5,
+      "cell": "O14"
+    },
+    {
+      "attacker": "water",
+      "defender": "frog",
+      "multiplier": 0,
+      "cell": "AS14"
+    },
+    {
+      "attacker": "water",
+      "defender": "grass",
+      "multiplier": 0.5,
+      "cell": "P14"
+    },
+    {
+      "attacker": "water",
+      "defender": "magic",
+      "multiplier": 1,
+      "cell": "BI14"
+    },
+    {
+      "attacker": "water",
+      "defender": "bird",
+      "multiplier": 1,
+      "cell": "AC14"
+    },
+    {
+      "attacker": "water",
+      "defender": "rock",
+      "multiplier": 2,
+      "cell": "I14"
+    },
+    {
+      "attacker": "grass",
+      "defender": "rat",
+      "multiplier": 1,
+      "cell": "BN15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "boring",
+      "multiplier": 2,
+      "cell": "AE15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "cat",
+      "multiplier": 1,
+      "cell": "AF15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "water",
+      "multiplier": 2,
+      "cell": "O15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "frog",
+      "multiplier": 2,
+      "cell": "AS15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "grass",
+      "multiplier": 0.5,
+      "cell": "P15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "magic",
+      "multiplier": 1,
+      "cell": "BI15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "bird",
+      "multiplier": 0.5,
+      "cell": "AC15"
+    },
+    {
+      "attacker": "grass",
+      "defender": "rock",
+      "multiplier": 2,
+      "cell": "I15"
+    },
+    {
+      "attacker": "flying",
+      "defender": "rat",
+      "multiplier": 2,
+      "cell": "BN5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "boring",
+      "multiplier": 2,
+      "cell": "AE5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "cat",
+      "multiplier": 0.5,
+      "cell": "AF5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "water",
+      "multiplier": 1,
+      "cell": "O5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "frog",
+      "multiplier": 2,
+      "cell": "AS5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "grass",
+      "multiplier": 2,
+      "cell": "P5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "magic",
+      "multiplier": 1,
+      "cell": "BI5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "bird",
+      "multiplier": 1,
+      "cell": "AC5"
+    },
+    {
+      "attacker": "flying",
+      "defender": "rock",
+      "multiplier": 0.5,
+      "cell": "I5"
+    },
+    {
+      "attacker": "rock",
+      "defender": "rat",
+      "multiplier": 2,
+      "cell": "BN8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "boring",
+      "multiplier": 0.5,
+      "cell": "AE8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "cat",
+      "multiplier": 1,
+      "cell": "AF8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "water",
+      "multiplier": 1,
+      "cell": "O8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "frog",
+      "multiplier": 1,
+      "cell": "AS8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "grass",
+      "multiplier": 1,
+      "cell": "P8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "magic",
+      "multiplier": 1,
+      "cell": "BI8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "bird",
+      "multiplier": 2,
+      "cell": "AC8"
+    },
+    {
+      "attacker": "rock",
+      "defender": "rock",
+      "multiplier": 1,
+      "cell": "I8"
+    },
+    {
+      "attacker": "electric",
+      "defender": "rat",
+      "multiplier": 1,
+      "cell": "BN16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "boring",
+      "multiplier": 2,
+      "cell": "AE16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "cat",
+      "multiplier": 1,
+      "cell": "AF16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "water",
+      "multiplier": 2,
+      "cell": "O16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "frog",
+      "multiplier": 2,
+      "cell": "AS16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "grass",
+      "multiplier": 0.5,
+      "cell": "P16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "magic",
+      "multiplier": 0.5,
+      "cell": "BI16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "bird",
+      "multiplier": 2,
+      "cell": "AC16"
+    },
+    {
+      "attacker": "electric",
+      "defender": "rock",
+      "multiplier": 1,
+      "cell": "I16"
+    }
+  ]
+}
