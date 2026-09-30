@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import net from 'node:net';
 import {execFileSync} from 'node:child_process';
-import {config, preflight, manifest, datasetIdentity, supervise, root, lockWorkspace} from './core.mjs';
+import {config, preflight, manifest, datasetIdentity, supervise, root, lockWorkspace, writeSnapshot, clientAssetStatus} from './core.mjs';
 const [command, ...extra] = process.argv.slice(2);
 const commands = ['doctor', 'build', 'test', 'dev', 'manifest:write', 'manifest:check', 'data:validate'];
 const node = (cwd, args, label) => ({file: process.execPath, args, cwd, label});
@@ -18,26 +18,27 @@ try {
   const c = config();
   preflight(c);
   if (command === 'doctor') {
-    console.log(JSON.stringify({paths: {data: c.data, server: c.server, client: c.client}, node: process.version, npm: execFileSync('npm', ['--version'], {encoding: 'utf8'}).trim(), git: execFileSync('git', ['--version'], {encoding: 'utf8'}).trim(), ports: [c.serverPort, c.clientPort], dataset: datasetIdentity(c)}, null, 2));
+    console.log(JSON.stringify({paths: {data: c.data, server: c.server, client: c.client}, node: process.version, npm: execFileSync('npm', ['--version'], {encoding: 'utf8'}).trim(), git: execFileSync('git', ['--version'], {encoding: 'utf8'}).trim(), ports: [c.serverPort, c.clientPort], dataset: datasetIdentity(c), clientAssets: clientAssetStatus(c)}, null, 2));
   } else if (command.startsWith('manifest:')) {
-    const file = path.join(root, '.local/compatibility.json');
-    const content = JSON.stringify(manifest(c), null, 2) + '\n';
-    if (command === 'manifest:write') {
-      fs.mkdirSync(path.dirname(file), {recursive: true});
-      fs.writeFileSync(file + '.tmp', content);
-      fs.renameSync(file + '.tmp', file);
-      console.log('Wrote .local/compatibility.json (snapshot, not production validation)');
-    } else {
-      if (fs.readFileSync(file, 'utf8') !== content) throw Error('Compatibility snapshot mismatch; inspect changes before regenerating');
-      console.log('Compatibility snapshot matches');
-    }
+    const release = lockWorkspace();
+    try {
+      const file = path.join(root, '.local/compatibility.json');
+      const content = JSON.stringify(manifest(c), null, 2) + '\n';
+      if (command === 'manifest:write') {
+        writeSnapshot(content);
+        console.log('Wrote .local/compatibility.json (snapshot, not production validation)');
+      } else {
+        if (fs.readFileSync(file, 'utf8') !== content) throw Error('Compatibility snapshot mismatch; inspect changes before regenerating');
+        console.log('Compatibility snapshot matches');
+      }
+    } finally { release(); }
   } else if (command === 'data:validate') {
     console.log(JSON.stringify(datasetIdentity(c)));
     throw Error('Production validation incomplete: authoritative TMT2 data, schema and provenance checks are not implemented. No artifacts generated.');
   } else {
     const release = lockWorkspace();
     try {
-      const builds = [node(c.server, ['build'], 'server build'), node(c.client, ['build'], 'client normal build (existing checked-in data; no upstream indexes)')];
+      const builds = [node(c.server, ['build'], 'server build'), node(c.client, ['build'], 'client normal build (no runtime data generation or upstream indexes)')];
       if (command === 'build') process.exitCode = await supervise(builds);
       if (command === 'test') {
         process.exitCode = await supervise([
@@ -48,6 +49,8 @@ try {
         ]);
       }
       if (command === 'dev') {
+        const assets = clientAssetStatus(c);
+        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. Normal build does not generate these; testclient may attempt remote fallbacks. This is not a complete TMT2 client.`);
         await free(c.serverPort); await free(c.clientPort);
         const result = await supervise(builds);
         if (result) process.exitCode = result;

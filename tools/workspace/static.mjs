@@ -10,6 +10,8 @@ const server = http.createServer(async (req, res) => {
     if (pathname.split('/').some(p => p.startsWith('.')) || /\.(php|map)$/i.test(pathname)) throw Error('source file');
     const file = await fs.realpath(path.join(root, pathname === '/' ? 'testclient-new.html' : pathname));
     if (!file.startsWith(root + path.sep)) throw Error('outside root');
+    const relative = path.relative(root, file);
+    if (relative.split(path.sep).some(p => p.startsWith('.')) || /\.(php|map)$/i.test(file)) throw Error('source file');
     const bytes = await fs.readFile(file);
     res.writeHead(200, {'Content-Type': mime[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store'});
     res.end(req.method === 'HEAD' ? undefined : bytes);

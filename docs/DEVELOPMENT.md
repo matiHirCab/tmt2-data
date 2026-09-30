@@ -15,8 +15,10 @@ Keep independent Git histories: no fourth repository or submodules. Use Node
 
 Clone the three `matiHirCab` repositories into the layout above. For a repeatable
 checkout use explicitly reviewed commit SHAs, then run `npm ci` in each repository.
-No command here fetches, pulls, resets, installs dependencies or selects a remote
-revision automatically. A build may create the forks' default ignored config files
+No coordination command performs a Git fetch/pull/reset, installs dependencies
+or selects a remote revision automatically. The upstream normal client build
+may attempt its optional news refresh, and its test page can load remote assets.
+A build may create the forks' default ignored config files
 and normal generated build outputs. Existing local configs remain in use.
 
 ```sh
@@ -34,17 +36,25 @@ npm run workspace:dev
 
 `doctor` validates Git roots, package identities, distinct sibling locations,
 ports, minimum Node and installed dependency sentinels; it prints Node/npm/Git
-versions and dataset status. It is not a full dependency-integrity audit.
+versions, dataset status and missing client runtime assets. It is not a full
+dependency-integrity audit.
 `workspace:build` builds server then client. `workspace:test` runs this repository's
 tests/typecheck then each fork's `npm test` (including its lint/typecheck lifecycle).
 Failures stop the sequence and produce a nonzero exit status.
-Build/test/dev share an exclusive `.local/operation.lock` to prevent concurrent
+Build/test/dev and manifest write/check share an exclusive `.local/operation.lock`
+to prevent concurrent
 commands from interfering with generated files or server REPL sockets. Do not run
 fork tests manually while dev is running either. Normal completion/failure/signals
 release the lock. After SIGKILL or a machine crash, inspect its recorded PID and
 remove only the stale lock after verifying that operation and its children ended.
+Locks are never stolen automatically; releasing an old lock does not delete a
+replacement lock. A symlinked `.local` directory is rejected.
 
-**Client build scope:** only `node build`, with existing checked-in client data.
+**Client build scope:** only `node build`, using already available local runtime
+data. The client data directory is generated and Git-ignored, **not checked in**;
+a clean checkout has none of these files. Doctor reports `clientAssets: incomplete`,
+and dev warns with the missing paths. READY means HTTP readiness only, not complete
+assets or a playable TMT2 build.
 The coordination CLI accepts no extra build arguments. It never calls `full`,
 `indexes`, `learnsets` or `minidex`: current index tooling clones/pulls upstream
 Smogon and uses the base Dex. This slice does not regenerate or claim synchronized
@@ -90,8 +100,10 @@ npm run workspace:manifest:check
 npm run workspace:data:validate
 ```
 
-The first command atomically replaces ignored `.local/compatibility.json`. Review
-changes before refreshing a stale snapshot. The check is read-only and fails if
+The first command uses an exclusively created unique temporary file and atomically
+replaces ignored `.local/compatibility.json`. Review
+changes before refreshing a stale snapshot. The check leaves the snapshot unchanged (but acquires/releases the operation lock)
+and fails if
 any recorded state differs or no snapshot exists. There are no timestamps or
 absolute paths: identical inputs produce identical bytes. Every repository has a
 HEAD commit, dirty flag and SHA-256 over sorted file names, file/executable/symlink
@@ -99,7 +111,8 @@ kind and content hashes of tracked and nonignored untracked files. Deleted files
 are represented explicitly. Ignored dependencies, local config, build outputs and
 the manifest itself are excluded. The snapshot therefore describes **source state**,
 not a reproducible binary/environment certificate; ignored configs can change
-runtime behavior. Dirty trees are visible and content-sensitive, not represented
+runtime behavior. Stop manual edits/fork commands while taking a snapshot; the
+lock excludes other coordination operations, not arbitrary external writers. Dirty trees are visible and content-sensitive, not represented
 as clean commits. Commit/clean the intended changes before sharing release pins.
 
 No authoritative dataset exists in this checkout. By default the manifest says

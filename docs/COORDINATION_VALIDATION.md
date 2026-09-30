@@ -1,4 +1,9 @@
-# Coordination slice verification
+# Initial coordination slice verification
+
+Follow-up: [controlled baseline comparison and final safety checks](BASELINE_COMPARISON.md)
+explains the test-count differences, DNS failures and missing runtime assets. The
+follow-up raises the coordination test count to 13 and supersedes the preliminary
+UI attribution below.
 
 Verified in the provisioned environment with Node 24.19.0, npm 11.9.0 and Git
 2.52.0. Checkouts initially had no dependencies/build outputs; `npm ci` installed

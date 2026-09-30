@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {execFileSync, spawn} from 'node:child_process';
 import net from 'node:net';
-import {config, manifest, datasetIdentity, preflight, supervise, root, lockWorkspace} from '../tools/workspace/core.mjs';
+import {config, manifest, datasetIdentity, preflight, supervise, root, lockWorkspace, writeSnapshot, clientAssetStatus} from '../tools/workspace/core.mjs';
 function fixture(t) {
   const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tmt2 workspace '));
   t.after(() => fs.rmSync(base, {recursive: true, force: true}));
@@ -89,6 +89,8 @@ test('static server exposes public assets only, supports HEAD, rejects sources a
   fs.writeFileSync(path.join(publicDir, 'key.php'), 'secret');
   fs.writeFileSync(path.join(publicDir, '.hidden'), 'secret');
   fs.symlinkSync(path.join(f.data, 'package.json'), path.join(publicDir, 'escape.json'));
+  fs.symlinkSync(path.join(publicDir, '.hidden'), path.join(publicDir, 'hidden-alias'));
+  fs.symlinkSync(path.join(publicDir, 'key.php'), path.join(publicDir, 'php-alias'));
   const p = spawn(process.execPath, [path.join(root, 'tools/workspace/static.mjs'), publicDir, '0'], {stdio: ['ignore', 'pipe', 'pipe']});
   const exit = new Promise(resolve => p.once('exit', resolve));
   t.after(async () => { p.kill(); await exit; });
@@ -97,7 +99,7 @@ test('static server exposes public assets only, supports HEAD, rejects sources a
   assert.equal(await (await fetch(url)).text(), '<p>synthetic</p>');
   assert.equal((await fetch(url + '/app.js')).headers.get('content-type'), 'text/javascript');
   assert.equal(await (await fetch(url, {method: 'HEAD'})).text(), '');
-  for (const name of ['/key.php', '/.hidden', '/escape.json', '/%zz', '/missing']) assert.equal((await fetch(url + name)).status, 404);
+  for (const name of ['/key.php', '/.hidden', '/escape.json', '/hidden-alias', '/php-alias', '/%zz', '/missing']) assert.equal((await fetch(url + name)).status, 404);
   assert.equal((await fetch(url, {method: 'POST'})).status, 405);
 });
 test('readiness failure shuts down service group', async () => {
@@ -112,4 +114,36 @@ test('workspace lock rejects concurrent operations and can be released', t => {
   assert.equal(JSON.parse(fs.readFileSync(path.join(f.data, '.local/operation.lock'))).pid, process.pid);
   release();
   lockWorkspace(f.data)();
+});
+
+test('snapshot output does not follow temporary or destination symlinks', t => {
+  const f = fixture(t); const directory = path.join(f.data, '.local'); fs.mkdirSync(directory);
+  const outside = path.join(f.base, 'preserve'); fs.writeFileSync(outside, 'untouched');
+  fs.symlinkSync(outside, path.join(directory, 'compatibility.json.tmp'));
+  fs.symlinkSync(outside, path.join(directory, 'compatibility.json'));
+  writeSnapshot('snapshot\n', f.data);
+  assert.equal(fs.readFileSync(outside, 'utf8'), 'untouched');
+  assert.equal(fs.readFileSync(path.join(directory, 'compatibility.json'), 'utf8'), 'snapshot\n');
+  assert.equal(fs.lstatSync(path.join(directory, 'compatibility.json')).isSymbolicLink(), false);
+});
+test('local directory symlinks rejected and replaced locks preserved', t => {
+  const f = fixture(t); const outside = path.join(f.base, 'outside'); fs.mkdirSync(outside);
+  const local = path.join(f.data, '.local'); fs.symlinkSync(outside, local);
+  assert.throws(() => lockWorkspace(f.data), /symlink/);
+  assert.throws(() => writeSnapshot('no', f.data), /symlink/);
+  assert.deepEqual(fs.readdirSync(outside), []);
+  fs.unlinkSync(local);
+  const release = lockWorkspace(f.data); const lock = path.join(local, 'operation.lock');
+  fs.renameSync(lock, lock + '.old'); fs.writeFileSync(lock, 'replacement');
+  release(); assert.equal(fs.readFileSync(lock, 'utf8'), 'replacement');
+});
+test('doctor asset status distinguishes absent generated files from present unvalidated files', t => {
+  const f = fixture(t); const c = config({}, f.data);
+  const missing = clientAssetStatus(c); assert.equal(missing.status, 'incomplete');
+  assert.ok(missing.missing.includes('data/text/en.js'));
+  for (const name of missing.missing) {
+    const filename = path.join(c.client, 'play.pokemonshowdown.com', name);
+    fs.mkdirSync(path.dirname(filename), {recursive: true}); fs.writeFileSync(filename, 'synthetic sentinel');
+  }
+  assert.deepEqual(clientAssetStatus(c), {status: 'present-unvalidated', missing: []});
 });

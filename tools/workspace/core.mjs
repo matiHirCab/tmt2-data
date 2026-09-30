@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync, spawn} from 'node:child_process';
-import {createHash} from 'node:crypto';
+import {createHash, randomUUID} from 'node:crypto';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -118,8 +118,7 @@ export async function supervise(commands, {services = false, graceMs = 2000, rea
 }
 
 export function lockWorkspace(base = root) {
-  const file = path.join(base, '.local/operation.lock');
-  fs.mkdirSync(path.dirname(file), {recursive: true});
+  const file = path.join(localDirectory(base), 'operation.lock');
   let fd;
   try { fd = fs.openSync(file, 'wx'); }
   catch (e) {
@@ -128,5 +127,42 @@ export function lockWorkspace(base = root) {
   }
   try { fs.writeFileSync(fd, JSON.stringify({pid: process.pid}) + '\n'); }
   finally { fs.closeSync(fd); }
-  return () => fs.unlinkSync(file);
+  const identity = fs.lstatSync(file);
+  return () => {
+    let current;
+    try { current = fs.lstatSync(file); } catch (e) { if (e.code === 'ENOENT') return; throw e; }
+    // Never remove a lock replaced by another operation or manual recovery.
+    if (current.ino === identity.ino && current.dev === identity.dev) fs.unlinkSync(file);
+  };
+}
+
+export function localDirectory(base = root) {
+  const directory = path.join(base, '.local');
+  fs.mkdirSync(directory, {recursive: true});
+  if (fs.lstatSync(directory).isSymbolicLink()) throw Error('.local must not be a symlink');
+  return directory;
+}
+
+export function writeSnapshot(content, base = root) {
+  const directory = localDirectory(base);
+  const temporary = path.join(directory, `compatibility.${randomUUID()}.tmp`);
+  let created = false;
+  try {
+    // Exclusive creation never follows an existing temporary-file symlink.
+    const fd = fs.openSync(temporary, 'wx', 0o600);
+    created = true;
+    try { fs.writeFileSync(fd, content); } finally { fs.closeSync(fd); }
+    fs.renameSync(temporary, path.join(directory, 'compatibility.json'));
+  } finally {
+    if (created && fs.existsSync(temporary)) fs.unlinkSync(temporary);
+  }
+}
+
+export function clientAssetStatus(c) {
+  const required = ['data/text/en.js', 'data/pokedex.js', 'data/moves.js',
+    'data/items.js', 'data/abilities.js', 'data/search-index.js',
+    'data/teambuilder-tables.js', 'data/typechart.js', 'data/aliases.js',
+    'data/graphics.js', 'data/commands.js', 'js/server/chat-formatter.js'];
+  const missing = required.filter(file => !fs.existsSync(path.join(c.client, 'play.pokemonshowdown.com', file)));
+  return {status: missing.length ? 'incomplete' : 'present-unvalidated', missing};
 }
