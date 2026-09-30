@@ -10,6 +10,8 @@ test('isolated catalog deterministic, versioned and preserves every selected ref
  const d=catalog(seed);assert.equal(encode(d),encode(catalog(structuredClone(seed))));
  assert.deepEqual(d.table.species.pidgeot.types,['Bird','Bird','Bird']);
  assert.equal(d.table.species.mew,undefined);assert.equal(d.metadata.modID,'gen9tmt2seed');
+ assert.equal(d.table.moves.struggle,undefined);assert.equal(d.table.engineMoves.struggle.basePower,50);
+ assert(seed.species.every(s=>!s.learnset.includes('struggle')));
  for(const s of seed.species){assert.deepEqual(d.table.species[s.id].baseStats,s.baseStats);assert.deepEqual(d.table.species[s.id].learnset,s.learnset);}
  for(const p of seed.chart)assert.equal(d.table.types[p.defender].damageTaken[seed.types.find(t=>t.id===p.attacker).name],({0:3,0.5:2,1:0,2:1})[p.multiplier]);
  assert.notEqual(d.table.species.pidgeot.types.join(','),'Normal,Flying');

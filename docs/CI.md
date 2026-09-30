@@ -99,6 +99,14 @@ other resources can still be absent or require remote fallback, reported by doct
 The pinned offline pipeline restores data/text labels without downloading Smogon.
 No full battle, no-EV runtime or exact ROM fidelity is certified by integration CI.
 
+TMT-06 extends core with actual mod simulator tests (the server's configured suite)
+and cross-repository checks: client premade export must pass authoritative validation,
+client EV0 stats must equal actual battle stats, and engine-only Struggle metadata
+must match the pinned Gen9 parent. Struggle is never a selectable catalog/learnset
+entry. These are adaptation checks, not ROM measurements or the two-browser TMT-07
+journey. See the dated results in RULES_REFERENCE; earlier TMT-05 limits above are
+historical scope evidence. Live DNS and slow exclusions remain exactly unchanged.
+
 ## Failure handling and evidence
 
 Any core failure returns nonzero and stops the sequence. Network diagnostics keep
