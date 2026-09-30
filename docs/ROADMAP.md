@@ -29,7 +29,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 
 | Etapa | Ticket | Prerrequisitos | Estado actual |
 | --- | --- | --- | --- |
-| 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Parcial/bloqueado: falta BPS del usuario |
+| 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Terminado: input registrado; mecánicas pendientes en TMT-02 |
 | 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Pendiente |
 | 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Implementado local; pendiente CI remoto |
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Pendiente |
@@ -46,7 +46,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 
 ### TMT-01 — Registrar fuentes y versión
 
-**Prerrequisitos:** ninguno. **Estado:** parcial/bloqueado por entrada exacta.
+**Prerrequisitos:** ninguno. **Estado:** terminado (registro de fuentes/entrada).
 Registrar fuentes oficiales, versión, permisos, hashes y base. Inspeccionar BPS
 cuando esté disponible, sin descargar/aplicar ROMs ni confundir un parche binario
 con una base de datos de especies o mecánicas.
@@ -60,9 +60,11 @@ un ROM de salida. El BPS tampoco resuelve por sí solo todas las reglas de TMT-0
 **Evidencia:** [registro de fuentes](../provenance/SOURCES.md),
 [registro estructurado](../provenance/sources.json),
 [verificación de etapa 1](STAGE_1_VALIDATION.md).
-**Bloqueo/petición:** se solicitó en este mismo chat el archivo
-`Pokemon Emerald - Too Many Types 2 (v1.5.2) (kobazco).bps`; no está adjunto aún.
-No usar la identidad del ZIP de referencia como identidad del archivo del usuario.
+**Entrada recibida:** BPS v1.5.2, dos variantes v1.4.0 y readme adjuntos en este
+mismo chat el 2026-09-30. SHA-256, estructura y CRC de los tres parches verificados
+sin aplicar ROMs; ver [inspección](../provenance/PATCH_INSPECTION.md). SRC-05 fija el
+input v1.5.2 por sus bytes. Autenticidad de release, derechos y mecánicas quedan
+explícitamente desconocidos; sus límites no se resuelven por el nombre o CRC.
 
 ### TMT-02 — Reglas y casos de referencia
 

@@ -6,7 +6,7 @@ Rama nueva `feat/stage-1-sources-ci`, creada desde el master fusionado
 No había cambios ajenos; no se modificaron fuentes de los forks ni permisos remotos.
 No push, PR, merge, despliegue, issue o chat nuevo en esta etapa.
 
-## TMT-01
+## TMT-01 — Estado histórico previo a recibir adjuntos
 
 Registro de fuentes primarias leído/creado, campos desconocidos explícitos y
 metadatos de referencia separados del input del usuario. Se solicitó el BPS exacto
@@ -71,3 +71,18 @@ presupone una política administrativa que el conector no permite leer.
 No hay CI de fidelidad/batallas TMT2 ni datos de producción. Se preservan el fallo
 explícito de `workspace:data:validate`, el aviso de assets ausentes, el diagnóstico
 DNS y el aviso opcional de PHP/noticias del cliente.
+
+## Actualización tras recibir el BPS
+
+La petición anterior está satisfecha: se recibieron BPS v1.5.2, v1.4.0, v1.4.0 Alt
+y readme en este chat. [PATCH_INSPECTION.md](../provenance/PATCH_INSPECTION.md)
+supersede el bloqueo por falta de archivo. TMT-01 termina el registro con límites
+explícitos; TMT-02 sigue pendiente. Los tres parches pasan estructura/CRC y el
+readme sólo declara la base. No se aplicaron ROMs ni se importaron datos.
+
+`npm test`: 21 pasan (16 previos + 5 de inspección/consistencia);
+`npm run typecheck` y `git diff --check`: pasan.
+`workspace:data:validate`: código 1 esperado; dataset de producción ausente.
+Los perfiles core/network y la instalación limpia anteriores no se repitieron:
+no cambiaron sus scripts, pins o los forks; el perfil core descubrirá las nuevas
+pruebas automáticamente. No hay ejecución remota autorizada.

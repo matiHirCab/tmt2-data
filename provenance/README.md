@@ -6,5 +6,6 @@ Provenance records should make every imported or derived fact traceable to an ap
 
 Stage 1 source of truth: [SOURCES.md](SOURCES.md) and [sources.json](sources.json),
 linked from the sole implementation backlog [TMT-01](../docs/ROADMAP.md).
-Unknown hashes stay null. Reference-patch metadata must never identify an unseen
-user file. Receiving a BPS does not supply a ROM mechanics oracle.
+Patch inspection: [PATCH_INSPECTION.md](PATCH_INSPECTION.md). Unknown hashes stay
+null; uploaded-file hashes and third-party reference metadata remain distinct.
+Receiving a BPS does not supply a ROM mechanics oracle.
