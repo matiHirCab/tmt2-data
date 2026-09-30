@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "ticket": "TMT-01",
+  "reviewedOn": "2026-09-30",
+  "status": "partial-awaiting-user-patch",
+  "productionValidated": false,
+  "sources": [
+    {
+      "id": "SRC-01",
+      "authority": "creator-primary",
+      "url": "https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/",
+      "review": "read-2026-09-30",
+      "snapshotSha256": null
+    },
+    {
+      "id": "SRC-02",
+      "authority": "creator-primary",
+      "url": "https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6",
+      "review": "post-108-read-2026-09-30",
+      "snapshotSha256": null
+    },
+    {
+      "id": "SRC-03",
+      "authority": "creator-linked-mutable-document",
+      "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing",
+      "review": "type-chart-view-read; species-observation-from-prior-research",
+      "snapshotSha256": null
+    },
+    {
+      "id": "SRC-04",
+      "authority": "third-party-patch-distribution",
+      "url": "https://github.com/RetroAchievements/RAPatches/raw/refs/heads/main/GBA/Hacks/Pokemon%20Emerald/37577-PokemonEmerald-TooManyTypes2.zip",
+      "review": "prior-research-handoff; not-downloaded-this-task",
+      "snapshotSha256": null,
+      "repositoryCommit": null
+    },
+    {
+      "id": "SRC-05",
+      "authority": "user-input-pending",
+      "url": null,
+      "review": "requested-in-current-task-chat; bytes-not-received",
+      "snapshotSha256": null
+    }
+  ],
+  "release": {
+    "latestFoundVersion": "1.5.2",
+    "announcementDate": "2026-03-11",
+    "sourceId": "SRC-02",
+    "userPatchMatches": null
+  },
+  "userPatch": {
+    "sourceId": "SRC-05",
+    "requestedFilename": "Pokemon Emerald - Too Many Types 2 (v1.5.2) (kobazco).bps",
+    "status": "requested-in-current-task-chat-not-received",
+    "sha256": null,
+    "sizeBytes": null,
+    "patchCrc32": null,
+    "metadata": null,
+    "sourceSizeBytes": null,
+    "sourceCrc32": null,
+    "targetSizeBytes": null,
+    "targetCrc32": null,
+    "referenceMatch": null
+  },
+  "referencePatch": {
+    "sourceId": "SRC-04",
+    "evidence": "reported-by-prior-research-worker",
+    "sha256": null,
+    "patchCrc32": null,
+    "sourceSizeBytes": 16777216,
+    "sourceCrc32": "1F1C08FB",
+    "targetSizeBytes": 33554432,
+    "targetCrc32": "D25FBCCC",
+    "applied": false,
+    "identifiesUserPatch": false
+  },
+  "claims": [
+    {
+      "id": "FACT-01",
+      "claim": "No EVs",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01"
+      ],
+      "romOracleVerified": false
+    },
+    {
+      "id": "FACT-02",
+      "claim": "Up to three species types",
+      "status": "verified-primary-statement",
+      "sourceIds": [
+        "SRC-01"
+      ],
+      "romOracleVerified": false
+    },
+    {
+      "id": "FACT-03",
+      "claim": "Mega Pidgeot types Holy/Bird/Bird, ordered and repeated",
+      "status": "prior-research-observation-pending-row-snapshot",
+      "sourceIds": [
+        "SRC-03"
+      ],
+      "romOracleVerified": false
+    }
+  ],
+  "pending": [
+    "Exact user BPS identity and structural/integrity inspection",
+    "Complete seed stats, moves, abilities/passives, items, learnsets and forms",
+    "Damage, immunity, repeated-type STAB and fourth-type reference cases",
+    "Evidence-based Showdown generation and competitive level/team-size decisions",
+    "Source snapshot/version binding and redistribution rights"
+  ],
+  "assumptions": [],
+  "decisions": {
+    "showdownBaseGeneration": null,
+    "level": null,
+    "teamSize": null,
+    "suggestedFormat": "private-unranked-singles-premade-teams-not-a-ROM-fact"
+  },
+  "rights": {
+    "datasetLicense": null,
+    "redistributionApproved": false
+  }
+}

@@ -12,7 +12,10 @@
     "workspace:dev": "node tools/workspace/cli.mjs dev",
     "workspace:manifest:write": "node tools/workspace/cli.mjs manifest:write",
     "workspace:manifest:check": "node tools/workspace/cli.mjs manifest:check",
-    "workspace:data:validate": "node tools/workspace/cli.mjs data:validate"
+    "workspace:data:validate": "node tools/workspace/cli.mjs data:validate",
+    "ci:core": "node tools/ci/run.mjs core",
+    "ci:network": "node tools/ci/run.mjs network",
+    "ci:smoke": "node tools/ci/smoke.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

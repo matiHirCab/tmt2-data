@@ -2,6 +2,14 @@
 
 Canonical shared-data and generation layer for the Pokémon Too Many Types 2 (TMT2) Pokémon Showdown project.
 
+## Implementation plan
+
+[**Canonical roadmap: four stages / twelve tickets**](docs/ROADMAP.md) is the only
+active implementation backlog. Read it for prerequisites, status and evidence.
+[Source register](provenance/SOURCES.md) and [CI instructions](docs/CI.md) support
+stage 1. Older task proposals are superseded; architecture and engineering policies
+remain valid. No production dataset or TMT2 mechanics are implemented yet.
+
 ## Related repositories
 
 - [Pokémon Showdown server fork](https://github.com/matiHirCab/Pokemon-Too-Many-Types-2)
