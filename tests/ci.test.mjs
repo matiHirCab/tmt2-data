@@ -44,3 +44,12 @@ test('CI pin mismatch and dirty sibling rejection leave files untouched', t => {
   assert.throws(() => verifyPins(c, pins, versions), /dirty/);
   assert.equal(fs.readFileSync(path.join(c.server, 'source'), 'utf8'), 'user edit');
 });
+
+test('workflow action references use complete SHA-1 pins instead of malformed or floating refs', () => {
+  const workflow = fs.readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8');
+  const references = [...workflow.matchAll(/^\s+uses:\s+(\S+)/gm)].map(match => match[1]);
+  assert.ok(references.length > 0, 'Workflow must contain action references');
+  for (const reference of references) {
+    assert.match(reference, /^actions\/(checkout|setup-node)@[a-f0-9]{40}$/);
+  }
+});
