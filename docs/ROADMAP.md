@@ -30,7 +30,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | Etapa | Ticket | Prerrequisitos | Estado actual |
 | --- | --- | --- | --- |
 | 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Terminado: input registrado; mecánicas pendientes en TMT-02 |
-| 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Parcial/bloqueado: oráculos y decisiones |
+| 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Parcial: contrato mínimo; filas, oráculo y decisiones pendientes |
 | 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Terminado: primera CI remota verificada |
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Pendiente |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Pendiente |
@@ -69,7 +69,8 @@ explícitamente desconocidos; sus límites no se resuelven por el nombre o CRC.
 ### TMT-02 — Reglas y casos de referencia
 
 **Prerrequisitos:** TMT-01. **Estado:** parcial/bloqueado: matriz y protocolos
-registrados; faltan oráculos y decisiones. Gen 9 es candidato provisional de
+registrados; contrato acotado a seis sets simples. Faltan sus filas/efectos,
+oráculo ordinario/stats y decisiones. Gen 9 es candidato provisional de
 ingeniería, no una generación elegida ni fidelidad demostrada.
 Definir casos mínimos de stats, no EVs, tipos ordenados/repetidos, STAB,
 efectividad/inmunidades, efectos y formas. Elegir base Showdown por evidencia de
@@ -80,7 +81,9 @@ competitivas (singles, nivel, tamaño de equipo, cláusulas y equipos prefijados
 decisiones competitivas explícitas; faltantes que impiden la semilla identificados.
 No marcar completo con conjeturas sobre STAB duplicado, un cuarto tipo o pasivas.
 **Evidencia:** [RULES_REFERENCE.md](RULES_REFERENCE.md): matriz de generaciones,
-REF-01…09, semilla mínima condicional y propuestas competitivas. Definiciones de
+REF-01…09, seis candidatos condicionales, controles heredados reproducibles y
+contrato mínimo. Casos de mecánicas excluidas no bloquean sets que no las usan,
+pero no se declaran resueltos. Definiciones de
 pasivas/datos y referencia legítima solicitadas en el mismo chat; no repetir BPS.
 No se desbloquea TMT-04 con protocolos aún no ejecutados.
 

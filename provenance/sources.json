@@ -23,7 +23,7 @@
       "id": "SRC-03",
       "authority": "creator-linked-mutable-document",
       "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing",
-      "review": "type-chart-view-read; species-observation-from-prior-research",
+      "review": "type-chart-five-pairs-read-2026-09-30; species-rows-unavailable",
       "snapshotSha256": null
     },
     {
@@ -169,8 +169,8 @@
     }
   ],
   "pending": [
-    "Complete seed stats, moves, abilities/passives, items, learnsets and forms",
-    "Damage, immunity, repeated-type STAB and fourth-type reference cases",
+    "Version-bound rows and selected moves/ability/passives for six simple seed sets",
+    "Ordinary damage/STAB/immunity and stat oracle; duplicates/fourth type deferred if excluded from seed",
     "Evidence-based Showdown generation and competitive level/team-size decisions",
     "Source snapshot/version binding and redistribution rights",
     "Independent release-byte authenticity and origin of v1.4.0 Alt differences"
@@ -271,9 +271,49 @@
   "ruleReference": {
     "ticket": "TMT-02",
     "document": "docs/RULES_REFERENCE.md",
-    "status": "partial-blocked-oracles-and-policy",
+    "status": "partial-minimal-seed-contract-awaiting-rows-oracle-and-policy",
     "provisionalEngineeringCandidate": "gen9",
     "chosenGeneration": null,
-    "romFidelityProven": false
+    "romFidelityProven": false,
+    "scope": "six-simple-sets; unsupported-mechanics-excluded; docs/RULES_REFERENCE.md"
+  },
+  "chartObservations": {
+    "sourceId": "SRC-03",
+    "observedOn": "2026-09-30",
+    "versionBinding": null,
+    "romOracleVerified": false,
+    "orientation": "attacker-row / defender-column; auxiliary columns A-C retained",
+    "pairs": [
+      {
+        "attacker": "Ghost",
+        "defender": "Steel",
+        "multiplier": 1,
+        "cell": "L10"
+      },
+      {
+        "attacker": "Fire",
+        "defender": "Grass",
+        "multiplier": 2,
+        "cell": "P13"
+      },
+      {
+        "attacker": "Fire",
+        "defender": "Water",
+        "multiplier": 0.5,
+        "cell": "O13"
+      },
+      {
+        "attacker": "Normal",
+        "defender": "Ghost",
+        "multiplier": 0,
+        "cell": "K3"
+      },
+      {
+        "attacker": "Electric",
+        "defender": "Ground",
+        "multiplier": 0,
+        "cell": "H16"
+      }
+    ]
   }
 }

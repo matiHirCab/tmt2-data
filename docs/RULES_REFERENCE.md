@@ -1,7 +1,7 @@
 # TMT-02 — Reglas, base y casos de referencia
 
 Evidencia de [TMT-02 en el backlog único](ROADMAP.md#tmt-02--reglas-y-casos-de-referencia),
-no un segundo plan. Estado: **parcial/bloqueado por semántica/oráculos y decisiones**.
+no un segundo plan. Estado: **parcial: contrato inicial acotado; faltan filas de candidatos y oráculo mínimo**.
 Revisión 2026-09-30. Entrada fijada: SRC-05 v1.5.2 por SHA-256 en
 [registro de fuentes](../provenance/sources.json). Integridad BPS no demuestra reglas.
 
@@ -22,7 +22,9 @@ Fuentes primarias: [hilo oficial](https://www.pokecommunity.com/threads/pok%C3%A
 [página 6, #105 y #108](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6),
 [hoja enlazada por el creador](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing).
 Son declaraciones/documentación, **no pruebas ejecutadas del ROM**. La hoja expuso
-sólo la tabla; htmlview no estuvo accesible. Páginas 2/3 del foro respondieron 403;
+sólo la tabla; htmlview no estuvo accesible. El navegador provisionado falló con
+`net::ERR_TUNNEL_CONNECTION_FAILED` en la URL pública de la hoja; no se alteró
+proxy ni se eludió acceso. Páginas 2/3 del foro respondieron 403;
 no se eludió acceso. Hace falta documentación adicional o resultados legítimos.
 
 ## Comportamiento heredado y base provisional
@@ -33,13 +35,13 @@ siguientes se observaron en su Dex compilado; el callback de estados usa un harn
 sin habilidades, no un combate completo. `Future`/`Past` son flags de catálogo;
 existir en el Dex **no implica legalidad**. La matriz no es evidencia ROM.
 
-| Base | Waterfall/Bite | Burn por turno sobre 160 HP | Speed 100 con parálisis | Rapid Spin potencia | Protosynthesis | Mega Pidgeot |
-| --- | --- | ---: | ---: | ---: | --- | --- |
-| Gen 3 | Special/Special | 20 | 25 | 20 | Future | Future |
-| Gen 6 | Physical/Physical | 20 | 25 | 20 | Future | actual |
-| Gen 7 | Physical/Physical | 10 | 50 | 20 | Future | actual |
-| Gen 8 | Physical/Physical | 10 | 50 | 50 | Future | Past |
-| Gen 9 | Physical/Physical | 10 | 50 | 50 | actual | Past |
+| Base | Ghost→Steel | Waterfall/Bite | Burn por turno sobre 160 HP | Speed 100 con parálisis | Rapid Spin potencia | Protosynthesis | Mega Pidgeot |
+| --- | ---: | --- | ---: | ---: | ---: | --- | --- |
+| Gen 3 | 0.5 | Special/Special | 20 | 25 | 20 | Future | Future |
+| Gen 6 | 1 | Physical/Physical | 20 | 25 | 20 | Future | actual |
+| Gen 7 | 1 | Physical/Physical | 10 | 50 | 20 | Future | actual |
+| Gen 8 | 1 | Physical/Physical | 10 | 50 | 50 | Future | Past |
+| Gen 9 | 1 | Physical/Physical | 10 | 50 | 50 | actual | Past |
 
 - Gen 3 añade reescritura de categorías por tipo y fases de daño específicas:
   `data/mods/gen3/scripts.ts`. Los anuncios de división y megas requieren deltas
@@ -54,12 +56,17 @@ existir en el Dex **no implica legalidad**. La matriz no es evidencia ROM.
   Protosynthesis/Quark Drive como actuales; retiene megas en el catálogo con
   legalidad específica. Tera/Dynamax/Z no están autorizados por esta evidencia.
 
-**Propuesta provisional de ingeniería: investigar Gen 9 como padre**, porque el
-creador menciona efectos modernos que allí ya existen y es el Dex raíz del fork
+**Propuesta provisional de ingeniería: investigar Gen 9 como padre**, porque la
+hoja del creador documenta Ghost→Steel ×1 (Gen3 heredada usa ×0.5), los anuncios
+requieren split y mencionan efectos modernos, y es el Dex raíz del fork
 (`data/scripts.ts`). Es minimizar reconstrucción, no afirmar fidelidad Gen 9.
 Gen 7 sigue alternativa si los oráculos favorecen su timing/valores. Decisión real
-`showdownBaseGeneration` permanece null. Antes de fijarla: medir split, estados,
-mega/speed/prioridad, movepowers y efectos; inventariar overrides y legalidad.
+`showdownBaseGeneration` permanece null. Para la primera semilla, cotejar stats,
+STAB/daño, categorías y valores de los
+moves elegidos, chart y efectos inherentes de sus tipos/abilities. Gen6–9 no se
+distinguen sólo por Ghost→Steel o split; Gen9 sigue una elección de ingeniería
+condicionada. Burn, parálisis, Rapid Spin y mega timing sólo son gates si se usan.
+Excluir esos contenidos evita hacer depender esta selección de todas sus reglas.
 Ninguna base elimina la necesidad de catálogo TMT2, tipos nuevos, pasivas y noEV.
 
 Otros comportamientos heredados que requieren confrontación:
@@ -82,6 +89,7 @@ Reproducción desde el workspace hermano (Node/npm/pins exactos):
 ```sh
 npm run workspace:build
 npm run source:showdown-reference
+npm run source:showdown-reference -- --damage
 cd ../Pokemon-Too-Many-Types-2
 node node_modules/mocha/bin/mocha.js --no-config test/main.js test/sim/misc/megaevolution.js --reporter dot --timeout 2000 --exit
 ```
@@ -124,16 +132,67 @@ implementar esa etapa ahora.
 
 ## Semilla mínima recomendada y decisiones competitivas
 
-Para mediciones empezar con **dos combatientes de referencia**, controles sin
-pasivas/objetos y filas completas verificadas; no es la semilla jugable TMT-04.
-Para TMT-04 recomendar el mínimo autorizado de **seis especies** y dos premades,
-seleccionadas sólo tras resolver sus dependencias: control ordinario, triple tipo,
-control de split y el menor conjunto de chart/moves/abilities/items/learnsets
-necesario para usar esos casos. Mega Pidgeot es un candidato de oráculo, no una
-fila de semilla aceptada: stats/ability/baseform no están completos. No hay aún
-seis nombres/sets verificables; ninguna especie se aprueba sólo por existir en Dex.
-Primera semilla excluiría megas, cambios de tipo y pasivas sin oráculo; si una
-pasiva inherente no puede excluirse legalmente, excluir la especie.
+### Contrato inicial acotado
+
+No exige resolver todo TMT2. Estos requisitos aplican sólo a los seis sets que se
+acepten; no se han implementado legalidad ni mecánicas de etapa 2.
+
+| Regla | Estado / condición de aceptación |
+| --- | --- |
+| EV0; rechazar EVs no cero | NoEV documentado por creador; prohibición de formato propuesta. Fórmula de stats aún pendiente |
+| Tipos como array ordenado, sin deduplicar | Repetición documentada; conservar datos. No aprobar especies repetidas hasta REF-01/02 |
+| Chart por pareja de tipos | Cinco observaciones SRC-03 registradas abajo; verificar sólo las parejas usadas, con versión/proveniencia |
+| STAB y daño ordinario | Producto defensivo por entrada y STAB único ×1.5 son hipótesis heredadas; requiere oráculo, no hechos ROM |
+| Stats/categoría/moves | Seis base stats, naturaleza/IVs, categoría, potencia, precisión, PP, prioridad, flags y learnset verificados para cada set; no tomar valores del Dex base como ROM |
+| Efectos | Sólo abilities y pasivas inherentes verificadas. Ningún nombre garantiza ausencia de efectos. Usar inicialmente moves de un golpe sin secundarios/cambio de stats/tipos sólo si su definición lo confirma |
+| Legalidad inicial | Lista de sets comprobados, sin objetos si es legal, sin megas/Tera/Dynamax/Z, clima ni cambios de tipo. Excluir especie si no puede evitarse un efecto desconocido |
+
+Observaciones de la [hoja oficial SRC-03](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing),
+2026-09-30: filas atacantes/columnas defensoras Ghost→Steel ×1 (10/L),
+Fire→Grass ×2 (13/P), Fire→Water ×0.5 (13/O), Normal→Ghost ×0 (3/K),
+Electric→Ground ×0 (16/H). Son documentación mutable, sin binding a v1.5.2 ni
+oráculo ROM; no importación de catálogo. Las coordenadas incluyen las columnas
+auxiliares A–C del documento. Ver `chartObservations` en el registro.
+
+**Candidatos para buscar filas, no roster aprobado:**
+
+| Grupo provisional | Nombres | Evidencia de existencia / límite |
+| --- | --- | --- |
+| A | Rattata, Eevee, Froakie | SRC-01 #6: fallback, nota Attract/evolución y encuentros respectivamente |
+| B | Koffing, Floragato, Pidgeot base | SRC-01 #6: cry y encuentros para los dos primeros. Pidgeot base es inferencia desde Mega Pidgeot SRC-02 #105: confirmar fila o reemplazar |
+
+Todos tienen tipos/stats/ability/moves/learnsets pendientes. No asignar tipos
+ordinarios ni abilities de Showdown a estos nombres. Buscar **una ability y uno o
+dos moves simples por especie**, no sus learnsets completos. Si una fila introduce
+Pure, pasiva desconocida, tipos repetidos u otra mecánica difícil, reemplazarla por
+una fila completa más simple; la lista no obliga a implementar esos efectos.
+La agrupación no es balance validado. Dos equipos de tres quedan sujetos a política.
+Mega Pidgeot permanece candidato de oráculo futuro, excluido de esta semilla.
+
+### Referencia mínima que desbloquea reglas
+
+Primero aportar las filas oficiales/versionadas de esos candidatos (o seis
+alternativas más simples), definiciones de sus tipos/pasivas y sólo los moves y
+ability elegidos. Un export o capturas legibles de la documentación bastan como
+entrada de investigación; anotar fecha y versión, sin ROM/save. No pedir el BPS otra vez.
+
+Con esas filas, seleccionar **dos combatientes reales** y un estado restaurable
+en una copia legítima v1.5.2/mGBA: stats visibles, nivel, naturaleza, tipos exactos,
+ability, sin objeto/campo/estado ni efecto sin verificar. Registrar un ataque STAB
+y un control noSTAB de categoría/potencia conocidas contra el mismo defensor,
+HP antes/después, críticas y RNG/repeticiones. No exigir cambiar tipos arbitrariamente
+ni comparar razones crudas cuando potencias/stats difieran. Calcular las predicciones
+competidoras con inputs medidos; conservar rangos hasta identificar rounding/RNG.
+Añadir un defensor de dos/tres tipos distintos si las parejas elegidas permiten
+separar producto defensivo de otra regla; documentar también una inmunidad accesible.
+Esto ejecuta los subconjuntos ordinarios de REF-01/02/07; REF-06 necesita stats base
+verificados y IV/naturaleza conocidos (dos niveles solos con IV desconocido no bastan).
+Si no hay par sin pasivas, documentar su efecto antes de usarlo como control.
+
+REF-03/04/05, duplicados de REF-01/02 y las partes de estados/Pure de REF-07/08 se
+mantienen como casos pendientes para contenidos excluidos, **no bloqueos globales
+para seis sets que no los usen**. REF-09 sólo bloquea pasivas de esos seis sets.
+La representación de duplicados se preserva aun cuando esas especies se excluyan.
 
 | Política | Recomendación de producto | Pendiente antes de aceptar |
 | --- | --- | --- |
@@ -158,29 +217,34 @@ No se extrajeron tablas ni se dedujeron mecánicas de cadenas/bytes sin etiqueta
 Se pueden establecer identidad, tamaños, CRC y estructura; no está justificado
 un extractor de stats/moves a partir de esos datos actuales.
 
-**Bloqueos exactos:** chart/seed/export de documentación vinculado a v1.5.2;
-definiciones de pasivas/moves/stats/learnsets; oráculos REF-01…09; generación y
-políticas competitivas sin aceptar. Pregunta enviada en este mismo chat: si el
-usuario puede probar su copia legítima en mGBA o aportar fuente/documentación.
-No se requiere otro BPS y no se solicitó compartir un ROM.
+**Bloqueos mínimos:** filas y definiciones de seis sets simples vinculadas a la
+versión; oráculo ordinario de STAB/daño/inmunidad y fórmula de stats; elección del
+padre provisional y política del formato. No falta otro BPS. No se ha recibido un
+ROM/reference executable; no se solicitó compartirlo. La pregunta enviada aquí
+sobre singles privado, 3v3/nivel50/IV31 sigue **sin respuesta registrada**; los
+campos de decisión permanecen null. Es una recomendación de formato, no regla ROM.
+Se preguntó en este chat si el usuario puede ejecutar la prueba mínima en su copia
+legítima/mGBA o aportar sólo documentación; respuesta aún pendiente.
 
-Sin esos inputs pueden mantenerse CI y documentación, preparar el formato de
-registro de observaciones y cotejar fuentes públicas permitidas. No se desbloquea
-TMT-04 ni se implementa mod/combate. TMT-02 sigue incompleto. TMT-03 tiene CI remota verificada, con evidencia
-en [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md#publicación-autorizada-y-ci-remota). Derechos/proveniencia y publicación conservan sus gates del roadmap.
+Sin esos inputs se pueden ejecutar los controles heredados y CI ya existente;
+no empezar TMT-04 ni afirmar fidelidad. TMT-02 continúa parcial. TMT-03 conserva
+la CI remota verificada en [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md#publicación-autorizada-y-ci-remota).
+Derechos/proveniencia y publicación conservan sus gates del roadmap.
 
 ## Verificación de esta revisión
 
-- `npm test`: 21 pasan, 0 fallan; pruebas propias, no oráculos ROM.
-- `npm run typecheck`, `node --check tools/provenance/showdown-reference.mjs` y
+- `npm test`: 22 pasan; pruebas propias, no oráculos ROM.
+- `npm run typecheck`, `node --check tools/provenance/showdown-reference.mjs`,
   `git diff --check`: pasan.
-- `npm run workspace:build`: código 0, builds normales de ambos forks; persiste
-  aviso baseline `php: not found` para noticias opcionales del cliente.
-- `npm run source:showdown-reference`: código 0; salida idéntica antes/después del
-  build y en dos ejecuciones. Argumento inesperado: código 1, sin datos de éxito.
-- Suite mega exacta arriba: 9 pasan; ningún test del juego ejecutado.
-- Perfil CI completo/DNS no repetido: scripts, pins y fuentes de forks intactos;
-  resultados anteriores siguen en STAGE_1_VALIDATION.md. No se levantó UI nueva.
-- Manifiesto local se regenera y coteja dos veces después del commit final.
-  Ese fue el estado previo a la autorización de publicar PR #2; la actualización
-  remota y el historial de corrección del pin están en STAGE_1_VALIDATION.md.
+- `npm run source:showdown-reference -- --damage`: diez asserts sobre el motor
+  Gen9 fijado. Mew sintético, nivel50/Hardy/IV31/EV0, No Ability, RNG [1,2,3,4],
+  sin crítica. `setType` mantiene orden/repetición; inmunidad se verifica antes de
+  `getDamage`. No ejecuta turno/move completo ni secundarios, y no usa catálogo TMT2.
+  Ember: neutral16, STAB24 (también Fire/Fire y Water/Fire/Fire), debilidad32,
+  duplicada64, triple128, resistencia8, duplicada4; Tackle inmune devuelve false.
+  Son expected **heredados**, no resultados del juego. Dos ejecuciones idénticas.
+- Probe sin flag: cinco bases; argumento inválido: código1 sin JSON de éxito.
+- Builds previos disponibles; no se modificaron forks ni pins. Suites completas,
+  DNS y UI no repetidas por esta revisión de probe/documentación; evidencia baseline
+  en STAGE_1_VALIDATION.md. Ningún test ROM ni nuevas checks remotas ejecutadas.
+- Manifiesto local ignorado se regenera/coteja dos veces tras el commit final.

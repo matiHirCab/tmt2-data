@@ -64,3 +64,15 @@ real ni contiene una base de datos directamente consultable.
 
 TMT-01 cierra el registro de fuentes/entrada con sus límites explícitos. TMT-02
 sigue pendiente de reglas y oráculos; datos de producción permanecen ausentes.
+
+## Ampliación focalizada TMT-02
+
+Cinco parejas de chart documentadas se registran con coordenadas en
+`chartObservations` (sin snapshot/version binding ni verificación ROM).
+Ghost→Steel distingue el chart documentado de Gen3 heredada. Los nombres de cinco
+candidatos provienen de SRC-01 #6; Pidgeot base sigue una inferencia por confirmar.
+No se importaron CSV de terceros ni se dedujeron stats de BPS.
+El [contrato inicial](../docs/RULES_REFERENCE.md#contrato-inicial-acotado) limita
+el input pendiente a seis sets simples y sus efectos, manteniendo los casos de
+contenido excluido como pendientes. La hoja sólo expuso chart; el navegador
+falló por túnel en la URL pública, sin eludir restricciones.
