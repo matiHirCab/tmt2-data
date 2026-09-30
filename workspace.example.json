@@ -1,0 +1,6 @@
+{
+  "server": "../Pokemon-Too-Many-Types-2",
+  "client": "../Pokemon-Too-Many-Types-2-client",
+  "serverPort": 8000,
+  "clientPort": 8080
+}

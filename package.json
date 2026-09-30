@@ -4,9 +4,20 @@
   "private": true,
   "description": "Canonical data tooling for Pokémon Too Many Types 2 Showdown",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "workspace:doctor": "node tools/workspace/cli.mjs doctor",
+    "workspace:build": "node tools/workspace/cli.mjs build",
+    "workspace:test": "node tools/workspace/cli.mjs test",
+    "workspace:dev": "node tools/workspace/cli.mjs dev",
+    "workspace:manifest:write": "node tools/workspace/cli.mjs manifest:write",
+    "workspace:manifest:check": "node tools/workspace/cli.mjs manifest:check",
+    "workspace:data:validate": "node tools/workspace/cli.mjs data:validate"
   },
   "devDependencies": {
     "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

@@ -35,6 +35,13 @@ It must never generate executable battle callbacks from descriptive prose. Battl
 
 ## Current status
 
-This repository currently contains only the project and data-pipeline foundation. Authoritative TMT2 data has not yet been imported.
+This repository contains the project/data-pipeline foundation and workspace coordination tooling. Authoritative TMT2 data has not yet been imported.
 
 No license has been selected. Licensing and data redistribution remain an explicit project decision.
+
+## Workspace coordination
+
+Run `npm run workspace:doctor`, `npm run workspace:build`,
+`npm run workspace:test`, or `npm run workspace:dev` from this repository.
+See [reproducible setup, configuration, snapshots and limitations](docs/DEVELOPMENT.md).
+Coordination is implemented; production TMT2 data and game integration are not.
