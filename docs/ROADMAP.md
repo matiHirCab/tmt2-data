@@ -32,7 +32,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Terminado: input registrado; fidelidad ROM no demostrada |
 | 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Terminado: adaptación y formato aprobados |
 | 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Terminado: primera CI remota verificada |
-| 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Pendiente |
+| 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Completado: seed acotado de adaptación, esquema y validación |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Pendiente |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Pendiente |
 | 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Pendiente |
@@ -114,12 +114,23 @@ fallos genuinos ocultos. Extender con datos/mecánicas cuando existan, no ahora.
 
 ### TMT-04 — Semilla verificada y esquema
 
-**Prerrequisitos:** TMT-01 y TMT-02. **Estado:** pendiente.
+**Prerrequisitos:** TMT-01 y TMT-02. **Estado:** completado bajo adaptación aprobada (2026-09-30).
+**Alcance aplicado 2026-09-30:** la adaptación aprobada en TMT-02 permite stats,
+moves/abilities/items y learnsets ordinarios del servidor fijado, con procedencia
+por campo; tipos de especies y overrides custom requieren fuente del creador.
+Los tipos se corroboraron en celdas oficiales; pasivas no documentadas usan
+política explícita sin callback adicional, como aplicación del fallback Gen9
+aprobado, sin afirmar ausencia de pasivos en ROM ni fidelidad exacta.
 **DoD:** 6–10 especies para dos equipos prefijados y todos sus movimientos,
 habilidades e ítems; stats y dependencias con evidencia; tipos como secuencias
 ordenadas que preservan duplicados. Esquema y validaciones rechazan referencias
 rotas o desconocidos presentados como hechos; fixtures de prueba etiquetados aparte.
-**Evidencia:** pendiente; no existe catálogo de producción importado.
+**Evidencia:** `schemas/seed.schema.json`, `tools/data/validate.mjs`,
+`normalized/seed.json` (seed v0.1.0 acotado), `provenance/seed-types.json`,
+`provenance/seed-chart.json`, `tests/seed.test.mjs` y
+[contrato/validación](RULES_REFERENCE.md#tmt-04--esquema-y-semilla-acotada).
+El seed seleccionado supera su contrato; fixtures no pueden sustituirlo.
+TMT-05 permanece pendiente: no hay mod jugable ni catálogo completo.
 
 ### TMT-05 — Mod, formato oculto y Dex cliente integrados
 

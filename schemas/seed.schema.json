@@ -1,0 +1,655 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "enum": [
+        "production",
+        "test-fixture"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contract": {
+      "const": "tmt04-bounded-adaptation-seed-v1"
+    },
+    "rules": {
+      "type": "object",
+      "properties": {
+        "generation": {
+          "const": 9
+        },
+        "format": {
+          "const": "private-unranked-singles-premade"
+        },
+        "level": {
+          "const": 50
+        },
+        "teamSize": {
+          "const": 3
+        },
+        "iv": {
+          "const": 31
+        },
+        "ev": {
+          "const": 0
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "generation",
+        "format",
+        "level",
+        "teamSize",
+        "iv",
+        "ev",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "fullCatalog": {
+          "const": false
+        },
+        "romFidelityProven": {
+          "const": false
+        },
+        "excluded": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 100
+        }
+      },
+      "required": [
+        "fullCatalog",
+        "romFidelityProven",
+        "excluded"
+      ],
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/source"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "types": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/type"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "species": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/species"
+      },
+      "minItems": 6,
+      "maxItems": 10
+    },
+    "moves": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/move"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "abilities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/effect"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/effect"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    },
+    "chart": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/chart"
+      },
+      "minItems": 1,
+      "maxItems": 6400
+    },
+    "teams": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/team"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "version",
+    "contract",
+    "rules",
+    "scope",
+    "sources",
+    "types",
+    "species",
+    "moves",
+    "abilities",
+    "items",
+    "chart",
+    "teams"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bounded TMT2 adaptation seed; semantic validation also required",
+  "definitions": {
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "creator",
+            "showdown",
+            "policy",
+            "test-fixture",
+            "unknown"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "version",
+        "locator",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "type": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passive": {
+          "enum": [
+            "ordinary-gen9",
+            "none-adaptation",
+            "unsupported-custom",
+            "fixture"
+          ]
+        },
+        "fieldSources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minProperties": 1
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "passive",
+        "fieldSources"
+      ],
+      "additionalProperties": false
+    },
+    "species": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "types": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+$",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "maxItems": 3
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "baseStats": {
+          "type": "object",
+          "properties": {
+            "hp": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "atk": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "def": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "spa": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "spd": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "spe": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            }
+          },
+          "required": [
+            "hp",
+            "atk",
+            "def",
+            "spa",
+            "spd",
+            "spe"
+          ],
+          "additionalProperties": false
+        },
+        "abilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "learnset": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 50
+        },
+        "fieldSources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minProperties": 1
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "types",
+        "baseStats",
+        "abilities",
+        "learnset",
+        "fieldSources"
+      ],
+      "additionalProperties": false
+    },
+    "move": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "category": {
+          "enum": [
+            "Physical",
+            "Special",
+            "Status"
+          ]
+        },
+        "basePower": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 250
+        },
+        "accuracy": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            {
+              "const": true
+            }
+          ]
+        },
+        "pp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": -7,
+          "maximum": 7
+        },
+        "flags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "behaviorRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fieldSources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minProperties": 1
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "category",
+        "basePower",
+        "accuracy",
+        "pp",
+        "priority",
+        "flags",
+        "behaviorRef",
+        "fieldSources"
+      ],
+      "additionalProperties": false
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "behaviorRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fieldSources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minProperties": 1
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "behaviorRef",
+        "fieldSources"
+      ],
+      "additionalProperties": false
+    },
+    "chart": {
+      "type": "object",
+      "properties": {
+        "attacker": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "defender": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "multiplier": {
+          "enum": [
+            0,
+            0.5,
+            1,
+            2
+          ]
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "attacker",
+        "defender",
+        "multiplier",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "set": {
+      "type": "object",
+      "properties": {
+        "species": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "ability": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "item": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "moves": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "nature": {
+          "const": "Hardy"
+        },
+        "level": {
+          "const": 50
+        },
+        "ivs": {
+          "type": "object",
+          "properties": {
+            "hp": {
+              "const": 31
+            },
+            "atk": {
+              "const": 31
+            },
+            "def": {
+              "const": 31
+            },
+            "spa": {
+              "const": 31
+            },
+            "spd": {
+              "const": 31
+            },
+            "spe": {
+              "const": 31
+            }
+          },
+          "required": [
+            "hp",
+            "atk",
+            "def",
+            "spa",
+            "spd",
+            "spe"
+          ],
+          "additionalProperties": false
+        },
+        "evs": {
+          "type": "object",
+          "properties": {
+            "hp": {
+              "const": 0
+            },
+            "atk": {
+              "const": 0
+            },
+            "def": {
+              "const": 0
+            },
+            "spa": {
+              "const": 0
+            },
+            "spd": {
+              "const": 0
+            },
+            "spe": {
+              "const": 0
+            }
+          },
+          "required": [
+            "hp",
+            "atk",
+            "def",
+            "spa",
+            "spd",
+            "spe"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "species",
+        "ability",
+        "item",
+        "moves",
+        "nature",
+        "level",
+        "ivs",
+        "evs"
+      ],
+      "additionalProperties": false
+    },
+    "team": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "sets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/set"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "id",
+        "sets"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

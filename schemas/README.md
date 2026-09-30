@@ -1,5 +1,7 @@
 # Schemas
 
-Ownership: permanent schemas and TypeScript types for canonical data models.
-
-Future models may include `DatasetManifest`, `Type`, `Species/Form`, `Move`, `Learnset`, `Ability`, and `Item`. They will be introduced only when requirements and authoritative inputs support them; this scaffold deliberately defines no speculative models.
+`seed.schema.json` is Draft07 for the bounded TMT-04 adaptation contract.
+`tools/data/validate.mjs` interprets the used keywords and additionally enforces
+references, approved rules, provenance hashes, ordered types and premade legality.
+Schema shape permits null species types to represent incomplete input; semantic
+validation always rejects them. Full catalog/runtime mechanics are out of scope.

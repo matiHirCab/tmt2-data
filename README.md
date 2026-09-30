@@ -43,7 +43,11 @@ It must never generate executable battle callbacks from descriptive prose. Battl
 
 ## Current status
 
-This repository contains the project/data-pipeline foundation and workspace coordination tooling. Authoritative TMT2 data has not yet been imported.
+This repository contains the project/data-pipeline foundation and workspace coordination tooling. The bounded TMT-04 schema, validator and pinned inherited dependencies are implemented.
+`normalized/seed.json` is a validated bounded adaptation seed: six species and
+two premade teams, official ordered types and explicitly inherited pinned Gen9
+dependencies. This is not full-catalog validation or a playable mod.
+Separate test fixtures are not production TMT2 data.
 
 No license has been selected. Licensing and data redistribution remain an explicit project decision.
 
@@ -52,6 +56,7 @@ No license has been selected. Licensing and data redistribution remain an explic
 Run `npm run workspace:doctor`, `npm run workspace:build`,
 `npm run workspace:test`, or `npm run workspace:dev` from this repository.
 See [reproducible setup, configuration, snapshots and limitations](docs/DEVELOPMENT.md).
-Coordination is implemented; production TMT2 data and game integration are not.
+Coordination and a bounded adaptation seed are implemented; full TMT2 data and
+game integration remain pending.
 
-TMT-02 evidence and pending oracle protocols: [docs/RULES_REFERENCE.md](docs/RULES_REFERENCE.md).
+Approved TMT-02 adaptation, TMT-04 contract and optional fidelity protocols: [docs/RULES_REFERENCE.md](docs/RULES_REFERENCE.md).

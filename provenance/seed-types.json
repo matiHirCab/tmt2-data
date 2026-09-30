@@ -1,0 +1,75 @@
+{
+  "sourceId": "SRC-03",
+  "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668",
+  "versionBinding": null,
+  "observedOn": "2026-09-30",
+  "userTranscription": {
+    "message": "Sentinel_51eeebf3c58c8191af721b1ca6a7eceb",
+    "receivedAt": "2026-09-30T20:12:49Z"
+  },
+  "primaryObservation": {
+    "observedAt": "2026-09-30T20:16:00Z",
+    "observer": "parent research worker; relayed source observations, not fetched by this importer",
+    "headers": {
+      "C": "Type1",
+      "D": "Type2",
+      "E": "Type3"
+    }
+  },
+  "rows": [
+    {
+      "id": "rattata",
+      "rawTranscription": "10 Rattata Rat",
+      "types": [
+        "rat"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B11, C11:E11"
+    },
+    {
+      "id": "eevee",
+      "rawTranscription": "110 Eevee Boring Cat",
+      "types": [
+        "boring",
+        "cat"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B125, C125:E125"
+    },
+    {
+      "id": "froakie",
+      "rawTranscription": "7 Froakie Water Frog",
+      "types": [
+        "water",
+        "frog"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B8, C8:E8"
+    },
+    {
+      "id": "nosepass",
+      "rawTranscription": "264 Nosepass Rock",
+      "types": [
+        "rock"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B302, C302:E302"
+    },
+    {
+      "id": "floragato",
+      "rawTranscription": "2 Floragato Grass Magic Cat",
+      "types": [
+        "grass",
+        "magic",
+        "cat"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B3, C3:E3"
+    },
+    {
+      "id": "pidgeot",
+      "rawTranscription": "23 Pidgeot Bird Bird Bird",
+      "types": [
+        "bird",
+        "bird",
+        "bird"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B24, C24:E24"
+    }
+  ]
+}

@@ -324,3 +324,91 @@ publicación y derechos/proveniencia mantienen sus gates.
   DNS y UI no repetidas por esta revisión de probe/documentación; evidencia baseline
   en STAGE_1_VALIDATION.md. Ningún test ROM ni nuevas checks remotas ejecutadas.
 - Manifiesto local ignorado se regenera/coteja dos veces tras el commit final.
+
+## TMT-04 — Esquema y semilla acotada
+
+Rama `feat/tmt04-seed-data` desde PR3 merged
+`ff09cca24dd6211f30cb235d62468913805f2aba`. El primer commit dejó explícitamente
+el seed incompleto; las filas recibidas y corroboradas el 2026-09-30 completan
+este contrato. No se afirma fidelidad ROM ni integración jugable.
+
+**Aplicación del alcance aprobado, 2026-09-30:** datos ordinarios y comportamiento
+no documentado heredan Gen9 del servidor fijado. Para tipos custom se registra
+`none-adaptation`: no callback adicional de tipo en esta adaptación inicial;
+esto no demuestra que el ROM carezca de pasivos. Sustituye la exclusión conservadora
+anterior de Pidgeot/tipos repetidos para este seed, sin cambiar las incógnitas ROM.
+Moves mantienen sus tipos Gen9: Gust es Flying, no Bird; no se inventan aliases.
+
+`provenance/seed-types.json` conserva la transcripción del usuario
+`Sentinel_51eeebf3c58c8191af721b1ca6a7eceb` (20:12:49 UTC) y observaciones visuales
+primarias del investigador del chat padre (20:16 UTC), con URL/celdas exactas:
+Rattata C11:E11, Eevee C125:E125, Froakie C8:E8, Floragato C3:E3,
+Pidgeot base C24:E24 y Nosepass C302:E302. No se atribuye esa consulta al importador.
+Mega Pidgeot es otra fila, excluida. No se importa todo el catálogo ni se normalizan
+aliases ambiguos. Las observaciones actuales de hoja no están ligadas a v1.5.2.
+
+Dos premades, todos Hardy, nivel50/IV31/EV0 y sin objeto (ID `none`):
+
+| Equipo | Especie / tipos oficiales ordenados | Ability heredada | Cuatro moves heredados |
+| --- | --- | --- | --- |
+| alpha | Rattata / Rat | Run Away | Tackle, Quick Attack, Bite, Protect |
+| alpha | Eevee / Boring, Cat | Run Away | Tackle, Quick Attack, Bite, Protect |
+| alpha | Froakie / Water, Frog | Torrent | Pound, Water Gun, Quick Attack, Protect |
+| beta | Nosepass / Rock | Sturdy | Tackle, Rock Throw, Thunder Wave, Protect |
+| beta | Floragato / Grass, Magic, Cat | Overgrow | Scratch, Magical Leaf, Bite, Protect |
+| beta | Pidgeot / Bird, Bird, Bird | Keen Eye | Tackle, Gust, Quick Attack, Protect |
+
+Nosepass reemplaza Koffing, ausente de la transcripción. Son sets de efectos
+ordinarios conocidos: prioridad Quick Attack, Bite, Protect, Torrent/Overgrow,
+Sturdy y Thunder Wave remiten a callbacks del servidor fijado. Stats base,
+metadatos y cuatro entradas del learnset por especie heredan ese Dex; se verifica
+cada ability y presencia de cada move, incluyendo entradas históricas permitidas
+por adaptación. No se afirma legalidad OU Gen9 ni igualdad con learnsets ROM.
+
+`provenance/seed-chart.json` registra 63 parejas numéricas y sus celdas primarias:
+los siete tipos de ataques seleccionados (incluido Electric de Thunder Wave)
+contra los nueve tipos defensivos únicos. No hay default neutral para custom.
+La matriz ordinaria restante hereda Gen9, salvo cinco overrides ya registrados;
+parejas observadas tienen precedencia. Rock→Bird=2; producto por tres slots=8 es
+expectativa de adaptación, no una medición ROM. Nuevos ataques sin cobertura fallan.
+
+`schemas/seed.schema.json` Draft07 y `tools/data/validate.mjs` comprueban shape,
+IDs/referencias, stats, reglas/sets, evidencia por campo, hashes de fuentes,
+correspondencia de filas/chart, cobertura y separación de fixtures. Hash canónico
+ordena objetos y preserva arrays; integridad del snapshot no autentica por sí sola
+una fuente. El fixture separado usa tipos ordinarios base-Dex y nunca valida como
+producción. Megas, cambios/cuarto tipo, callbacks custom, resto del catálogo y
+fidelidad ROM quedan excluidos; runtime/generación para ambos forks es TMT-05/06.
+
+```sh
+npm run workspace:build
+npm run seed:prepare -- --output /tmp/seed-new.json
+npm run seed:prepare -- --fixture --output /tmp/fixture-new.json
+npm test
+npm run typecheck
+npm run seed:validate
+npm run workspace:data:validate
+npm run ci:core
+```
+
+El preparador lee únicamente el servidor compilado fijado; no fetch/pull ni ROM.
+Valida antes de escribir un archivo nuevo con `wx`: rechaza overwrite/symlink.
+Se revisa el resultado antes de reemplazar el snapshot comprometido.
+
+**Verificación local:** 34 tests propios pasan; typecheck y validación de ambos
+comandos pasan. Preparación repetida es idéntica y overwrite falla sin modificar
+el archivo. `npm run ci:core` sale0: builds server/client, lint/typechecks, servidor
+2365 passed/74 pending, cliente21 passed/3 skipped por assets, y smoke HTTP/WS,
+rechazo de operaciones concurrentes, SIGTERM143, eliminación de lock y puertos
+libres. Dos tests DNS y upstream slow no se ejecutan en core; no se afirma que
+pasaron. Aviso PHP ausente en noticias opcionales y assets cliente faltantes
+son límites baseline documentados, no se ocultan ni se descargan datos upstream.
+No verificación visual nueva: no se modifica UI ni se certifica batalla TMT2.
+Manifest escrito dos veces/check confirma reproducibilidad tras el commit final.
+Manifest debe indicar `bounded-seed-validated`, seedValidated=true, pero mantiene
+productionValidated=false/fullCatalogValidated=false: no certifica catálogo/juego.
+No hay CI remota nueva, publicación ni trabajo TMT-05/06.
+
+**Checklist TMT-04:** seis especies, dos sets completos 3v3, dependencias con
+procedencia, tipos ordenados/duplicados, esquema/validador, fixture separado y
+hashes reproducibles cumplidos bajo adaptación aprobada; fidelidad ROM no probada.

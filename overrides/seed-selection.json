@@ -1,0 +1,65 @@
+{
+  "version": "0.1.0",
+  "species": [
+    {
+      "id": "rattata",
+      "ability": "runaway",
+      "moves": [
+        "tackle",
+        "quickattack",
+        "bite",
+        "protect"
+      ]
+    },
+    {
+      "id": "eevee",
+      "ability": "runaway",
+      "moves": [
+        "tackle",
+        "quickattack",
+        "bite",
+        "protect"
+      ]
+    },
+    {
+      "id": "froakie",
+      "ability": "torrent",
+      "moves": [
+        "pound",
+        "watergun",
+        "quickattack",
+        "protect"
+      ]
+    },
+    {
+      "id": "nosepass",
+      "ability": "sturdy",
+      "moves": [
+        "tackle",
+        "rockthrow",
+        "thunderwave",
+        "protect"
+      ]
+    },
+    {
+      "id": "floragato",
+      "ability": "overgrow",
+      "moves": [
+        "scratch",
+        "magicalleaf",
+        "bite",
+        "protect"
+      ]
+    },
+    {
+      "id": "pidgeot",
+      "ability": "keeneye",
+      "moves": [
+        "tackle",
+        "gust",
+        "quickattack",
+        "protect"
+      ]
+    }
+  ]
+}

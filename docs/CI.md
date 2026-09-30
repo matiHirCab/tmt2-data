@@ -99,3 +99,7 @@ their true result. Workspace commands do not steal locks; inspect stale lock PID
 before manual recovery after a crash. Tests and dev never run simultaneously.
 Source snapshots exclude ignored outputs/config; stop manual writers for a stable
 snapshot. See [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md) for exact current results.
+
+TMT-04 adds selected bounded seed validation after own tests/typecheck, before
+fork builds. `normalized/seed.json` now passes its bounded adaptation contract, including
+registered creator rows and chart coverage. Fixture success cannot bypass that gate. The validator runs offline against committed schema/evidence/pins.

@@ -169,7 +169,7 @@
     }
   ],
   "pending": [
-    "Version-bound rows and selected moves/ability/passives for six simple seed sets",
+    "Release-bound species rows and ROM-specific stats/moves/abilities/passives remain unknown; six creator type rows and pinned adaptation dependencies are recorded for TMT-04 in seed-types.json and normalized/seed.json",
     "Optional ROM-fidelity oracles for damage/STAB/immunity/stats, duplicates and fourth type; not required for approved adaptation",
     "ROM fidelity differences of Gen9 adaptation remain unverified; not a TMT-02 completion gate",
     "Source snapshot/version binding and redistribution rights",
@@ -332,7 +332,7 @@
     {
       "date": "2026-09-30",
       "scope": "Use Showdown rules where evidence is missing, record pending differences, no exact replica claim",
-      "assistantQuestion": "Podemos usar las reglas de Showdown como base explícita donde falte evidencia, registrar esas diferencias pendientes y comprobarlas después. Eso sería una adaptación de TMT2, sin prometer todavía una réplica exacta. Para llegar antes a algo jugable, recomiendo ese camino. ¿Te sirve avanzar con esa base?",
+      "assistantQuestion": "Podemos usar las reglas de Showdown como base expl\u00edcita donde falte evidencia, registrar esas diferencias pendientes y comprobarlas despu\u00e9s. Eso ser\u00eda una adaptaci\u00f3n de TMT2, sin prometer todav\u00eda una r\u00e9plica exacta. Para llegar antes a algo jugable, recomiendo ese camino. \u00bfTe sirve avanzar con esa base?",
       "userResponse": "Si!"
     }
   ]
