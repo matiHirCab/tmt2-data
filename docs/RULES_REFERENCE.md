@@ -166,8 +166,8 @@ No se requiere otro BPS y no se solicitó compartir un ROM.
 
 Sin esos inputs pueden mantenerse CI y documentación, preparar el formato de
 registro de observaciones y cotejar fuentes públicas permitidas. No se desbloquea
-TMT-04 ni se implementa mod/combate. TMT-02 sigue incompleto y TMT-03 pendiente CI
-remoto. Derechos/proveniencia y publicación conservan sus gates del roadmap.
+TMT-04 ni se implementa mod/combate. TMT-02 sigue incompleto. TMT-03 tiene CI remota verificada, con evidencia
+en [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md#publicación-autorizada-y-ci-remota). Derechos/proveniencia y publicación conservan sus gates del roadmap.
 
 ## Verificación de esta revisión
 
@@ -182,4 +182,5 @@ remoto. Derechos/proveniencia y publicación conservan sus gates del roadmap.
 - Perfil CI completo/DNS no repetido: scripts, pins y fuentes de forks intactos;
   resultados anteriores siguen en STAGE_1_VALIDATION.md. No se levantó UI nueva.
 - Manifiesto local se regenera y coteja dos veces después del commit final.
-  No se ha publicado esta rama ni ejecutado el workflow remoto.
+  Ese fue el estado previo a la autorización de publicar PR #2; la actualización
+  remota y el historial de corrección del pin están en STAGE_1_VALIDATION.md.

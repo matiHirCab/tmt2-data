@@ -1,4 +1,8 @@
-# Etapa 1 — Evidencia de implementación local
+# Etapa 1 — Evidencia de implementación local y CI remota
+
+Las secciones iniciales registran el estado previo a la autorización de publicación.
+La [actualización remota](#publicación-autorizada-y-ci-remota) supersede sus pendientes
+de publicación/primera CI; preserva los resultados históricos y límites de datos.
 
 Backlog único: [ROADMAP.md](ROADMAP.md). No se inició ninguna etapa posterior.
 Rama nueva `feat/stage-1-sources-ci`, creada desde el master fusionado
@@ -86,3 +90,44 @@ readme sólo declara la base. No se aplicaron ROMs ni se importaron datos.
 Los perfiles core/network y la instalación limpia anteriores no se repitieron:
 no cambiaron sus scripts, pins o los forks; el perfil core descubrirá las nuevas
 pruebas automáticamente. No hay ejecución remota autorizada.
+
+## Publicación autorizada y CI remota
+
+El usuario autorizó publicar esta rama y abrir PR en borrador el 2026-09-30.
+[PR #2](https://github.com/matiHirCab/tmt2-data/pull/2), base master, rama
+`feat/stage-1-sources-ci`; no merge/despliegue ni cambios de settings/protecciones.
+Se revisaron los 26 archivos cambiados antes del push: texto/metadata, sin binarios
+ROM/BPS, credenciales ni rutas de checkout específicas.
+
+- Primer commit publicado `5e0060e4b05729cbb6313e5324c2650fb448713e`: el
+  [run 36749315578](https://github.com/matiHirCab/tmt2-data/actions/runs/36749315578)
+  falló en `Set up job`, antes de tests. `actions/checkout` tenía un carácter de más
+  en el pin. No fue un fallo upstream ni una prueba aprobada.
+- Se cotejó el tag v6 por Git y API primaria y se corrigió checkout a
+  `d23441a48e516b6c34aea4fa41551a30e30af803` (40 hex). El pin de setup-node
+  permaneció correcto. Se añadió una prueba que rechaza pins de Actions mal
+  formados/flotantes. `npm test`: **22 pasan**; typecheck/actionlint/diff-check pasan.
+- Commit `e1cd28fc181fbe52946b0d0b04104b2e2d3e0441`: el
+  [run 36749458158](https://github.com/matiHirCab/tmt2-data/actions/runs/36749458158)
+  terminó **success**; todos los pasos del job core y post-checkouts pasaron.
+  Tres instalaciones lockfile, Node/npm/commits exactos, permisos read-only.
+  **21 tests propios** (antes de la nueva prueba del pin), **2369 servidor / 70
+  pendientes**, **21 cliente / 3 omitidos**. Typechecks/lint/builds, manifiesto
+  reproducible y HTTP/WS, rechazo de concurrencia, SIGTERM143, lock/puertos: pasan.
+- La diferencia local **2365/74** → runner **2369/70** mantiene 2439 casos.
+  Localmente `better-sqlite3` no está instalado y la suite condicional
+  `test/lib/sql.js` da exactamente 0 pasan/4 pendientes (reproducido por separado).
+  CI instaló 355 paquetes de servidor frente a 282 en la instalación limpia local;
+  los cuatro pases adicionales son consistentes con esa dependencia opcional.
+  El reporter dot remoto no enumera casos: la atribución por nombre es una
+  inferencia explícita, no un log de cuatro resultados individuales.
+- DNS: los **dos** casos exactos no se ejecutaron en core; sus fallos locales
+  baseline se conservan. No se ejecutó aquí workflow_dispatch de diagnóstico.
+  Slow/pendientes upstream y assets cliente ausentes no se ocultaron.
+- Se conserva la alerta de cliente incompleto en el smoke. Producción permanece
+  ausente/no validada y no hay prueba de gameplay TMT2. TMT-02 sigue parcial.
+
+Esta primera ejecución remota satisface el pendiente de TMT-03. La prueba preventiva
+y esta actualización documental se publican como commits ordinarios posteriores;
+la PR conserva los checks de cada commit y se verifica su head final antes de
+entregarla. No se registran por anticipado resultados del head final.

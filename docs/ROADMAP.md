@@ -31,7 +31,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | --- | --- | --- | --- |
 | 1 | [TMT-01](#tmt-01--registrar-fuentes-y-versión) | Ninguno | Terminado: input registrado; mecánicas pendientes en TMT-02 |
 | 1 | [TMT-02](#tmt-02--reglas-y-casos-de-referencia) | TMT-01 | Parcial/bloqueado: oráculos y decisiones |
-| 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Implementado local; pendiente CI remoto |
+| 1 | [TMT-03](#tmt-03--ci-reproducible) | Independiente | Terminado: primera CI remota verificada |
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Pendiente |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Pendiente |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Pendiente |
@@ -86,7 +86,7 @@ No se desbloquea TMT-04 con protocolos aún no ejecutados.
 
 ### TMT-03 — CI reproducible
 
-**Prerrequisitos:** independiente de BPS/TMT-01/TMT-02. **Estado:** implementado local; pendiente primera ejecución remota.
+**Prerrequisitos:** independiente de BPS/TMT-01/TMT-02. **Estado:** terminado: primera ejecución remota verificada en PR #2.
 Fijar revisiones compatibles de los forks, Node/npm y acciones; instalar por
 lockfile; ejecutar tests/typechecks/lint y coordinación. Separar explícitamente
 pruebas de red no deterministas de las comprobaciones ordinarias sin declararlas
@@ -97,7 +97,8 @@ reproducibles; pruebas de fallos/limpieza/manifiesto; exclusiones exactas docume
 primera ejecución remota del commit autorizadamente publicado inspeccionada y sin
 fallos genuinos ocultos. Extender con datos/mecánicas cuando existan, no ahora.
 **Evidencia:** [CI](CI.md), [pins](../ci/pins.json),
-[workflow](../.github/workflows/ci.yml), [validación](STAGE_1_VALIDATION.md).
+[workflow](../.github/workflows/ci.yml), [validación](STAGE_1_VALIDATION.md#publicación-autorizada-y-ci-remota),
+[CI remota aprobada](https://github.com/matiHirCab/tmt2-data/actions/runs/36749458158).
 **Pendiente externo:** no publicar ni ejecutar Actions remoto en esta autorización.
 
 ## Etapa 2 — Primer combate de semilla
