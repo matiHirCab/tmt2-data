@@ -14,3 +14,7 @@ Desktop.ini
 .vscode/
 *.swp
 *.swo
+
+# Local coordination settings and compatibility snapshots
+workspace.local.json
+.local/
