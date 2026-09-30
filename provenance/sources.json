@@ -23,7 +23,7 @@
       "id": "SRC-03",
       "authority": "creator-linked-mutable-document",
       "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing",
-      "review": "type-chart-view-read; species-observation-from-prior-research",
+      "review": "type-chart-five-pairs-read-2026-09-30; species-rows-unavailable",
       "snapshotSha256": null
     },
     {
@@ -169,18 +169,23 @@
     }
   ],
   "pending": [
-    "Complete seed stats, moves, abilities/passives, items, learnsets and forms",
-    "Damage, immunity, repeated-type STAB and fourth-type reference cases",
-    "Evidence-based Showdown generation and competitive level/team-size decisions",
+    "Version-bound rows and selected moves/ability/passives for six simple seed sets",
+    "Optional ROM-fidelity oracles for damage/STAB/immunity/stats, duplicates and fourth type; not required for approved adaptation",
+    "ROM fidelity differences of Gen9 adaptation remain unverified; not a TMT-02 completion gate",
     "Source snapshot/version binding and redistribution rights",
     "Independent release-byte authenticity and origin of v1.4.0 Alt differences"
   ],
   "assumptions": [],
   "decisions": {
-    "showdownBaseGeneration": null,
-    "level": null,
-    "teamSize": null,
-    "suggestedFormat": "private-unranked-singles-premade-teams-not-a-ROM-fact"
+    "showdownBaseGeneration": 9,
+    "level": 50,
+    "teamSize": 3,
+    "iv": 31,
+    "baseGenerationAuthority": "engineering-selection-not-ROM-generation",
+    "ev": 0,
+    "format": "private-unranked-singles-premade-teams",
+    "policyAuthority": "user-approved-2026-09-30",
+    "undocumentedMechanics": "inherit-pinned-Gen9-Showdown-as-explicit-adaptation"
   },
   "rights": {
     "datasetLicense": null,
@@ -271,9 +276,64 @@
   "ruleReference": {
     "ticket": "TMT-02",
     "document": "docs/RULES_REFERENCE.md",
-    "status": "partial-blocked-oracles-and-policy",
+    "status": "complete-user-approved-adaptation",
     "provisionalEngineeringCandidate": "gen9",
-    "chosenGeneration": null,
-    "romFidelityProven": false
-  }
+    "chosenGeneration": 9,
+    "romFidelityProven": false,
+    "scope": "six-simple-sets; unsupported-mechanics-excluded; docs/RULES_REFERENCE.md",
+    "generationEvidence": "SRC-01 split/modern effects; SRC-03 Ghost/Steel; pinned server root Dex; docs/RULES_REFERENCE.md",
+    "romOracleRequiredForCompletion": false
+  },
+  "chartObservations": {
+    "sourceId": "SRC-03",
+    "observedOn": "2026-09-30",
+    "versionBinding": null,
+    "romOracleVerified": false,
+    "orientation": "attacker-row / defender-column; auxiliary columns A-C retained",
+    "pairs": [
+      {
+        "attacker": "Ghost",
+        "defender": "Steel",
+        "multiplier": 1,
+        "cell": "L10"
+      },
+      {
+        "attacker": "Fire",
+        "defender": "Grass",
+        "multiplier": 2,
+        "cell": "P13"
+      },
+      {
+        "attacker": "Fire",
+        "defender": "Water",
+        "multiplier": 0.5,
+        "cell": "O13"
+      },
+      {
+        "attacker": "Normal",
+        "defender": "Ghost",
+        "multiplier": 0,
+        "cell": "K3"
+      },
+      {
+        "attacker": "Electric",
+        "defender": "Ground",
+        "multiplier": 0,
+        "cell": "H16"
+      }
+    ]
+  },
+  "userApprovals": [
+    {
+      "date": "2026-09-30",
+      "scope": "private singles, premade3v3, level50, IV31, EV0",
+      "userResponse": "El formato sirve, porque preciso tmt2 en mgba?"
+    },
+    {
+      "date": "2026-09-30",
+      "scope": "Use Showdown rules where evidence is missing, record pending differences, no exact replica claim",
+      "assistantQuestion": "Podemos usar las reglas de Showdown como base explícita donde falte evidencia, registrar esas diferencias pendientes y comprobarlas después. Eso sería una adaptación de TMT2, sin prometer todavía una réplica exacta. Para llegar antes a algo jugable, recomiendo ese camino. ¿Te sirve avanzar con esa base?",
+      "userResponse": "Si!"
+    }
+  ]
 }
