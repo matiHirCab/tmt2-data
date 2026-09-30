@@ -450,7 +450,7 @@ archivos ajenos por marca de ownership. Locks nunca se roban.
 | Repo | Rama local | HEAD consumidor |
 | --- | --- | --- |
 | server | `feat/tmt05-hidden-mod` | `79614d93b69a05cac53c3ed6681be4f2a1395635` |
-| client | `feat/tmt05-client-dex` | `8e19677c1362b03dff1b30210511504b15ac676c` |
+| client | `feat/tmt05-client-dex` | `aa0a1fc9958b5c24e5f542313ab061762266a5cb` |
 | data | `feat/tmt05-local-integration` | commit final del cambio; manifest registra HEAD real |
 
 ```sh
@@ -509,3 +509,10 @@ local, pendiente autorización de publicación y CI remota. No trabajo TMT-06/07
 Revisión final de aislamiento: Terastallization, excluida por TMT-02, se desactiva
 mediante `Terastal Clause` existente. Test focalizado con la configuración real
 pasa3/3 y verifica la regla registrada. No añade callbacks ni mecánicas nuevas.
+
+CI de publicación detectó dos defectos de checkout limpio: historia servidor
+shallow insuficiente para el guard de procedencia y carpeta pública data ausente.
+Se conserva el guard y se descarga historia en CI; el builder crea data/text sólo
+después de rechazar symlinks. Fixture aislado sin data produjo los mismos 16 hashes,
+y symlink de índice se rechazó conservando archivo personal. Client51/1skip y
+propios37/typecheck pasan; resultado remoto final se registra en los checks PR5.
