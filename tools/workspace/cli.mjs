@@ -3,6 +3,7 @@ import path from 'node:path';
 import net from 'node:net';
 import {execFileSync} from 'node:child_process';
 import {config, preflight, manifest, datasetIdentity, supervise, root, lockWorkspace, writeSnapshot, clientAssetStatus} from './core.mjs';
+import {readSeed} from '../data/validate.mjs';
 const [command, ...extra] = process.argv.slice(2);
 const commands = ['doctor', 'build', 'test', 'dev', 'manifest:write', 'manifest:check', 'data:validate'];
 const node = (cwd, args, label) => ({file: process.execPath, args, cwd, label});
@@ -33,8 +34,10 @@ try {
       }
     } finally { release(); }
   } else if (command === 'data:validate') {
-    console.log(JSON.stringify(datasetIdentity(c)));
-    throw Error('Production validation incomplete: authoritative TMT2 data, schema and provenance checks are not implemented. No artifacts generated.');
+    if (!c.dataset) throw Error('No selected bounded seed dataset');
+    const checked=readSeed(c.dataset);
+    console.log(JSON.stringify(checked,null,2));
+    if(!checked.valid) throw Error('Bounded seed validation failed; not a full-catalog or ROM-fidelity check. No artifacts generated.');
   } else {
     const release = lockWorkspace();
     try {

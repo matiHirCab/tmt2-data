@@ -115,17 +115,21 @@ runtime behavior. Stop manual edits/fork commands while taking a snapshot; the
 lock excludes other coordination operations, not arbitrary external writers. Dirty trees are visible and content-sensitive, not represented
 as clean commits. Commit/clean the intended changes before sharing release pins.
 
-No authoritative dataset exists in this checkout. By default the manifest says
-`dataset.status = absent`, `productionValidated = false`, and protocol compatibility
-is `unverified`. Optional `dataset` points to a JSON identity document requiring
-`kind: "production" | "test-fixture"` and a nonempty `version`. Its exact bytes are
-hashed, and it remains `identified-unvalidated`. This hash identifies that document,
-not external files it might reference. Synthetic identity documents used by tests
-are **not ROM data** and never become production artifacts.
+A bounded candidate dataset now exists at `normalized/seed.json`, selected by
+default; a config `dataset` overrides it. It is **incomplete** while creator type
+rows are absent. Doctor/manifest show `bounded-seed-incomplete`, not successful
+production validation. `seedValidated` may become true only after the seed contract
+passes; `productionValidated`/`fullCatalogValidated` remain false because full
+catalog and gameplay fidelity are outside this slice. Legacy identity documents
+remain `identified-unvalidated`. Fixture files can never pass selected seed validation.
 
-`workspace:data:validate` deliberately exits 1, even with an identity document:
-production schema/provenance/mechanics validation is not implemented. There is no
-empty-data generator and no ROM binary is required for coordination work.
+`npm run seed:validate` and `workspace:data:validate` run schema and semantic checks
+for the bounded contract; current draft exits1 with exact missing type rows. No
+empty generator or automatic type fallback. `npm run seed:prepare -- --output NEW.json`
+extracts dependencies from the already-built pinned server into a new draft file,
+never overwriting existing files or fetching data. `--fixture` makes a labeled test
+fixture only. Full commands, sets, boundaries and results are in
+[RULES_REFERENCE.md](RULES_REFERENCE.md#tmt-04--esquema-y-semilla-acotada).
 
 ## Rollback
 

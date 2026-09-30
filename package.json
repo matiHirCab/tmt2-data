@@ -17,7 +17,9 @@
     "ci:network": "node tools/ci/run.mjs network",
     "ci:smoke": "node tools/ci/smoke.mjs",
     "source:inspect": "node tools/provenance/inspect-bps.mjs",
-    "source:showdown-reference": "node tools/provenance/showdown-reference.mjs"
+    "source:showdown-reference": "node tools/provenance/showdown-reference.mjs",
+    "seed:validate": "node tools/data/cli.mjs",
+    "seed:prepare": "node tools/import/prepare-seed.mjs"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

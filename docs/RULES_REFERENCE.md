@@ -324,3 +324,68 @@ publicación y derechos/proveniencia mantienen sus gates.
   DNS y UI no repetidas por esta revisión de probe/documentación; evidencia baseline
   en STAGE_1_VALIDATION.md. Ningún test ROM ni nuevas checks remotas ejecutadas.
 - Manifiesto local ignorado se regenera/coteja dos veces tras el commit final.
+
+## TMT-04 — Esquema y semilla acotada
+
+Rama nueva desde PR3 merged `ff09cca24dd6211f30cb235d62468913805f2aba`.
+La adaptación permite heredar datos ordinarios, no afirmar tipos TMT2 desde
+Showdown. Hoja oficial sólo expone chart en esta sesión; Hackdex y el túnel HTTP
+responden403. Se pidió transcripción exacta de las seis filas, sin repetir BPS/mGBA.
+
+`schemas/seed.schema.json` (Draft07) valida shape; `tools/data/validate.mjs` aplica
+ese subconjunto y referencias/proveniencia/contrato. Arrays conservan orden y
+repeticiones. Versionado/hash por source y procedencia por campo, más hash canónico
+del dataset (objetos ordenados, arrays intactos). Hashes son integridad del snapshot
+registrado, no prueba independiente de autenticidad del creador. El chart ordinario
+Gen9 heredado tiene cinco overrides de observaciones oficiales, sin release binding.
+
+Dos premades candidatos, todos Hardy, nivel50/IV31/EV0 y **sin objeto** (ID `none`):
+
+| Equipo | Especie / ability heredada | Cuatro moves heredados | Motivo |
+| --- | --- | --- | --- |
+| alpha | Rattata / Run Away | Tackle, Quick Attack, Bite, Protect | Control físico simple; mencionado por creador |
+| alpha | Eevee / Run Away | Tackle, Quick Attack, Bite, Protect | Control similar sin adaptación de evolución |
+| alpha | Froakie / Torrent | Pound, Water Gun, Quick Attack, Protect | Control físico/especial; mencionado por creador |
+| beta | Koffing / Levitate | Tackle, Smog, Assurance, Protect | Ability ordinaria heredada; inmunidad explícita futura |
+| beta | Floragato / Overgrow | Scratch, Magical Leaf, Bite, Protect | Categoría especial ordinaria sin move custom |
+| beta | Pidgeot base / Keen Eye | Tackle, Gust, Quick Attack, Protect | Forma sin mega; existencia TMT2 base aún requiere fila |
+
+Stats base, learnsets restringidos a los cuatro moves y metadatos salen del Dex
+Gen9 compilado del SHA servidor fijado. Se verifica cada ability y presencia de
+cada move en su learnset (incluidos registros históricos por adaptación); no se
+afirma legalidad de ladder Gen9 ni ROM. Callbacks sólo referenciados, no generados.
+Reglas/status/prioridad ordinarios se heredan bajo TMT-02; integración TMT-05/06.
+Todos los `species.types` de **producción draft** están null y citan `unknown`: no
+son jugables/validados. El fixture separado usa tipos base-Dex únicamente para
+probar el validador, nunca como hechos TMT2.
+
+Comandos reproducibles (pins limpios de forks y build previo, sin fetch/pull):
+
+```sh
+npm run workspace:build
+npm run seed:prepare -- --output /tmp/seed-new.json
+npm run seed:prepare -- --fixture --output /tmp/fixture-new.json
+npm test
+npm run typecheck
+npm run seed:validate
+npm run workspace:data:validate
+npm run ci:core
+```
+
+El preparador crea sólo archivos nuevos (`wx`), rechaza overwrite/symlinks
+existentes y nunca aplica ROM. `provenance/seed-types.json` registra las filas del
+creador antes de incorporarlas; actualmente vacío. Hash/locator y arrays deben
+coincidir. Para tipo custom, revisar chart y passive antes de incluirlo; si es
+desconocido, reemplazar candidato o solicitar esa decisión específica.
+
+**Verificación local:** 31 tests propios pasan; typecheck/sintaxis/diff-check pasan.
+Preparación draft/fixture repetida produce bytes iguales. `seed:validate`,
+`workspace:data:validate` y `ci:core` salen1 por las seis filas ausentes. Core pasó
+tests/typecheck y se detuvo en el gate real de seed antes de builds/tests de forks
+y smoke; no se ocultó ni se ejecutó DNS/UI. No hay CI remota de esta rama.
+Manifest identifica `bounded-seed-incomplete`, seedValidated=false y siempre
+productionValidated=false/fullCatalogValidated=false; no certifica juego.
+
+**Checklist:** esquema/referencias/proveniencia/pruebas/dependencias ordinarias y
+premades definidos; dataset usable con tipos del creador **pendiente**. TMT-04 no
+terminado, TMT-05/06 no iniciados. No publicación autorizada en esta rama.

@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0-draft",
+  "species": [
+    {"id":"rattata","types":null,"ability":"runaway","moves":["tackle","quickattack","bite","protect"]},
+    {"id":"eevee","types":null,"ability":"runaway","moves":["tackle","quickattack","bite","protect"]},
+    {"id":"froakie","types":null,"ability":"torrent","moves":["pound","watergun","quickattack","protect"]},
+    {"id":"koffing","types":null,"ability":"levitate","moves":["tackle","smog","assurance","protect"]},
+    {"id":"floragato","types":null,"ability":"overgrow","moves":["scratch","magicalleaf","bite","protect"]},
+    {"id":"pidgeot","types":null,"ability":"keeneye","moves":["tackle","gust","quickattack","protect"]}
+  ]
+}

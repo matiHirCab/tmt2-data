@@ -3,6 +3,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {execFileSync, spawn} from 'node:child_process';
 import {createHash, randomUUID} from 'node:crypto';
+import {validateSeed} from '../data/validate.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -37,6 +38,7 @@ export function config(env = process.env, base = root) {
     if (typeof value.dataset !== 'string' || !value.dataset) throw Error('Invalid dataset path');
     result.dataset = path.resolve(filename ? path.dirname(filename) : base, value.dataset);
   }
+  if (!result.dataset && fs.existsSync(path.join(base, 'normalized/seed.json'))) result.dataset = path.join(base, 'normalized/seed.json');
   return result;
 }
 export function preflight(c) {
@@ -54,6 +56,10 @@ export function datasetIdentity(c) {
   const d = JSON.parse(bytes);
   if (!d || !['test-fixture', 'production'].includes(d.kind) || typeof d.version !== 'string' || !d.version.trim()) {
     throw Error('Dataset identity requires kind (test-fixture|production) and nonempty version');
+  }
+  if (d.contract === 'tmt04-bounded-adaptation-seed-v1') {
+    const check=validateSeed(d);
+    return {status: check.valid ? 'bounded-seed-validated' : 'bounded-seed-incomplete', kind:d.kind, version:d.version, sha256:hash(bytes), canonicalSha256:check.sha256 ?? null, seedValidated:check.valid, fullCatalogValidated:false, productionValidated:false};
   }
   return {status: 'identified-unvalidated', kind: d.kind, version: d.version, sha256: hash(bytes), productionValidated: false};
 }

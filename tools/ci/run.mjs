@@ -19,6 +19,7 @@ try {
     ] : [
       npm(c.data, ['test'], 'data and coordination tests'),
       npm(c.data, ['run', 'typecheck'], 'data typecheck'),
+      npm(c.data, ['run', 'seed:validate'], 'selected bounded seed contract (fixtures cannot pass production)'),
       node(c.server, ['build'], 'pinned server build'),
       node(c.client, ['build'], 'pinned client normal build; no index/data pulls'),
       npm(c.server, ['run', 'lint'], 'server lint'),

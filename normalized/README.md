@@ -1,7 +1,7 @@
 # Normalized data
 
-Ownership: canonical normalized records produced from approved inputs.
-
-Generated/derived canonical records. Do not manually use this directory as a second source database.
-
-No normalized records exist yet.
+`seed.json` is a deterministic **incomplete production candidate**. Six creator
+type rows are null; validation fails. Derive it from `overrides/seed-selection.json`,
+`provenance/seed-types.json`, source registration and the pinned compiled server
+with `npm run seed:prepare -- --output NEW.json`; review before replacement.
+`tests/fixtures/seed.json` is separate synthetic test data, never production.
