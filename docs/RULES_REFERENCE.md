@@ -846,3 +846,31 @@ incluye build, ambos typechecks y lint --max-warnings0. CI-core preliminar compl
 manifest reproducible, lifecycle. Se repite core con el último pin/background test.
 Se mantienen dos exclusiones DNS y upstream slow, no acreditadas como pasadas.
 Aviso heredado de PHP ausente/news durante build no afecta native battle/replay.
+
+## TMT-07 — assets oficiales: evaluación local autorizada, transferencia bloqueada
+
+2026-10-01: el usuario autoriza lectura/descarga mínima de recursos estáticos
+públicos oficiales para evaluación local. No requiere nueva aprobación sólo para
+descargarlos. No se autoriza distribución/publicación bajo derechos no verificados.
+Las tarjetas siguen siendo un fallback provisional, no el resultado gráfico final.
+
+Fuente primaria verificada: https://play.pokemonshowdown.com/sprites/ani/ y
+/ani-back/ (Rattata y Floragato observados en índice), /sprites/trainers/ y
+/sprites/categories/. Créditos: https://pokemonshowdown.com/credits, que identifica
+proyectos/autores de sprites; no se encontró una concesión general de redistribución
+de esos bytes por la licencia AGPL del código. No se aceptaron acuerdos nuevos.
+Scope mínimo: ani/ani-back de rattata, eevee, froakie, nosepass, floragato, pidgeot;
+avatares1/170, hojas Pokemon/Pokeball y arte de tipos estándar/categorías disponible.
+Tipos TMT2 sin arte aprobado conservan etiquetas; audio no bloquea esta corrección.
+
+Prueba real de acceso: HEAD a
+https://play.pokemonshowdown.com/sprites/ani/rattata.gif falló curl exit56:
+“CONNECT tunnel failed, response403”; proxy HTTP403 Forbidden, serverenvoy,
+antes de llegar al origin. El lector web sí abre los índices, pero abrir ese GIF
+devuelve “URL ... is not accessible via this tool”. No se eludieron restricciones
+ni cambiaron controles de red. No bytes adquiridos, no SHA256 inventados, no asset
+ejecutado/redistribuido. Siguiente paso concreto: transferir los archivos oficiales
+mínimos mediante un canal soportado con acceso al origin; recién entonces pinnear
+hashes, preservar originales, integrar dimensiones contra Dex pinneado y verificar
+replay local sin noguestsecurity. No hay nuevo replay visual con sprites originales.
+Repos de gameplay intactos, servidor/excepción apagados; gráfico final bloqueado.
