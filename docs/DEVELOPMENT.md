@@ -247,7 +247,8 @@ front/back downloads succeed**; a partial run exits1 and leaves no ZIP. Existing
 runs are never overwritten. ZIP uses portable stored entries and requires no new
 dependency; the archive hash lives outside it to avoid a circular self-hash.
 
-Limits:8MiB/file,128MiB/run,32KiB list file, ten-minute overall budget;
+Limits:8MiB/response,128MiB of preserved valid originals/run,32KiB list file,
+ten-minute overall budget (retried or rejected responses also consume network);
 --timeout-ms100..30000 (default15000 per attempt), --retries0..2 (default1).
 Transient network/timeout/408/429/selected5xx failures retry with bounded delay;
 403/404, redirects and invalid content do not. SIGINT/SIGTERM cancel remaining
