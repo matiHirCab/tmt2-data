@@ -35,7 +35,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Completado: seed acotado de adaptación, esquema y validación |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Terminado: tres PRs fusionados, CI remota verificada |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Terminado: PRs fusionados y CI remota verificada |
-| 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Completado: dos navegadores, combate y replay; CI-core local aprobado |
+| 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Recorrido nativo automatizado verificado; revisión visual pendiente |
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Pendiente |
 | 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Pendiente |
 | 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Pendiente |
@@ -167,11 +167,11 @@ fidelidad ROM. La prueba local del simulador no cumple el recorrido de TMT-07.
 
 ### TMT-07 — Primer combate privado de dos jugadores
 
-**Prerrequisitos:** TMT-03 y TMT-06. **Estado:** completado local; excepción guest temporal autorizada y retirada.
+**Prerrequisitos:** TMT-03 y TMT-06. **Estado:** completado funcionalmente con UI nativa automatizada; revisión visual del usuario pendiente (sprites/audio originales ausentes).
 **DoD:** dos navegadores independientes eligen premades, se desafían y finalizan
 un combate con resultados consistentes; replay reproducible en cliente compatible.
 Registrar versiones, pasos y resultados. HTTP/WS READY no cumple esta DoD.
-**Evidencia:** [recorrido TMT-07](RULES_REFERENCE.md#tmt-07--recorrido-privado-completado). Dos sesiones browser automatizadas, selección alpha/beta, desafío/aceptación, win consistente y replay local. No playtesting humano ni fidelidad ROM.
+**Evidencia:** [corrección nativa TMT-07](RULES_REFERENCE.md#tmt-07--corrección-nativa-verificada-2026-10-01). Dos sesiones browser automatizadas, selección alpha/beta, desafío/aceptación, win consistente y replay local. No playtesting humano ni fidelidad ROM.
 
 ## Etapa 3 — Ampliación verificada
 

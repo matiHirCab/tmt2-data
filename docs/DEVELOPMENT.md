@@ -63,9 +63,11 @@ records source and output hashes; `--fresh` forces regeneration. The catalog and
 runtime each verify both canonical dataset and derived-table hashes.
 
 Generated public assets remain ignored. Text, species/move/ability data and
-search/teambuilder tables now come from the local pinned checkout. Other assets,
-including graphics.js, commands.js, chat-formatter.js and sprite/logo/audio
-resources, can remain absent or use remote fallbacks; doctor reports them.
+search/teambuilder tables now come from the local pinned checkout. Legacy optional
+graphics.js/commands.js remain absent and doctor reports them. The native TMT2
+entry loads local scene/move animations and pinned chat-formatter instead, disables
+external data fallback and labels its local sprite placeholders. Original art/audio
+are not certified; unrelated legacy entries may still use upstream fallback.
 READY is HTTP readiness, not a playable battle certificate. `full`, `minidex` and
 other independent upstream generators are not invoked by coordination.
 
@@ -75,7 +77,8 @@ Open the printed READY URL, normally:
 `http://127.0.0.1:8080/testclient-new.html?~~localhost:8000`.
 The isolated catalog view is `http://127.0.0.1:8080/tmt2-seed.html`; it renders all
 six names/types, filters by every type slot, and displays dataset identity.
-The hidden format is deliberately absent from public challenge/search menus.
+The hidden format stays absent from public challenge/search menus; this local
+native entry adds it only to its private Challenge selector.
 The server bootstrap changes bind address/port/SSL/watchconfig only in memory.
 It loads the user's other server settings unchanged. This is the existing Showdown
 test client; remote assets/login features may still require internet access.
@@ -204,20 +207,33 @@ not production auth. No other auth/IP/throttle control changes. Without opt-in,
 normal config remains unchanged. Stop with Ctrl-C/SIGTERM when finished and
 confirm lock/listeners are gone. Never expose this test server publicly.
 
-Open `/tmt2-private.html` in two independent browser profiles. Use distinct local
-names, choose alpha and beta, put the other name in Opponent, Challenge privately,
-and Accept in the recipient. Start preview, then use move/switch buttons until win.
-Cancel and retry must respect the inherited10-second challenge cooldown. Reload
-reconnects/rejoins the remembered room under the same disconnected local name.
-For other configured ports, change the loopback Server input to match workspace
-config; paths remain configured by the existing workspace tooling.
+Open `/testclient-new.html?~~127.0.0.1:8000` in two independent browser
+profiles (replace8000 with the configured loopback server port). Use Choose name,
+Find a user, Look up, Challenge. Select the private [Gen9] TMT2 Seed format in
+the existing format picker and TMT2 alpha; the recipient selects TMT2 beta and
+Accept. Premades are installed locally without replacing saved teams. Choose lead
+and play through the native move/switch controls. Cancel/retry respects the
+inherited10-second cooldown. Reload restores the local name and rejoins after its
+acknowledgement. No public auth requests or keys are used by this loopback-only
+entry; server guest security is unchanged unless the explicit opt-in is present.
 
-Save replay JSON, then load it using the file picker, or open
-`/tmt2-private.html?replay=1` in the same session to replay the last saved log.
-This is an offline text/state replay with the real client parser and pinned Dex;
-no upload or official graphics dependency. Keep generated catalog/client pins
-compatible: mismatched hashes fail. Tests include the recorded automated browser
-log and negative drift/private-payload cases. See RULES_REFERENCE for exact evidence.
+Use the native Download replay button, then Home's Load local replay JSON.
+Replay retains the real BattleScene, HP/log, controls and isolated catalog; reload
+restores it from session storage. Downloaded JSON, rather than the session-local
+Copy/Visit URL, is how another profile receives the replay. Public upload is
+disabled. Tier/dataset/version/catalogHash mismatch fails, with no official Dex
+fallback. Replays require this compatible built client, not public replay hosting.
+
+`build-tools/build-native-tmt2` consumes only the clean exact local server SHA
+passed by pinned build-indexes: MIT chat-formatter source and code-generated SVG
+text cards with output hashes in data/tmt2-native-assets.json. No git pull/download.
+The original sprites/audio are unavailable here (the official asset request
+returned403); cards explicitly say “sprite unavailable”, audio is disabled only
+for this local entry. The native scene/layout/HP/move animations still run.
+This proves native functional integration, not finished artwork or ROM fidelity.
+`/tmt2-private.html` is a developer-only protocol harness using BattleSceneStub;
+its earlier results cannot certify the user-facing native UX. See RULES_REFERENCE
+for the superseding native browser evidence and known limits.
 Rollback: stop services, switch clean client/data to the recorded TMT-06 masters,
 regenerate compatible catalogs/assets and restart without the guest opt-in. Preserve
 unrelated edits/feature branches; no destructive reset or history rewriting.

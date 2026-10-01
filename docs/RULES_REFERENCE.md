@@ -671,6 +671,10 @@ no ejecutados: falta la decisión anterior, no se declaran aprobados por CI TMT-
 
 ## TMT-07 — recorrido privado completado
 
+**Evidencia histórica de protocolo, supersedida para acceptance de UI:** este
+recorrido usaba una página plana/BattleSceneStub. La revisión del usuario reabrió
+el ticket; ver la corrección nativa al final. No acredita UX Showdown nativa.
+
 2026-10-01: el usuario respondió «si» a habilitar temporalmente `noguestsecurity`
 sólo en memoria y con127.0.0.1, sin verificar firmas de nombres locales y retirarlo
 al terminar. Esa aprobación resuelve el checkpoint anterior; no autoriza otros
@@ -759,3 +763,86 @@ red/seguridad para ocultarlos. Assets opcionales/PHP-news siguen incompletos fue
 de esta página mínima. Tras pin/bootstrap final se repite core sobre commits
 limpios y se comprueba manifest/check y generación sin drift. No fidelidad ROM,
 playtest humano, TMT08+, gráficos completos ni CI remoto/publicación aquí.
+
+## TMT-07 — corrección nativa verificada (2026-10-01)
+
+Esta evidencia **supersede la aceptación prematura de la página plana**. La página
+tmt2-private era un atajo de protocolo, no una necesidad arquitectónica. El cliente
+nuevo ya tenía layout/controles; faltaban scripts locales BattleScene/animaciones
+de moves y formatter. El cliente viejo dependía de config remoto. Se eligió el
+nuevo para reutilizar sus selectores, desafíos, HP, log, tooltips y replay, sin
+nuevo framework. La página plana queda explícitamente developer-only.
+
+Bootstrap native loopback y datos locales fallan sin fallback remoto. Alpha/beta
+se añaden sin borrar equipos guardados y el formato oculto aparece sólo en el
+selector Challenge local (no ladder). /inviteonlynext usa el flujo normal.
+Reconexión espera nombre confirmado; replay importado no intenta /join ni hosting.
+El guard live/replay rechaza drift de dataset. Download replay JSON y Home's
+file picker usan el parser y **BattleScene real**; public upload deshabilitado,
+Copy/Visit sólo apunta a la sesión local. Otro perfil necesita el JSON compatible.
+
+Assets: build-indexes invoca build-native-tmt2 con server limpio/SHA exacto.
+Formatter MIT se compila del server/chat-formatter.ts pinneado; SVG text cards
+locales deterministas muestran “sprite unavailable”; manifest registra fuente y
+hashes. No upstream pull, ROM, BPS ni arte externo. Petición oficial de sprites
+recibió403 y no se eludió. **Arte, trainers y audio originales siguen ausentes**:
+cards no son sprites Pokémon, audio se omite sólo en este entry. Layout/animaciones
+nativas funcionan; no se afirma acabado visual ni fidelidad ROM.
+
+Prueba browser automatizada: dos perfiles independientes NativeFinalA/NativeFinalB
+en testclient-new.html?~~127.0.0.1:8000. Choose name → Find a user → Look up →
+Challenge → formato TMT2 Seed → alpha; beta eligió beta/Accept. Choose lead mediante
+botones nativos; alpha recargó/rejoined durante turno1 bajo su nombre. Automatización
+posterior clicó los botones reales /move y /switch, usando mayor basePower y el
+choice-builder normal; no comandos battle falsificados ni win inyectado. Room
+battle-gen9tmt2seed-24 (capability omitido) terminó turno11: ambos |win|NativeFinalB.
+Ambos BattleScene, modgen9tmt2seed, arrays Bird/Bird/Bird y cero recursos fuera de
+origin; errors=[] en los dos perfiles limpios finales.
+
+Download desde alpha → tercer perfil independiente → Load local replay JSON →
+reload: ganador NativeFinalB, BattleScene, mismo Dex/tipos, cero recursos externos.
+Hash manipulado mostró “dataset mismatch” en popup nativo y no creó replay válido.
+El último ajuste quitó un enlace psim.us heredado: se descubrió y corrigió un
+error de montaje ChatTextEntry, luego reload/ended=true, sin excepción, errors=[],
+publicLinks=0. La regresión anterior no cuenta como aceptación.
+
+Cancel/retry desde controles nativos probado en el primer recorrido: cancel quita
+desafío, retry espera cooldown10s. Equipo manipulado EV252 en memoria rechazado
+por servidor “rattata: EVS must all be0” antes del combate; restaurado alpha. Primer
+combate nativo también terminó NativeBeta/11turnos y su log saneado está en
+test/fixtures/tmt2-native-browser-replay.json. Esa fixture es evidencia de browser,
+no ROM/humano; su test unitario usa SceneStub, separado del recorrido nativo real.
+
+Capturas finales: /tmp/tmt07-native-final-alpha.png,
+ /tmp/tmt07-native-final-beta.png, /tmp/tmt07-native-final-replay.png.
+Replay descargado: /tmp/tmt07-native-final-replay.json. Capturas no se comiten.
+La carga por helper oficial de Biblioteca falló: tools/list request failed: network;
+no archivo publicado ni intento de eludir acceso.
+
+Seguridad: aprobación expresa nueva “autorizo”, únicamente noguestsecurity=true en
+memoria. ss confirmó listeners127.0.0.1:8000/8080. Sin cambios auth/IP/throttle,
+sin credenciales. Todos los perfiles propios cerrados; launcher PID58617 SIGTERM,
+exit143, lock ausente, listeners ausentes, config persistente noguestsecurity=false.
+No servidor unsigned activo al terminar.
+
+Pins: server4c21861353d77acf48b29e4b5c08a8b009d83fd3 sin cambios nuevos;
+client34ffc4952eaa2ff659450be812219aece00457c0. Publicación eventual cliente primero, datos después con
+ese SHA fetchable. Servidor ya fusionado. Revisión visual del usuario pendiente;
+no push/PR/merge/deploy, playtest humano ni etapas08+.
+
+
+Verificación adicional sin servidor de batalla ni excepción guest: sólo static
+127.0.0.1:8080. Replay cargó y recargó hasta win NativeFinalB con BattleScene real,
+sin recursos externos. Se sustituyó el fondo Gen9 ausente por fx/bg-city.png ya
+trackeado en el cliente; no asset descargado. Ese fondo destapó race de extracción
+de paleta antes de PS: corregido con paleta local explícita, test de inicialización
+sin PS, nuevo perfil limpio errors=[]. Captura final replay muestra estado Offline
+porque no había servidor de batalla: es prueba de replay local autónomo, no un
+fallo de aceptación live. Static y browser propios cerrados después; puertos libres.
+
+Checks: npm test cliente final =61passing/1skip (5 regresiones nativas nuevas);
+incluye build, ambos typechecks y lint --max-warnings0. CI-core preliminar completo
+=datos39/0skip, server2406passing/74pending, client60passing/1skip, integración,
+manifest reproducible, lifecycle. Se repite core con el último pin/background test.
+Se mantienen dos exclusiones DNS y upstream slow, no acreditadas como pasadas.
+Aviso heredado de PHP ausente/news durante build no afecta native battle/replay.
