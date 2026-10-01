@@ -194,3 +194,30 @@ and status. The former next-slice registration proposal is superseded by TMT-05,
 which now depends on a verified seed (TMT-04); it is not an independent task.
 Use [CI.md](CI.md) for reproducible verification and the explicit DNS diagnostic
 split. Historical test results remain evidence, not competing implementation plans.
+
+## Private local seed battle (TMT-07)
+
+For the explicitly approved local guest test, run
+`TMT2_LOCAL_GUESTS=1 npm run workspace:dev`. This opt-in enables unsigned,
+unregistered local names only in server memory after enforcing127.0.0.1; it is
+not production auth. No other auth/IP/throttle control changes. Without opt-in,
+normal config remains unchanged. Stop with Ctrl-C/SIGTERM when finished and
+confirm lock/listeners are gone. Never expose this test server publicly.
+
+Open `/tmt2-private.html` in two independent browser profiles. Use distinct local
+names, choose alpha and beta, put the other name in Opponent, Challenge privately,
+and Accept in the recipient. Start preview, then use move/switch buttons until win.
+Cancel and retry must respect the inherited10-second challenge cooldown. Reload
+reconnects/rejoins the remembered room under the same disconnected local name.
+For other configured ports, change the loopback Server input to match workspace
+config; paths remain configured by the existing workspace tooling.
+
+Save replay JSON, then load it using the file picker, or open
+`/tmt2-private.html?replay=1` in the same session to replay the last saved log.
+This is an offline text/state replay with the real client parser and pinned Dex;
+no upload or official graphics dependency. Keep generated catalog/client pins
+compatible: mismatched hashes fail. Tests include the recorded automated browser
+log and negative drift/private-payload cases. See RULES_REFERENCE for exact evidence.
+Rollback: stop services, switch clean client/data to the recorded TMT-06 masters,
+regenerate compatible catalogs/assets and restart without the guest opt-in. Preserve
+unrelated edits/feature branches; no destructive reset or history rewriting.

@@ -668,3 +668,94 @@ Verificación del checkpoint: `node tools/ci/pins.mjs verify` aprobado;
 passed/0skip y `npm run typecheck` aprobados. Shutdown exit143, lock ausente y
 bind de prueba a ambos puertos aprobado. Full CI-core TMT-07, partida y replay
 no ejecutados: falta la decisión anterior, no se declaran aprobados por CI TMT-06.
+
+## TMT-07 — recorrido privado completado
+
+2026-10-01: el usuario respondió «si» a habilitar temporalmente `noguestsecurity`
+sólo en memoria y con127.0.0.1, sin verificar firmas de nombres locales y retirarlo
+al terminar. Esa aprobación resuelve el checkpoint anterior; no autoriza otros
+controles ni producción. Launcher opt-in `TMT2_LOCAL_GUESTS=1 npm run workspace:dev`
+construye inputs fijados y fuerza/verifica loopback antes de activar sólo ese flag.
+No cambia archivos config, autoridad, `nothrottle`, `noipchecks`, SSL público ni
+interfaces públicas. Sin flag, guestsecurity queda como estaba. Dos tests del
+launcher comprueban opt-in, binding y conservación de los otros controles.
+
+Cliente mínimo aislado `/tmt2-private.html`, enlazado desde `/tmt2-seed.html`:
+selección alpha/beta, guest name local, challenge privado con `/inviteonlynext`,
+cancel/accept, preview, botones move/switch y resultado. Usa WebSocket real de
+Showdown, `/utm` y autoridad de TeamValidator; ninguna llamada a login/replay
+hosting. Sólo admite endpoint loopback sin credenciales. Recuerda nombre/premade/
+room en sessionStorage para reconnect/rejoin; replay se carga explícitamente offline.
+No es teambuilder general ni cliente gráfico completo.
+
+**Evidencia browser, no simulador directo ni humano:** dos sesiones Chromium
+independientes `tmt07-alpha`/`tmt07-beta`, nombres locales TmtAlpha/TmtBeta.
+Server8000/client8080, ambos127.0.0.1. Premades escogidos con select y verificados en
+request real: Rattata/Eevee/Froakie frente a Nosepass/Floragato/Pidgeot, tres por lado.
+Challenge enviado con botón, recibido/aceptado en segunda sesión y preview mediante
+botón. Automatización seleccionó botones move/switch de requests reales cada200ms,
+priorizando basePower; no inyección de equipos al simulador ni falsificación de win.
+Alpha recargó durante turno1 y rejoined la misma room/request. El combate final
+`battle-gen9tmt2seed-3` (sufijo de acceso privado omitido aquí) terminó en12turnos:
+ambos mostraron `Result: TmtBeta`, sin errores de elección. Log incluye aviso real
+«This battle is invite-only!», tier y `tmt2data` de la identidad canonical v0.1.0.
+
+Replay JSON descargado desde beta, cargado como archivo en alpha y recargado:
+`Replay result: TmtBeta`, las seis especies y Bird/Bird/Bird. Usa el parser/Dex
+real del cliente con BattleSceneStub, sin graphics ni recursos externos (0 recursos
+fuera de origin). `test/fixtures/tmt2-browser-replay.json` conserva el log registrado
+por alpha; elimina el room capability/sufijo y añade clasificación de evidencia,
+no fixture ROM ni battle synthetic. Prueba automática lo reproduce con Battle real,
+mod aislado y tipos/result. Replay exige tier, dataset/version/catalogHash y win;
+rechaza drift/incompleto/auth/private request payloads, sin fallback a Dex oficial.
+Live drift cierra conexión y retira elecciones. El artefacto no es autosuficiente
+para gráficos: requiere el cliente local de estos pins y su catálogo generado;
+no depende de hosting ni descarga oficial para su validación.
+
+Errores/flows comprobados: EV252 import manipulado fue rechazado por servidor
+`rattata: EVS must all be 0`; cancelación quitó challenge y deshabilitó Accept;
+retry inmediato fue bloqueado por cooldown heredado10s, conservado. Retry tras
+esperar creó una partida nueva. Primer probe reveló doble envío de rqid y falta de
+animation globals al reproducir flinch; corregidos mediante latch por request y
+skip de animación cuando SceneStub no anima. Tests ejercen ambos. Se corrigió el
+reset de selección de equipo al reload. Una repetición accidental alpha/alpha no
+se usa para certificar los dos premades; se repitió con beta y requests comprobados.
+Hash de replay alterado fue rechazado con `dataset mismatch`; reload restauró el
+replay válido. No se esconden esos intentos fallidos como acceptance.
+
+Capturas temporales fuera de Git: `/tmp/tmt07-private-battle.png`,
+`/tmp/tmt07-alpha-result.png`, `/tmp/tmt07-beta-result.png`, `/tmp/tmt07-replay.png`.
+Artefacto descargado `/tmp/tmt07-actual-replay.json`; contiene sólo log de perspectiva
+battle, no requests/auth/tokens. Se mantuvieron los límites de assets opcionales y
+PHP/news. Se cerraron ambas sesiones y el launcher: exit143, lock ausente, ports8000/
+8080 reutilizables, config persistente `noguestsecurity=false`. La excepción vive
+sólo en ese proceso; no hay servidor con unsigned names al terminar.
+
+Pins de esta revisión: server merge `4c21861353d77acf48b29e4b5c08a8b009d83fd3`
+(código sin cambios TMT-07), client `34303b39fb6c423788f158058f0f5bea74d137ed`.
+Ramas `feat/tmt07-private-journey` (server sin commit nuevo),
+`feat/tmt07-private-client`, `feat/tmt07-browser-evidence`. Publicación eventual:
+cliente primero, luego datos con pin fetchable; servidor ya fusionado. Si squash/
+rebase altera consumerSHA, repin explícito y repetir core antes de merge datos.
+No push/PR/merge/deploy ni etapas08+ hechos en este alcance.
+
+
+Verificación final: repetición con controlador final y guard live de compatibilidad:
+alpha/beta, ambos `compatible=true`, ganador TmtBeta, 11 turnos, sin error de
+choices. Descarga, carga y reload del replay en cliente final: seis especies,
+Bird/Bird/Bird, socket null y cero recursos externos. La inspección independiente
+de consola descubrió `Config is not defined` en battle-log; bootstrap local
+corregido antes del parser y cubierto por el mismo test. Perfil limpio posterior:
+`errors=[]` y `console.messages=[]`, replay y reload aprobados. No se declara
+limpia la consola de intentos previos. Capturas finales full-page:
+`/tmp/tmt07-alpha-final.png`, `/tmp/tmt07-beta-final.png`,
+`/tmp/tmt07-replay-final.png`; replay descargado `/tmp/tmt07-final-replay.json`.
+
+`npm run ci:core` aprobado: datos39/0skip, server2406passing/74pending,
+client56passing/1skip, typechecks/lints/builds, validación seed, integración,
+manifest reproducible y lifecycle. La política existente excluye exactamente dos
+casos DNS externos y suite upstream slow; no se declaran pasados ni hay cambio de
+red/seguridad para ocultarlos. Assets opcionales/PHP-news siguen incompletos fuera
+de esta página mínima. Tras pin/bootstrap final se repite core sobre commits
+limpios y se comprueba manifest/check y generación sin drift. No fidelidad ROM,
+playtest humano, TMT08+, gráficos completos ni CI remoto/publicación aquí.

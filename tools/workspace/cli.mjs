@@ -64,7 +64,8 @@ try {
         const result = await supervise(builds);
         if (result) process.exitCode = result;
         else process.exitCode = await supervise([
-          node(c.server, [path.join(root, 'tools/workspace/server.cjs'), String(c.serverPort)], 'local server'),
+          node(c.server, [path.join(root, 'tools/workspace/server.cjs'), String(c.serverPort),
+            ...(process.env.TMT2_LOCAL_GUESTS === '1' ? ['--local-guests'] : [])], 'local server'),
           node(c.client, [path.join(root, 'tools/workspace/static.mjs'), path.join(c.client, 'play.pokemonshowdown.com'), String(c.clientPort)], 'local client'),
         ], {services: true, ready: async stopped => {
           const url = `http://127.0.0.1:${c.clientPort}/testclient-new.html?~~localhost:${c.serverPort}`;
