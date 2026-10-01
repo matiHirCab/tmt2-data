@@ -4,10 +4,10 @@
   "npm": "11.9.0",
   "server": {
     "repository": "matiHirCab/Pokemon-Too-Many-Types-2",
-    "commit": "b195c4176fd2647c92943ad56cc59e679f431b07"
+    "commit": "4c21861353d77acf48b29e4b5c08a8b009d83fd3"
   },
   "client": {
     "repository": "matiHirCab/Pokemon-Too-Many-Types-2-client",
-    "commit": "e9597d09c557b5003801861d356f76f5bde9a082"
+    "commit": "8ad840a70e2c96c4382305cb4de105c1cc57e976"
   }
 }

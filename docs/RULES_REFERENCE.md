@@ -612,3 +612,59 @@ core/base-format isolation, generación/protocol hash y browser. No falta un inp
 para este contrato de adaptación. La próxima tarea autorizable es TMT-07; no se
 ha iniciado. Server `b195c4176fd2647c92943ad56cc59e679f431b07`, client
 `e9597d09c557b5003801861d356f76f5bde9a082` son los pins revisados locales.
+
+## TMT-07 — checkpoint de autenticacion local
+
+2026-10-01. Continuación autorizada después de serverPR2/clientPR2/dataPR6.
+Merges comprobados por API y fetch, sin squash/rebase:
+server `4c21861353d77acf48b29e4b5c08a8b009d83fd3`,
+client `8ad840a70e2c96c4382305cb4de105c1cc57e976`,
+data `619dc5c970f961d5840ad3761456aad752dde29a`.
+Los commits TMT-06 son ancestros y los árboles consumidores son idénticos al código
+probado. `ci/pins.json` pasa ahora a esos masters revisados; original facts pin y
+seed/catálogos no cambian. TMT-06 CI remota
+[36788694795](https://github.com/matiHirCab/tmt2-data/actions/runs/36788694795)
+aprobó own37, server2410/70pending, client52/1skip; se fusionaron los tres PRs.
+
+**Bloqueo concreto, no aceptación TMT-07:** el config local tiene
+`noguestsecurity=false`. `server/users.ts:User.validateToken` exige assertion
+firmada para cambiar a un nombre no-Guest; `server/chat-commands/core.ts:challenge`
+rechaza `!user.named`. Un Guest automático no puede desafiar. No se configuró
+login externo, no se transmitieron tokens/passwords, no se cambiaron auth/security
+ni permisos, ni se eludió ese guard. El modo `noguestsecurity` ya existe en Showdown
+(`config/config-example.js`, documentación exclusivamente dev); habilitarlo sería
+una excepción que requiere aclaración del usuario dado su límite explícito de
+no ampliar seguridad. No se presenta esa excepción como ya autorizada.
+
+`npm run workspace:dev` construyó los forks/índices locales fijados y arrancó
+127.0.0.1:8000 (server) y127.0.0.1:8080 (client). Dos sesiones Chromium
+`agent-browser --session tmt07-a` / `tmt07-b`, páginas `/tmt2-seed.html`, abrieron
+WebSockets reales hacia `/showdown/websocket`. Respuestas `updateuser`:
+Guest1 y Guest2, named0. La primera envió `/challenge guest2, gen9tmt2seed` y
+recibió exactamente `|popup|You must choose a username before you challenge someone.`
+No errores JS en ninguna sesión; la vista previa readonly muestra el seed.
+Esto fue un **probe browser del protocolo**, no UX de desafío implementada ni
+combate. Captura temporal `/tmp/tmt07-guest-blocker.png` con anotación del error
+agregada sólo al DOM del probe; no asset/código de producto ni prueba de batalla.
+Ambas sesiones cerradas y servicios detenidos mediante SIGTERM, sin borrar locks
+manualmente. Quedan los avisos de assets opcionales/PHP ya documentados.
+
+Acción mínima propuesta, aún **no aplicada**: permitir `noguestsecurity=true`
+sólo en memoria del launcher local ya ligado a127.0.0.1, exclusivamente para
+nombres no registrados/sin autoridad en esta prueba. No `--no-security`, no
+`nothrottle`/`noipchecks`, ningún cambio de config persistente, binding o permisos.
+Requiere una respuesta explícita antes de continuar challenge/battle/replay.
+La alternativa con assertions externas contradice el requisito de no transmitir
+tokens y no se intenta. No solicitud de ROM/BPS/mGBA.
+
+Ramas nuevas preservadas: server `feat/tmt07-private-journey`, client
+`feat/tmt07-private-client`, data `feat/tmt07-browser-evidence`. No código servidor
+ni cliente modificado. TMT-07 permanece parcial/bloqueado: premade selection UX,
+challenge cancel/retry/accept, combate completo, rejoin/replay y evidencia final
+siguen sin satisfacer; no se inicia catálogo/megas/TMT-10 ni se publica nada.
+
+Verificación del checkpoint: `node tools/ci/pins.mjs verify` aprobado;
+`npm run integration:check` aprobado sin cambios de catálogos; `npm test` own37
+passed/0skip y `npm run typecheck` aprobados. Shutdown exit143, lock ausente y
+bind de prueba a ambos puertos aprobado. Full CI-core TMT-07, partida y replay
+no ejecutados: falta la decisión anterior, no se declaran aprobados por CI TMT-06.
