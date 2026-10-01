@@ -61,3 +61,14 @@ Run `npm run integration:generate`, `integration:check`, `integration:assets` an
 no-EV runtime enforcement and battle fidelity remain TMT-06 and later.
 
 Approved TMT-02 adaptation, TMT-04 contract and optional fidelity protocols: [docs/RULES_REFERENCE.md](docs/RULES_REFERENCE.md).
+
+## Local sprite downloads
+
+`npm run sprites:download` downloads the six seed species' official front/back
+GIFs into a new ignored `.local/sprites/download-*/` folder. Use
+`npm run sprites:download -- --pokemon rattata,pidgeot-mega` or `--file ids.txt`
+for exact sprite filename IDs, retaining form hyphens. Originals, source URLs,
+SHA-256 hashes and failures are recorded; ZIP is created only on full success.
+See [Windows commands, limits and provenance](docs/DEVELOPMENT.md#official-sprite-downloader).
+This is local evaluation tooling, not permission to redistribute artwork or
+proof that the native client's visual integration is complete.
