@@ -174,6 +174,19 @@ merging data; otherwise preserve the reviewed commits. Never force-push to repai
 pins. Exact current branches/commits and local evidence are recorded in
 [RULES_REFERENCE.md](RULES_REFERENCE.md#tmt-05--integracion-local-aislada).
 
+For TMT-06, use the exact consumer pins in `ci/pins.json` before generation/build.
+Server/client then data remains the safe eventual publication/review order; this
+ticket has no publication authorization yet. Do not merge data with unreachable
+consumer pins. Preserve reviewed commits or explicitly repin reviewed merge heads
+and rerun core after squash/rebase. The original inherited facts pin remains separate.
+Open `/tmt2-seed.html` on the local client for locked level50/IV31/EV0 stats and
+copyable alpha/beta imports. Import a whole premade into the local client; the hidden
+format rejects mixed or edited sets with server errors. No general EV editor or
+expanded teambuilder is introduced. To undo this slice safely, stop local services
+and switch each clean checkout to the three recorded TMT-05 merge heads, then
+regenerate catalogs/assets with that data revision; never reset unrelated edits or
+reuse incompatible generated outputs. Local feature branches can be retained.
+
 ## Implementation backlog
 
 Follow only [ROADMAP.md](ROADMAP.md) for implementation stages, ticket prerequisites

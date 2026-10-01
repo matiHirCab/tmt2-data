@@ -1,0 +1,13 @@
+{
+  "source": "matiHirCab/Pokemon-Too-Many-Types-2@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts:struggle",
+  "classification": "approved-showdown-inheritance-engine-only-not-selectable-not-ROM-evidence",
+  "moves": {
+    "struggle": {
+      "name": "Struggle", "num": 165, "type": "Normal", "category": "Physical",
+      "basePower": 50, "accuracy": true, "pp": 1, "priority": 0,
+      "flags": { "contact": 1, "protect": 1, "failencore": 1, "failmefirst": 1, "nosleeptalk": 1, "noassist": 1, "failcopycat": 1, "failmimic": 1, "failinstruct": 1, "nosketch": 1 },
+      "target": "randomNormal", "noPPBoosts": true, "struggleRecoil": true,
+      "exists": true, "gen": 1
+    }
+  }
+}

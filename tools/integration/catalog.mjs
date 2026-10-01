@@ -2,12 +2,15 @@ import fs from 'node:fs';
 import {validateSeed, stableHash, canonical} from '../data/validate.mjs';
 export const formatID = 'gen9tmt2seed';
 export const formatName = '[Gen 9] TMT2 Seed';
+// Explicit pinned engine intrinsic, separate from selectable seed moves/learnsets.
+const engine = JSON.parse(fs.readFileSync(new URL('../../provenance/engine-moves.json', import.meta.url)));
 export function catalog(seed) {
   const checked=validateSeed(seed);if(!checked.valid)throw Error(checked.errors.join('; '));
   const names=Object.fromEntries(seed.types.map(t=>[t.id,t.name]));
   const abilityNames=Object.fromEntries(seed.abilities.map(a=>[a.id,a.name]));
   const fields=r=>Object.fromEntries(Object.entries(r).filter(([k])=>k!=='fieldSources'));
   const table={
+    engineMoves: structuredClone(engine.moves),
     species:Object.fromEntries(seed.species.map(s=>[s.id,{...fields(s),types:s.types.map(t=>names[t]),abilities:{0:abilityNames[s.abilities[0]]},tier:'TMT2',gen:9,exists:true}])),
     moves:Object.fromEntries(seed.moves.map(m=>[m.id,{...fields(m),type:names[m.type],gen:9,exists:true}])),
     abilities:Object.fromEntries(seed.abilities.map(a=>[a.id,{...fields(a),gen:9,exists:true}])),

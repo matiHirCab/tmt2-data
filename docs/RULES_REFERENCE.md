@@ -516,3 +516,99 @@ Se conserva el guard y se descarga historia en CI; el builder crea data/text só
 después de rechazar symlinks. Fixture aislado sin data produjo los mismos 16 hashes,
 y symlink de índice se rechazó conservando archivo personal. Client51/1skip y
 propios37/typecheck pasan; resultado remoto final se registra en los checks PR5.
+
+## TMT-06 — premades y runtime acotado
+
+2026-09-30, continuación autorizada después de los tres merges TMT-05. Aplica la
+adaptación aprobada TMT-02, no añade afirmaciones de fidelidad ROM. Contrato mínimo:
+uno de los equipos alpha o beta **completo**, en cualquiera de los dos lados;
+orden de miembros/moves libre. No se permiten mezclas, duplicados ni sustituir
+moves/ability/item/nature. Nivel50, Hardy, IV31, EV0, sin ítems/transformaciones.
+Nombre/género/shiny y otros campos cosméticos ordinarios no cambian este contrato.
+EV/IV omitidos en el formato packed se rellenan sólo con 0/31. Valores diferentes,
+no finitos, strings, stats extras, `adjustLevel`, niveles que el padre normalmente
+clamp-earía y overrides `@@@` se rechazan **antes** de normalización. Una defensa
+`onBegin` también rechaza bypass de TeamValidator en el simulador. El importador de
+Showdown puede normalizar texto antes del gate; ningún valor resultante aceptado
+puede influir en stats mediante EVs ni eludir el contrato.
+
+Servidor: `config/tmt2-formats.ts`, `data/mods/gen9tmt2seed/rules.ts` y
+`test/sim/tmt2-runtime.js`. Se reutilizan motor/arrays permanentes y callbacks Gen9
+fijados; no cambios en core ni `addedType`. Mod aislado mantiene los nueve moves
+ofensivos, Protect y Thunder Wave, las cinco abilities y política sin held items.
+Tipos custom siguen sin callback adicional **por adaptación**, no como hecho ROM.
+No Tera, Dynamax, Z, megas, formas alternas ni cambios de tipo seleccionables.
+
+Corrección funcional descubierta: el pruning TMT-05 también quitaba Struggle,
+necesario al agotar PP. Se conserva su callback heredado sólo como intrinsic del
+motor; sigue rechazado como elección y no aparece en learnsets/search. Metadata
+cliente se genera separadamente en `table.engineMoves` desde
+`provenance/engine-moves.json`, fijado al mismo source original; el check cruzado
+compara cada campo con padre/mod. No fallback silencioso a tablas upstream. El
+seed v0.1.0 y su hash siguen iguales; el catalogHash cambia explícitamente e impide
+usar un cliente viejo compatible sólo por versión. Callbacks no se generan.
+
+Cliente: helpers `TMT2.premade/exportPremade/stats`, vista readonly
+`/tmt2-seed.html` con dos imports completos y stats reales. No EV editor ni
+teambuilder general TMT-10. Check coordinado importa ambos textos con Teams.import,
+los valida y compara todos sus stats con seis Pokémon reales del simulador.
+Los errores server siguen siendo autoridad ante modificación del cliente.
+
+| Caso real del mod | Expected de adaptación y regresión |
+| --- | --- |
+| Stats de seis especies | Fórmula Gen9 a level50/IV31/EV0/Hardy; HP suma60, otros5; export/cliente = simulador |
+| Daño de todos los 9 moves ofensivos | 17 combinaciones species/move fijadas con roll máximo y sin crítico; categorías/flags/callbacks heredados |
+| Chart ordenado/repetido | Rock Throw contra Pidgeot suma3 etapas (8x), Water Gun contra Eevee suma2 (4x); Water/Frog inmune a Water en cálculo y turno real |
+| STAB | Membership 1.5x una vez; control sintético Rock vs Rock/Rock/Rock idéntico, quitar Rock reduce daño; no STAB Bird para Gust/Flying |
+| Turno | Quick Attack antes de Pidgeot más rápido; Protect bloquea daño; Bite con roll secundario controlado causa flinch y cancela move lento |
+| Thunder Wave / switches | Parálisis real persiste; Bird/Bird/Bird permanece al salir/entrar, sin addedType |
+| Torrent / Overgrow | Sus tipos ordinarios ganan daño a HP≤1/3, sin pasiva custom |
+| Sturdy / Keen Eye | Lethal hit a HP completo deja1; mismo hit sin HP completo KO; precisión no baja y move ignora evasión |
+| Run Away / item | Sin callback PvP según código fijado; getItem vacío, sin bonus |
+| Agotar PP | Struggle funciona/recoil, importarlo sigue ilegal |
+| Combate local | Match determinista del simulador con autochoices termina en win sin error; no dos navegadores ni certificación replay TMT-07 |
+
+Los 17 controles de daño (target = primer rival no inmune, HP completo, roll máximo,
+sin crítico; fixtures de **adaptación**, no mediciones ROM) son:
+Rattata y Eevee tackle5/quickattack5/bite14 contra Nosepass;
+Froakie pound5/watergun44/quickattack5 contra Nosepass;
+Nosepass tackle22/rockthrow84 contra Rattata;
+Floragato scratch34/magicalleaf60/bite50 contra Rattata;
+Pidgeot tackle34/gust60/quickattack34 contra Rattata. Los setups sintéticos de
+STAB, lethal HP y rolls están rotulados en tests y no permiten imports ilegales.
+
+Checks focalizados: `node node_modules/mocha/bin/mocha.js --grep 'TMT-0[56]'
+--forbid-only --reporter dot` = **41 passed** (38 TMT-06 +3 integración previa).
+Server build/tsc/lint pasan sin warnings de lint. Client `npm test` =52 passed/1
+skip heredado; data `npm test` =37 passed/0skip y typecheck aprobado.
+`npm run integration:test` aprueba imports, stats, provenance del intrinsic y
+catálogo aislado. Browser Chromium/agent-browser: seis filas, stats de Rattata
+105/76/55/45/55/92, dos imports readonly, tres Bird, filtro Cat=Eevee/Floragato,
+reload restituye seis filas, sin errores JS. Captura temporal `/tmp/tmt06-premades.png`,
+no asset distribuido. UI no usa graphics ausentes. Aviso opcional de noticias PHP
+continúa sin ocultarlo. CI-core final y manifest limpio se registran al terminar.
+
+Ramas locales: server `feat/tmt06-seed-runtime`, client
+`feat/tmt06-premade-contract`, data `feat/tmt06-runtime-verification`.
+Pins exactos consumidores en `ci/pins.json`; original facts pin no cambia.
+Publicación requiere autorización nueva: server y client antes de datos para que
+los pins existan; revisar/mergear server→client→data preservando commits o repin
+explícito tras squash/rebase. No push/PR/deploy hecho en esta etapa.
+
+**Resultado final TMT-06:** `npm run ci:core` exit0: propios37/0skip,
+server2406 passed/74 pending, client52 passed/1skip; builds/typechecks/lint,
+seed gate y checks cruzados aprobados. Smoke HTTP/WS, rechazo concurrente,
+SIGTERM143, lock eliminado y puertos liberados. Las dos pruebas DNS y las slow
+no se ejecutan ni se presentan como aprobadas. Faltan recursos opcionales
+`data/graphics.js`, `data/commands.js`, `js/server/chat-formatter.js`; no se
+ocultan ni descargan assets para simular completeness. Generación byte-idéntica
+y manifest final limpio se verifican después del commit. Sin CI remota en este
+alcance, sin recorrido TMT-07, ROM-fidelity, catálogo ampliado ni publicación.
+
+**Checklist DoD local:** legalidad de premades y negativos; EV0/stat agreement;
+nueve moves de daño y dos status; immunity/STAB/repetidos/switches; cinco abilities
+heredadas y ausencia de held item; PP exhaustion; match de simulador terminado;
+core/base-format isolation, generación/protocol hash y browser. No falta un input
+para este contrato de adaptación. La próxima tarea autorizable es TMT-07; no se
+ha iniciado. Server `b195c4176fd2647c92943ad56cc59e679f431b07`, client
+`e9597d09c557b5003801861d356f76f5bde9a082` son los pins revisados locales.
