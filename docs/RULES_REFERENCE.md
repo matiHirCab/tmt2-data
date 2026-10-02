@@ -1015,3 +1015,57 @@ redistribución de artwork siguen sin verificar y no se publica el paquete.
 Checks de este cambio documental: `git diff --check`, `npm test`47aprobadas/
 0fallos/0omitidas y `npm run typecheck` aprobados. No se repitió CI-core completo
 ni se validaron ZIP/imágenes/replay gráfico; el bloqueo de transferencia permanece.
+
+### Sprites originales integrados (2026-10-02)
+
+El nuevo adjunto directo `sprites.zip` resolvió el bloqueo de transferencia.
+Se verificaron sus816661bytes y SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+El ZIP contiene exactamente17entradas permitidas: los16recursos de la tabla
+anterior y `manifest.json`, sin rutas repetidas, traversal, symlinks ni entradas
+cifradas. Tamaños/hashes de todos los archivos coinciden. Pillow12.3.0 decodificó
+todos los cuadros GIF y píxeles PNG; dimensiones y conteos de cuadros coinciden
+con el manifiesto. Su SHA256 es
+`205c2188cc5428ed241c15fa8403c6b291d0a6ea8acf00f6a4fbc27ef83c7ca5`.
+Los URLs oficiales son procedencia declarada por el manifiesto recibido, no una
+nueva descarga HTTP propia ni prueba de artwork del ROM/derechos de redistribución.
+
+Cliente `feat/tmt07-private-client`, commit
+`bd7667d6593d7f335998c882e0f0fc24f3369e0d`: importador Node del ZIP pinneado,
+validación no destructiva de inputs/symlinks/hashes, metadata visual ligada a
+datasetHash y generación local sin red. `getSpriteData` usa GIF front/back y sus
+dimensiones reales; `resolveAvatar` usa Rosa/Lyra; `getPokemonIcon` conserva los
+recortes de hoja y estados Pokéball. Las otras entradas normales mantienen su
+comportamiento. Se conservan cards rotuladas para previews sin paquete/avatares
+fuera del par soportado; un paquete presente dañado falla, no activa fallback.
+Los originales/cache/outputs están ignorados, sin artwork binario en Git. Ver
+[setup reproducible](DEVELOPMENT.md#private-local-seed-battle-tmt-07) y
+[pin de artwork](../../Pokemon-Too-Many-Types-2-client/tmt2/native-artwork.json).
+Servidor permanece4c21861353d77acf48b29e4b5c08a8b009d83fd3, sin cambios nuevos;
+el pin de CI cliente se actualizó a bd7667d6. Publicación futura: cliente primero,
+datos después con ese commit fetchable. No se publica/fusiona/despliega ahora.
+
+Checks: importación real exit0; hashes de todos los outputs verificados;
+generación repetida byte-idéntica (manifest SHA256
+`2cafa8187b32156d06400fd481e2191d4e554ffc8cae41fd83d72f50f21c8675`).
+Input explícito ausente rechazado sin cambiar outputs públicos. Tests cliente:
+67aprobados/1omitido, incluidos7nativos y4del importador. La suite también pasó
+en modo developer-placeholders con los originales temporalmente apartados y
+restaurados después. `npm test` incluye build, ambos typechecks y lint.
+`npm run ci:core` pasó datos47, servidor2406/74pendientes, cliente67/1omitido,
+paridad/aislamiento, manifiesto reproducible y lifecycle HTTP/WS con SIGTERM143,
+lock retirado/puertos reutilizables. Dos tests DNS y upstream slow siguen excluidos
+explícitamente del core; no se ejecutó el diagnóstico DNS en esta reanudación.
+Log local `.local/evidence/tmt07-native/ci-core-original-artwork.log`, SHA256
+`5b891ace3987b288c7fa7c3aa6212346c8db109f07522ea7757d0f79d51e5bea`.
+Este core usó cliente bd7667d6 limpio y datos b186d036 con los cambios documentales/
+pin actuales todavía sin commit; no se presenta como CI remota ni certificación ROM.
+
+**Pendiente:** no hay captura browser nueva con los originales. Chromium abortó
+con el sandbox SUID mal configurado y tampoco pudo usar el de namespaces. No se
+cambió su configuración global ni se lanzó con `--no-sandbox`; se solicitó
+autorización concreta para una instancia efímera local con ese flag, aún pendiente.
+La prueba visual/replay y revisión del usuario siguen abiertas, por eso TMT-07
+sigue parcial. La excepción guest del servidor no se reactivó: config persistente
+false; el smoke sólo probó guests sin nombres firmados. No se afirma una nueva
+batalla browser ni fidelidad ROM a partir de estas pruebas de generación/simulador.

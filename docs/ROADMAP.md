@@ -35,7 +35,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Completado: seed acotado de adaptación, esquema y validación |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Terminado: tres PRs fusionados, CI remota verificada |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Terminado: PRs fusionados y CI remota verificada |
-| 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Parcial: recorrido nativo documentado; ZIP recibido, transferencia/integración y aceptación visual pendientes |
+| 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Parcial: sprites originales validados e integrados; QA browser/revisión visual pendientes |
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Pendiente |
 | 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Pendiente |
 | 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Pendiente |
@@ -168,13 +168,12 @@ fidelidad ROM. La prueba local del simulador no cumple el recorrido de TMT-07.
 ### TMT-07 — Primer combate privado de dos jugadores
 
 **Prerrequisitos:** TMT-03 y TMT-06. **Estado:** parcial: recorrido funcional nativo
-automatizado documentado; el usuario entregó el ZIP de sprites, pero su transferencia
-al executor sigue bloqueada. Faltan validar los bytes, integrarlos y cerrar la
-aceptación visual. Los placeholders no cierran esta corrección. Ver la
+automatizado documentado; el adjunto directo resolvió la transferencia y los16sprites
+originales están validados e integrados. Falta QA browser/revisión visual con esos
+recursos. Los placeholders no cierran esta corrección. Ver la
 [auditoría de cierre](RULES_REFERENCE.md#tmt-07--auditoría-de-cierre-2026-10-02).
-La [recepción del paquete](RULES_REFERENCE.md#sprites-recibidos-transferencia-pendiente-2026-10-02)
-supersede el bloqueo anterior de adjunto ausente; no se requiere otro ZIP ni una
-carpeta sin comprimir mientras no haya evidencia de un problema en el archivo.
+La [integración del paquete](RULES_REFERENCE.md#sprites-originales-integrados-2026-10-02)
+supersede los bloqueos históricos de adjunto ausente/transferencia fallida.
 **DoD:** dos navegadores independientes eligen premades, se desafían y finalizan
 un combate con resultados consistentes; replay reproducible en cliente compatible.
 Registrar versiones, pasos y resultados. HTTP/WS READY no cumple esta DoD.

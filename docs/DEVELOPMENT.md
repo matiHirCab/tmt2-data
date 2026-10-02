@@ -66,8 +66,9 @@ Generated public assets remain ignored. Text, species/move/ability data and
 search/teambuilder tables now come from the local pinned checkout. Legacy optional
 graphics.js/commands.js remain absent and doctor reports them. The native TMT2
 entry loads local scene/move animations and pinned chat-formatter instead, disables
-external data fallback and labels its local sprite placeholders. Original art/audio
-are not certified; unrelated legacy entries may still use upstream fallback.
+external data fallback and uses the locally imported/pinned sprite package when
+available (otherwise clearly labeled developer cards). Artwork redistribution
+rights are unverified; audio is optional. Unrelated legacy entries may still use upstream fallback.
 READY is HTTP readiness, not a playable battle certificate. `full`, `minidex` and
 other independent upstream generators are not invoked by coordination.
 
@@ -225,12 +226,37 @@ disabled. Tier/dataset/version/catalogHash mismatch fails, with no official Dex
 fallback. Replays require this compatible built client, not public replay hosting.
 
 `build-tools/build-native-tmt2` consumes only the clean exact local server SHA
-passed by pinned build-indexes: MIT chat-formatter source and code-generated SVG
-text cards with output hashes in data/tmt2-native-assets.json. No git pull/download.
-The original sprites/audio are unavailable here (the official asset request
-returned403); cards explicitly say “sprite unavailable”, audio is disabled only
-for this local entry. The native scene/layout/HP/move animations still run.
-This proves native functional integration, not finished artwork or ROM fidelity.
+passed by pinned build-indexes: MIT chat-formatter source and optional locally
+imported artwork. No git pull/download. The user-supplied ZIP is pinned by archive,
+manifest and all16file hashes in client `tmt2/native-artwork.json`; the original
+bytes are not committed or redistributed. This is Showdown artwork for local
+evaluation, not extracted TMT2 ROM artwork or verified redistribution permission.
+
+From the client checkout, import the received immutable package once:
+
+```sh
+node build-tools/import-tmt2-artwork /path/to/sprites.zip
+```
+
+The default ignored destination is `caches/tmt2-native-artwork`. The importer
+accepts only the exact pinned stored ZIP and its17whitelisted entries (16images
+plus manifest), validates hashes, refuses symlinks/existing destinations and never
+executes image content. No Python or unpacking program is needed. An optional
+second argument selects a new destination; set `TMT2_SPRITES_DIR` to that folder
+for coordinated builds/dev. Missing/corrupt explicit inputs fail before public
+outputs are written. Import into a new folder for recovery rather than overwriting
+an existing one; an interrupted filesystem copy may leave a partial destination
+that must be reviewed before removal. A newly downloaded archive with different
+manifest timestamps is not the pinned input and requires explicit verification.
+
+The generated `data/tmt2-native-assets.js` binds visual metadata to datasetHash;
+`data/tmt2-native-assets.json` records generator/validator/pin hashes and output
+hashes. Actual GIF front/back paths and dimensions, Rosa/Lyra and native cropped
+team/Pokéball icons are local. If artwork is absent, CI builds use an explicitly
+labeled developer-card mode; this does not satisfy visual acceptance. A present
+but damaged package never silently falls back. Audio remains disabled for this
+local entry. Custom types and categories use legible text labels. The native
+scene/layout/HP/move animations are retained; no ROM fidelity is claimed.
 `/tmt2-private.html` is a developer-only protocol harness using BattleSceneStub;
 its earlier results cannot certify the user-facing native UX. See RULES_REFERENCE
 for the superseding native browser evidence and known limits.
