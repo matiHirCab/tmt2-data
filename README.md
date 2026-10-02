@@ -66,6 +66,9 @@ Approved TMT-02 adaptation, TMT-04 contract and optional fidelity protocols: [do
 
 `npm run sprites:download` downloads the six seed species' official front/back
 GIFs into a new ignored `.local/sprites/download-*/` folder. Use
+`npm run sprites:download -- --with-ui` to include the four fixed TMT07 UI PNGs
+(Rosa/Lyra trainers and Pokemon/Pokeball icon sheets) in the same validated ZIP.
+Use
 `npm run sprites:download -- --pokemon rattata,pidgeot-mega` or `--file ids.txt`
 for exact sprite filename IDs, retaining form hyphens. Originals, source URLs,
 SHA-256 hashes and failures are recorded; ZIP is created only on full success.
