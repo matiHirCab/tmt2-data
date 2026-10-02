@@ -1322,3 +1322,39 @@ y la advertencia npm sobre NODE_OPTIONS se reportan, no impiden exit 0.
 La primera CI falló por una línea de iconos de 122 caracteres (límite120):
 se corrigió sin cambiar comportamiento, se creó un commit ordinario y se actualizó
 el pin. No se suprimieron warnings ni tests.
+
+#### Aclaración del baseline pendiente antes de publicación
+
+No hubo aumento local de pendientes de TMT-08 a TMT-09. El registro local final
+TMT-08 `.local/evidence/tmt08/core-active-final.log` contiene 2412 pass / 74 pending;
+el postmerge GitHub [37029721428](https://github.com/matiHirCab/tmt2-data/actions/runs/37029721428)
+registró 2416 pass / 70 pending. Son entornos distintos. TMT-09 local registra
+2420 pass / los mismos 74 pending, no cuatro nuevas exclusiones del catálogo.
+
+Comparación exacta por nombres completos: `git ls-tree` del servidor fusionado
+c7ec3c558663c153116a4ad6d535be56e3f6b517 seleccionó todos los archivos de pruebas
+anteriores; `git diff --name-only ... -- test` demuestra que el único archivo
+añadido/modificado es `test/sim/tmt2-catalog.js`. Inventarios Mocha `--dry-run
+--reporter json` con la misma política core, uno con esa lista baseline y otro
+con la lista actual, resultaron en 2486 vs 2494 casos y **listas idénticas de 74
+pending**. Esto sólo inventaría los tests: las aprobaciones de ejecución provienen
+de CI-core, no del dry-run. Comparación local reproducida:
+`.local/evidence/tmt09/pending-comparison.json` y `test-inventory.json`.
+
+Cuatro casos opcionales del grupo `SQLite worker wrapper` en `test/lib/sql.js`,
+sin cambios de código, usan `common.hasModule('better-sqlite3') ? describe :
+describe.skip`; aquí el módulo no se resuelve:
+- should require you to prepare a statement before running
+- should support both statement strings and corresponding statement classes
+- should support both inline and object params
+- should retrieve one line from Database.get
+
+TMT-09 añade ocho casos activos y aprobados: identidad/stats/learnsets,
+legalidad gamma y mutaciones, damage/split de las adiciones, defensas doble Bird
+y Crab, Leer, secundario Water Pulse, Shell Armor y combate gamma completo con
+aislamiento. Ninguna cobertura TMT-09 depende de SQLite. Los cuatro movimientos
+nuevos son Wing Attack (`wingattack`), Vise Grip (`visegrip`), Water Pulse
+(`waterpulse`) y Leer (`leer`): campos/callbacks/learnsets heredados del pin
+Showdown 2f5b273925862ac242b419086c1e7a8868b51da1, `data/moves.ts#ID`,
+no hechos de movimientos ROM. Conteo: nueve bases Rattata/Eevee/Froakie/Nosepass/
+Floragato/Pidgeot/Pidgey/Pidgeotto/Krabby más **Mega Pidgeot** = diez especies/formas.
