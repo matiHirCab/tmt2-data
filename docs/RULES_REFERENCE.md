@@ -983,3 +983,35 @@ coordinado actualizado. Pendiente: importar originales verificados, rutas/facing
 dimensiones/iconos, QA browser/replay con esos originales y capturas nuevas,
 CI-core de los cambios gráficos finales y revisión/publicación autorizadas.
 Ninguna de esas aceptaciones se cierra con las cards recuperadas.
+
+### Sprites recibidos; transferencia pendiente (2026-10-02)
+
+El usuario entregó `sprites.zip`, `manifest.json` y `report.json`. Esto supersede
+la observación anterior de adjunto ausente. Se pudo leer el manifiesto y el informe
+completos en Library: declaran éxito16/16, exactamente los12GIF front/back de las
+seis especies y los4PNG solicitados (Rosa, Lyra y ambas hojas de iconos), sin
+rutas adicionales ni duplicadas. Todas las rutas y URLs declaradas corresponden
+al origen oficial; los campos de tamaño y SHA256 tienen formato válido.
+El ZIP declara816661bytes y SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+**Son metadatos leídos, no hashes/dimensiones/contenidos verificados contra bytes.**
+
+La transferencia autorizada de los tres adjuntos falló sin instalar archivos en
+el executor. Refrescar la transferencia del ZIP con sus identificadores completos
+produjo el mismo fallo; no se eludió el acceso ni se modificó la red. El bloqueo
+concreto es recibir localmente el ZIP para validar entradas, tamaños, hashes y
+contenido de imágenes antes de importarlo. No hay evidencia de ZIP corrupto ni
+necesidad de una carpeta sin comprimir o de repetir la descarga de sprites.
+Reanudar con la materialización autorizada del adjunto `sprites.zip`, conservando
+su identidad Library; luego comprobar su hash declarado y los16archivos, conectar
+las rutas nativas y realizar el QA gráfico/replay pendiente. Las copias pequeñas
+de ZIP usadas por pruebas unitarias anteriores son fixtures sintéticas, no este
+paquete, y no pueden sustituirlo.
+
+En esta reanudación no se cambió código del cliente/servidor, no se ejecutó una
+batalla browser nueva ni se activó la excepción guest. Puertos8000/8080 libres y
+`noguestsecurity=false` persistente. TMT-07 sigue parcial; derechos de
+redistribución de artwork siguen sin verificar y no se publica el paquete.
+Checks de este cambio documental: `git diff --check`, `npm test`47aprobadas/
+0fallos/0omitidas y `npm run typecheck` aprobados. No se repitió CI-core completo
+ni se validaron ZIP/imágenes/replay gráfico; el bloqueo de transferencia permanece.
