@@ -14,7 +14,15 @@
       "C": "Type1",
       "D": "Type2",
       "E": "Type3"
-    }
+    },
+    "corroboratedIDs": [
+      "rattata",
+      "eevee",
+      "froakie",
+      "nosepass",
+      "floragato",
+      "pidgeot"
+    ]
   },
   "rows": [
     {
@@ -70,6 +78,37 @@
         "bird"
       ],
       "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; B24, C24:E24"
+    },
+    {
+      "id": "pidgey",
+      "rawTranscription": "21 Pidgey Bird",
+      "types": [
+        "bird"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; user message Sentinel_51eeebf3c58c8191af721b1ca6a7eceb, exact copied row 21 Pidgey Bird",
+      "evidenceClass": "user-transcription-of-creator",
+      "corroboration": "No new independent live-cell observation; retained exact user-supplied creator row"
+    },
+    {
+      "id": "pidgeotto",
+      "rawTranscription": "22 Pidgeotto Bird Bird",
+      "types": [
+        "bird",
+        "bird"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; user message Sentinel_51eeebf3c58c8191af721b1ca6a7eceb, exact copied row 22 Pidgeotto Bird Bird",
+      "evidenceClass": "user-transcription-of-creator",
+      "corroboration": "No new independent live-cell observation; retained exact user-supplied creator row"
+    },
+    {
+      "id": "krabby",
+      "rawTranscription": "280 Krabby Crab",
+      "types": [
+        "crab"
+      ],
+      "locator": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?gid=1164206668#gid=1164206668; user message Sentinel_51eeebf3c58c8191af721b1ca6a7eceb, exact copied row 280 Krabby Crab",
+      "evidenceClass": "user-transcription-of-creator",
+      "corroboration": "No new independent live-cell observation; retained exact user-supplied creator row"
     }
   ]
 }

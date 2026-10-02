@@ -76,3 +76,41 @@ test('production cannot omit or reorder creator types or promote unknown evidenc
  d=structuredClone(selected);d.species.find(s=>s.id==='floragato').types.reverse();fail(d,/no matching registered creator row/);
  d=structuredClone(selected);d.sources.find(s=>s.id==='creatorspecies').kind='unknown';fail(d,/unresolved evidence/);
 });
+
+test('TMT-09 bounded catalog has ten species/forms, fifteen moves and three fixed premades',()=>{
+ assert.equal(selected.species.length+(selected.forms||[]).length,10);
+ assert.equal(selected.moves.length,15);
+ assert.deepEqual(selected.teams.map(t=>t.id),['alpha','beta','gamma']);
+ assert.deepEqual(selected.teams[2].sets.map(s=>s.species),['pidgey','pidgeotto','krabby']);
+ assert.deepEqual(selected.species.find(s=>s.id==='pidgeotto').types,['bird','bird']);
+ for(const id of ['wingattack','visegrip','waterpulse','leer']) assert(selected.moves.some(m=>m.id===id));
+ for(const set of selected.teams[2].sets) {
+  assert.equal(set.level,50);assert.equal(set.item,'none');
+  assert(Object.values(set.evs).every(v=>v===0));assert(Object.values(set.ivs).every(v=>v===31));
+ }
+});
+
+test('TMT-09 provenance distinguishes copied creator rows from primary chart observations',()=>{
+ const rows=JSON.parse(fs.readFileSync(new URL('../provenance/seed-types.json',import.meta.url)));
+ for(const id of ['pidgey','pidgeotto','krabby']) {
+  const row=rows.rows.find(r=>r.id===id);
+  assert.equal(row.evidenceClass,'user-transcription-of-creator');
+  assert.match(row.locator,/Sentinel_51eeebf3c58c8191af721b1ca6a7eceb/);
+  assert.equal(rows.primaryObservation.corroboratedIDs.includes(id),false);
+ }
+ const expected={normal:1,dark:1,water:0.5,rock:1,electric:1,grass:0.5,flying:2};
+ for(const [attacker,multiplier] of Object.entries(expected)) {
+  const pair=selected.chart.find(p=>p.attacker===attacker&&p.defender==='crab');
+  assert.equal(pair.multiplier,multiplier);assert.equal(pair.source,'seedchart');
+ }
+});
+
+test('TMT-09 production rejects incomplete gamma, altered duplicate types and unsupported choices',()=>{
+ for(const mutate of [
+  d=>d.teams[2].sets.pop(),
+  d=>{d.teams[2].sets[2].moves[0]='surf';},
+  d=>{d.teams[2].sets[2].ability='hypercutter';},
+  d=>{d.species.find(s=>s.id==='pidgeotto').types=['bird'];},
+  d=>{d.chart=d.chart.filter(p=>!(p.attacker==='flying'&&p.defender==='crab'));},
+ ]){const d=structuredClone(selected);mutate(d);assert.equal(validateSeed(d).valid,false);}
+});

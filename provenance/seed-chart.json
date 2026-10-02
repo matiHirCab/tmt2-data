@@ -382,6 +382,62 @@
       "defender": "rock",
       "multiplier": 1,
       "cell": "I16"
+    },
+    {
+      "attacker": "normal",
+      "defender": "crab",
+      "multiplier": 1,
+      "cell": "CRAB defender column / NORMAL attacker row 3",
+      "observedOn": "2026-10-02"
+    },
+    {
+      "attacker": "dark",
+      "defender": "crab",
+      "multiplier": 1,
+      "cell": "CRAB defender column / DARK attacker row 20",
+      "observedOn": "2026-10-02"
+    },
+    {
+      "attacker": "water",
+      "defender": "crab",
+      "multiplier": 0.5,
+      "cell": "CRAB defender column / WATER attacker row 14",
+      "observedOn": "2026-10-02"
+    },
+    {
+      "attacker": "rock",
+      "defender": "crab",
+      "multiplier": 1,
+      "cell": "CRAB defender column / ROCK attacker row 8",
+      "observedOn": "2026-10-02"
+    },
+    {
+      "attacker": "electric",
+      "defender": "crab",
+      "multiplier": 1,
+      "cell": "CRAB defender column / ELECTRIC attacker row 16",
+      "observedOn": "2026-10-02"
+    },
+    {
+      "attacker": "grass",
+      "defender": "crab",
+      "multiplier": 0.5,
+      "cell": "CRAB defender column / GRASS attacker row 15",
+      "observedOn": "2026-10-02"
+    },
+    {
+      "attacker": "flying",
+      "defender": "crab",
+      "multiplier": 2,
+      "cell": "CRAB defender column / FLYING attacker row 5",
+      "observedOn": "2026-10-02"
     }
-  ]
+  ],
+  "latestObservedOn": "2026-10-02",
+  "batchObservation": {
+    "observedOn": "2026-10-02",
+    "columnLabel": "CRAB",
+    "method": "Read-only creator Documentation link; attacker row and labelled defender column",
+    "versionBinding": null
+  }
 }
