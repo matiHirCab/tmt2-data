@@ -399,7 +399,7 @@ Se revisa el resultado antes de reemplazar el snapshot comprometido.
 comandos pasan. Preparación repetida es idéntica y overwrite falla sin modificar
 el archivo. `npm run ci:core` sale0: builds server/client, lint/typechecks, servidor
 2365 passed/74 pending, cliente21 passed/3 skipped por assets, y smoke HTTP/WS,
-rechazo de operaciones concurrentes, SIGTERM143, eliminación de lock y puertos
+rechazo de operaciones concurrentes, SIGTERM 143, eliminación de lock y puertos
 libres. Dos tests DNS y upstream slow no se ejecutan en core; no se afirma que
 pasaron. Aviso PHP ausente en noticias opcionales y assets cliente faltantes
 son límites baseline documentados, no se ocultan ni se descargan datos upstream.
@@ -481,10 +481,10 @@ separados/excluidos según CI; no se presentan como aprobados. CI remota de esta
 ramas no se ejecuta hasta autorización de publicación. Orden de eventual revisión
 y rollback seguro: [DEVELOPMENT.md](DEVELOPMENT.md#integration-pins-and-eventual-review-order).
 
-**Resultado final local:** `npm run ci:core` exit0 con 37 tests propios (sin skips),
+**Resultado final local:** `npm run ci:core` exit 0 con 37 tests propios (sin skips),
 server2368 passed/74 pending y client51 passed/1 skip heredado. Builds, lint
 sin warnings, typechecks de los tres repos, seed gate e integración pasan.
-Smoke HTTP/WS pasa; operaciones concurrentes rechazadas, SIGTERM143, lock eliminado
+Smoke HTTP/WS pasa; operaciones concurrentes rechazadas, SIGTERM 143, lock eliminado
 y puertos liberados. Dos DNS y slow no ejecutados, CI remota no ejecutada.
 Regeneración compartida dos veces mantiene catálogos idénticos y forks limpios;
 `--fresh` preserva los 16 hashes de índices. Preparación del seed con los nuevos
@@ -595,10 +595,10 @@ Publicación requiere autorización nueva: server y client antes de datos para q
 los pins existan; revisar/mergear server→client→data preservando commits o repin
 explícito tras squash/rebase. No push/PR/deploy hecho en esta etapa.
 
-**Resultado final TMT-06:** `npm run ci:core` exit0: propios37/0skip,
+**Resultado final TMT-06:** `npm run ci:core` exit 0: propios37/0skip,
 server2406 passed/74 pending, client52 passed/1skip; builds/typechecks/lint,
 seed gate y checks cruzados aprobados. Smoke HTTP/WS, rechazo concurrente,
-SIGTERM143, lock eliminado y puertos liberados. Las dos pruebas DNS y las slow
+SIGTERM 143, lock eliminado y puertos liberados. Las dos pruebas DNS y las slow
 no se ejecutan ni se presentan como aprobadas. Faltan recursos opcionales
 `data/graphics.js`, `data/commands.js`, `js/server/chat-formatter.js`; no se
 ocultan ni descargan assets para simular completeness. Generación byte-idéntica
@@ -934,7 +934,7 @@ en los commits finales. El replay estático no requiere servidor ni excepción g
 Repetir live con dos invitados sí requiere nueva autorización expresa únicamente
 para noguestsecurity=true en memoria tras comprobar bind127.0.0.1 y retirar
 proceso/listeners/opt-in al terminar. No se activó en esta auditoría; config
-persistente false y puertos8000/8080 libres. Exclusiones DNS/slow siguen vigentes.
+persistente false y puertos 8000/8080 libres. Exclusiones DNS/slow siguen vigentes.
 
 Checks actuales: datos `npm test`47/0fail/0skip; `npm run typecheck`,
 `npm run integration:check` y `npm run integration:test` aprobados. Cliente
@@ -1045,7 +1045,7 @@ Servidor permanece4c21861353d77acf48b29e4b5c08a8b009d83fd3, sin cambios nuevos;
 el pin de CI cliente se actualizó a bd7667d6. Publicación futura: cliente primero,
 datos después con ese commit fetchable. No se publica/fusiona/despliega ahora.
 
-Checks: importación real exit0; hashes de todos los outputs verificados;
+Checks: importación real exit 0; hashes de todos los outputs verificados;
 generación repetida byte-idéntica (manifest SHA256
 `2cafa8187b32156d06400fd481e2191d4e554ffc8cae41fd83d72f50f21c8675`).
 Input explícito ausente rechazado sin cambiar outputs públicos. Tests cliente:
@@ -1053,7 +1053,7 @@ Input explícito ausente rechazado sin cambiar outputs públicos. Tests cliente:
 en modo developer-placeholders con los originales temporalmente apartados y
 restaurados después. `npm test` incluye build, ambos typechecks y lint.
 `npm run ci:core` pasó datos47, servidor2406/74pendientes, cliente67/1omitido,
-paridad/aislamiento, manifiesto reproducible y lifecycle HTTP/WS con SIGTERM143,
+paridad/aislamiento, manifiesto reproducible y lifecycle HTTP/WS con SIGTERM 143,
 lock retirado/puertos reutilizables. Dos tests DNS y upstream slow siguen excluidos
 explícitamente del core; no se ejecutó el diagnóstico DNS en esta reanudación.
 Log local `.local/evidence/tmt07-native/ci-core-original-artwork.log`, SHA256
@@ -1110,7 +1110,7 @@ excepción local. No se activó `noguestsecurity` ni se repitió un desafío liv
 el desafío, cancel/retry, reconexión, rechazo de equipo ilegal, batalla completa
 y replay nativos previos constan arriba. Esta sesión agrega QA gráfico/replay con
 originales, no playtest humano ni otra prueba de reglas ROM. Browser/perfiles y
-servicios de prueba cerrados, puertos8000/8080 y lock libres; configuración
+servicios de prueba cerrados, puertos 8000/8080 y lock libres; configuración
 persistente `noguestsecurity=false`.
 
 `npm run ci:core` final aprobó datos47/0fallos, servidor2406aprobados/74pendientes
@@ -1161,7 +1161,7 @@ Fuentes falsas, hashes alterados y cambios en valores Holy fallan la validación
 
 ### Contrato implementado y límites
 
-Seed **0.2.0** mantiene las seis especies/sets/moves de 0.1.0; agrega sólo la forma
+Seed **0.2.0** mantiene las seis especies, sets y movimientos de 0.1.0; agrega sólo la forma
 runtime Pidgeot-Mega, Holy, No Guard y Pidgeotite en beta Pidgeot. Formas iniciales
 siguen prohibidas. No se pueden reasignar la piedra, habilidad o movimientos,
 mezclar premades ni cambiar nivel50/IV31/EV0/Hardy. Las formas conservan HP y
@@ -1169,7 +1169,7 @@ learnset de base; el servidor crea el learnset propio de la mega desde el catál
 pues no existe un learnset upstream separado. Motor central y formatos normales
 permanecen aislados. Callbacks No Guard/Pidgeotite son heredados, no generados.
 
-Seis casos reales del mod prueban elección mega antes del move; HP158/SpA155/Spe141,
+Seis casos reales del mod prueban elección mega antes del move; HP158 / SpA155 / Spe141,
 No Guard y un uso por lado; switches preservan mega y limpian tipos temporales;
 combate nuevo restaura Bird/Bird/Bird; defensas por slot de los siete ataques;
 STAB una sola vez por pertenencia; inputs ilegales y aislamiento Gen9.
@@ -1200,9 +1200,26 @@ artwork, no se disfraza el GIF base como mega y no se comete el ZIP a Git.
 - `node tools/integration/verify.mjs`: paridad, aislamiento, stats y replay reproducible.
 - Extracción a dos archivos nuevos y comparación:datos byte-idénticos; generación
   server/client también idéntica. Fixtures sintéticos siguen separados de producción.
-- CI-core final y manifiesto se registran después de fijar los commits consumidores.
-  DNS en vivo no corre en core; diagnóstico previo `IPtools should resolve unknown
-  IPs correctly` timeout 2000ms permanece documentado, no se atribuye a la mega.
+- `npm run ci:core`: exit 0 con datos 56/0, servidor 2412/0 + 74 pendientes heredados,
+  cliente 70/0 + 1 omitido heredado; build/typecheck/lint, extracción offline de
+  índices, paridad y reproducción exacta del fixture, manifiesto y lifecycle pasan.
+  Log local `.local/evidence/tmt08/core-active-final.log`, SHA256
+  `66a6fa5b1e5b0daef71d94cdbddd70a4713c9f79d7e36ca4db3939efabb5b076`.
+  Código probado: datos `c50a32a22a5bab069f70bdc315e02083c9f579b8`; el commit
+  posterior sólo registra resultados/estado y se vuelve a verificar su manifiesto.
+- DNS en vivo no corre en core; `ci:network` no ejecutado. El diagnóstico previo
+  `IPtools should resolve unknown IPs correctly` timeout 2000ms permanece
+  documentado, no se atribuye a la mega. Dos casos DNS y upstream `(slow)` se
+  excluyen por la política existente; pendientes/omitidos no son aprobados.
+- El hook opcional de noticias del build cliente advierte `php: not found`,
+  sin fallar build/types/lint/tests. No se instala PHP ni se modifican esos hooks.
+- Lifecycle: HTTP/WS, rechazo de ejecución concurrente, SIGTERM 143, lock retirado
+  y puertos 8000/8080 liberados. `noguestsecurity=false` persistente; no excepción.
+
+Checklist TMT-08: mega documentada y habilitada; elección/stats/ability/stone
+heredados explícitamente; switches/reset/formas probados; tipos repetidos y cuarto
+slot con oráculo de adaptación; contenido no verificado excluido. Completo en ese
+contrato, sin afirmar fidelidad ROM ni cerrar la revisión visual TMT-07.
 
 Compatibilidad en `ci/pins.json`: servidor `6fae9fe32a19db5e8b00f1f90b4637149a5aad82`,
 cliente `813a3909579e1dc3e89ab3618c892a2d40d2d554`. Publicación eventual servidor→cliente→datos
