@@ -44,9 +44,9 @@ It must never generate executable battle callbacks from descriptive prose. Battl
 ## Current status
 
 This repository contains the project/data-pipeline foundation and workspace coordination tooling. The bounded TMT-04 schema, validator and pinned inherited dependencies are implemented.
-`normalized/seed.json` is a validated bounded adaptation seed: six species and
-two premade teams, official ordered types and explicitly inherited pinned Gen9
-dependencies. TMT-05 registers its hidden `gen9tmt2seed` mod/format and routes the client Dex, search and battle/replay parsing to the same catalog. This is not full-catalog validation or certified playable mechanics.
+`normalized/seed.json` is a validated bounded adaptation seed: nine base species plus Mega Pidgeot (ten species/forms), fifteen moves and
+three fixed premade teams. Creator type/chart evidence and explicitly inherited
+pinned Gen9 dependencies are classified separately in provenance. TMT-05 registers its hidden `gen9tmt2seed` mod/format and routes the client Dex, search and battle/replay parsing to the same catalog. TMT-06 enforces the bounded premades and TMT-08 tests the selected mega under the approved adaptation. This is not full-catalog validation or exact ROM fidelity.
 Separate test fixtures are not production TMT2 data.
 
 No license has been selected. Licensing and data redistribution remain an explicit project decision.
@@ -59,8 +59,7 @@ See [reproducible setup, configuration, snapshots and limitations](docs/DEVELOPM
 For the TMT-07 draft branches, follow the
 [Windows/WSL native-client preview](docs/DEVELOPMENT.md#windowswsl-local-preview-from-the-draft-branches).
 Run `npm run integration:generate`, `integration:check`, `integration:assets` and
-`integration:test` for the shared catalog and pinned local assets. Full TMT2 data,
-no-EV runtime enforcement and battle fidelity remain TMT-06 and later.
+`integration:test` for the shared catalog and pinned local assets. Full TMT2 data and exact ROM fidelity remain outside this bounded adaptation.
 
 Approved TMT-02 adaptation, TMT-04 contract and optional fidelity protocols: [docs/RULES_REFERENCE.md](docs/RULES_REFERENCE.md).
 

@@ -77,7 +77,7 @@ client HTTP service on loopback, and waits for both HTTP readiness endpoints.
 Open the printed READY URL, normally:
 `http://127.0.0.1:8080/testclient-new.html?~~localhost:8000`.
 The isolated catalog view is `http://127.0.0.1:8080/tmt2-seed.html`; it renders all
-six names/types, filters by every type slot, and displays dataset identity.
+catalog names/types, filters by every type slot, and displays dataset identity.
 The hidden format stays absent from public challenge/search menus; this local
 native entry adds it only to its private Challenge selector.
 The server bootstrap changes bind address/port/SSL/watchconfig only in memory.
@@ -184,7 +184,7 @@ ticket has no publication authorization yet. Do not merge data with unreachable
 consumer pins. Preserve reviewed commits or explicitly repin reviewed merge heads
 and rerun core after squash/rebase. The original inherited facts pin remains separate.
 Open `/tmt2-seed.html` on the local client for locked level50/IV31/EV0 stats and
-copyable alpha/beta imports. Import a whole premade into the local client; the hidden
+copyable catalog premade imports. Import a whole premade into the local client; the hidden
 format rejects mixed or edited sets with server errors. No general EV editor or
 expanded teambuilder is introduced. To undo this slice safely, stop local services
 and switch each clean checkout to the three recorded TMT-05 merge heads, then
@@ -255,7 +255,7 @@ and select
 `Pokemon-Too-Many-Types-2-client/test/fixtures/tmt2-native-browser-replay.json`
 from the WSL workspace. From another WSL terminal, `cd ~/tmt2 &&
 explorer.exe .` opens that folder in Windows Explorer to locate the fixture.
-The six-species catalog is at `http://127.0.0.1:8080/tmt2-seed.html`.
+The bounded catalog is at `http://127.0.0.1:8080/tmt2-seed.html`.
 The default launch does not enable unsigned local names; a fresh live
 two-player challenge requires separately approved loopback-only opt-in. Stop
 `workspace:dev` with Ctrl-C when finished. WSL-host execution has not yet
