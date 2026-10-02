@@ -18,6 +18,7 @@
     "ci:smoke": "node tools/ci/smoke.mjs",
     "source:inspect": "node tools/provenance/inspect-bps.mjs",
     "source:showdown-reference": "node tools/provenance/showdown-reference.mjs",
+    "sprites:download": "node tools/sprites/download.mjs",
     "seed:validate": "node tools/data/cli.mjs",
     "seed:prepare": "node tools/import/prepare-seed.mjs",
     "integration:generate": "node tools/integration/cli.mjs generate",

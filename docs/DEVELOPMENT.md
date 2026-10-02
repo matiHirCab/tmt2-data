@@ -237,3 +237,87 @@ for the superseding native browser evidence and known limits.
 Rollback: stop services, switch clean client/data to the recorded TMT-06 masters,
 regenerate compatible catalogs/assets and restart without the guest opt-in. Preserve
 unrelated edits/feature branches; no destructive reset or history rewriting.
+
+## Official sprite downloader
+
+Run from tmt2-data with the already supported Node>=22.18 runtime. This utility
+needs no sibling checkout, npm dependency install, PowerShell script, ZIP program,
+login or security-setting change. npm only provides a convenient command alias.
+
+```text
+npm run sprites:download
+npm run sprites:download -- --pokemon rattata,eevee,pidgeot-mega
+npm run sprites:download -- --file ids.txt
+node tools/sprites/download.mjs --file ids.json
+```
+
+Default IDs: rattata, eevee, froakie, nosepass, floragato, pidgeot. IDs are exact
+lowercase sprite filename stems, including hyphens for forms, e.g. pidgeot-mega
+and rattata-alola. Display names, TMT canonical IDs and asset filenames can differ;
+the tool does not guess aliases or remove form hyphens. Unknown filenames produce
+a real HTTP404 failure, not a fallback species. Requesting a form does not add it
+to the playable catalog. At most32 unique IDs; duplicate or unsafe IDs fail
+before creating output or making requests.
+
+ids.txt contains one ID per line (or comma-separated IDs), with optional whole
+comment lines beginning #. ids.json is a JSON array of strings, for example:
+
+```json
+["rattata", "pidgeot-mega"]
+```
+
+On Windows, if PowerShell selects a blocked npm.ps1 shim, invoke the normal
+executable or command shim explicitly **without changing execution policies**:
+
+```text
+node .\tools\sprites\download.mjs --pokemon rattata,pidgeot-mega
+npm.cmd run sprites:download -- --file ids.txt
+```
+
+Every run creates a unique ignored .local/sprites/download-*/ folder and preserves
+each validated original at sprites/ani/ID.gif or sprites/ani-back/ID.gif. Only
+HTTPS GETs to https://play.pokemonshowdown.com/sprites/ani/ and ani-back/ are made;
+no index crawling, alternate host, remote code execution or upstream git operation.
+Redirects are refused. TLS/certificate/proxy/credential settings are unchanged.
+GIF87a/89a headers, bounded dimensions, block framing/trailer and byte size are
+checked without executing or decompressing downloaded content. This is structural
+validation, not an artistic/provenance or pixel-decoding guarantee.
+
+manifest.json records exact source URLs, SHA256, byte sizes, canvas dimensions,
+frame counts, attempts and policy. report.json records every failure and ZIP
+hash/size. ZIP contains successful originals plus that manifest **only when all
+front/back downloads succeed**; a partial run exits1 and leaves no ZIP. Existing
+runs are never overwritten. ZIP uses portable stored entries and requires no new
+dependency; the archive hash lives outside it to avoid a circular self-hash.
+
+Limits:8MiB/response,128MiB of preserved valid originals/run,32KiB list file,
+ten-minute overall budget (retried or rejected responses also consume network);
+--timeout-ms100..30000 (default15000 per attempt), --retries0..2 (default1).
+Transient network/timeout/408/429/selected5xx failures retry with bounded delay;
+403/404, redirects and invalid content do not. SIGINT/SIGTERM cancel remaining
+requests, preserve a failure report when writable and exit130/143. Filesystem
+errors can prevent the report; they still fail visibly. Fix missing IDs/network
+then start a new run; partial originals remain available for inspection.
+
+Public availability and the client code's AGPL license do not establish artwork
+redistribution rights. This utility is for authorized local evaluation; do not
+commit its output or publish its ZIP under unverified rights. Official references:
+https://play.pokemonshowdown.com/sprites/ and https://pokemonshowdown.com/credits.
+It does not install assets into the client or complete TMT07 graphical acceptance.
+The cloud proxy403 is an actual access blocker; synthetic/local tests do not count
+as successful official downloads, and the tool never bypasses that restriction.
+
+Local verification (2026-10-01, Node24.19.0/npm11.9.0): the original combined
+branch passed47 tests, including8new sprite tests and2unpublished TMT07 local-guest
+tests. The isolated publication branch passes45 tests, including all8sprite tests;
+the2TMT07 tests are outside this PR, not skipped or suppressed. npm run typecheck,
+node --check on both modules and the test file, and git diff --check passed.
+An independent Python ZIP reader
+verified CRCs, entries, original bytes and source hashes of a synthetic successful
+download; Python is not a runtime dependency of this CLI. The live command
+`npm run sprites:download -- --pokemon rattata --timeout-ms 1000 --retries 0`
+exited1:0/2files, front network failure, back timeout, failure report preserved,
+no ZIP. It did not overcome the previously confirmed cloud proxy403. No official
+asset transfer success, Windows-host execution or final graphic integration is
+claimed by these tests. No data lint script is configured; no sibling changes or
+extra server/client suite rerun is needed for this independent utility.
