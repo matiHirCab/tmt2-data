@@ -944,3 +944,42 @@ Publicación eventual requiere revisión visual y autorización nueva: cliente
 primero, datos después con pin cliente fetchable y CI remoto verificado. Servidor
 ya está en master; sin nuevo PR servidor salvo cambio concreto necesario.
 Derechos de evaluación local no autorizan redistribución de artwork ni despliegue.
+
+### Evidencia recuperada y preparación independiente (2026-10-02)
+
+Al reanudar el executor, las capturas y el replay final sí estaban conservados en
+`.local/evidence/tmt07-native/`. Esto corrige la observación anterior sobre `/tmp`:
+no son capturas nuevas ni sprites originales recibidos. El replay recuperado tiene
+148 líneas, cero `|error|`, turno11 y `|win|NativeFinalB`; SHA256 del original
+`09fdd6bc86ca40615d4b1894384ac61a43caf501c00077f3f46f90369b148605`.
+Se conserva ahora como `test/fixtures/tmt2-native-final-replay.json` con procedencia,
+separado del primer recorrido NativeAlpha/NativeBeta. Una regresión reproduce ambos
+registros, tipos repetidos y rechazo de identidad alterada con SceneStub, no browser
+nuevo. El primer registro mantiene su error de reingreso, pero su clave privada de
+room fue sustituida por un nombre neutral; no se oculta el intento fallido.
+
+El log recuperado `ci-core.log` acredita el core final de datos739ee968/server4c218613/
+cliente34ffc495: datos39aprobadas/0omitidas, servidor2406aprobadas/74pendientes,
+cliente61aprobadas/1omitida, builds/lint/typechecks, manifiesto y lifecycle aprobados.
+SHA256 del log: `fde5a3b4e159dd5110276e09ec371bad490ff899901fac4362b8bc9c5758517a`.
+Es evidencia histórica: no describe los commits nuevos ni valida artwork ausente.
+
+PR8 del downloader sigue abierto en borrador, no fusionado, head
+`615894b8921579bbf59f10b4e903482d2ced2fdb`; master datos continúa854f128df.
+No ZIP/GIF/PNG originales nuevo visible en adjuntos ni búsquedas recientes; no se
+repitió la descarga proxy-bloqueada ni se activó servidor guest. Entrada concreta
+pendiente: `sprites.zip` de `npm run sprites:download -- --with-ui` en esa rama,
+con16originales y manifest; sólo un ZIP completo, no una carpeta/report de fallo.
+Rosa/Lyra corresponden al primer recorrido. El registro final usa avatares1/170,
+renderizados entonces como cards genéricas; su regresión prueba protocolo, no
+identidad visual de trainers. No se añaden Lucas/Hilda al paquete requerido:
+la siguiente prueba visual debe seleccionar explícitamente los avatares aprobados
+Rosa/Lyra. Tipos/categorías decorativos y audio siguen opcionales.
+
+Cliente actualizado únicamente en fixtures/regresión, commit
+`423bb07784f84aa6fc4173a7ec179fc1f688bcc3`: npm test62aprobadas/1omitida,
+incluidos build, ambos typechecks y lint;6regresiones nativas aprobadas. Pin local
+coordinado actualizado. Pendiente: importar originales verificados, rutas/facing/
+dimensiones/iconos, QA browser/replay con esos originales y capturas nuevas,
+CI-core de los cambios gráficos finales y revisión/publicación autorizadas.
+Ninguna de esas aceptaciones se cierra con las cards recuperadas.
