@@ -1227,3 +1227,51 @@ requiere autorización nueva. No excepción guest ni browser nuevo ni trabajo TM
 Rollback:detener servicios, volver conjuntamente a los tres masters previos a TMT-08,
 instalar lockfiles y regenerar 0.1.0; conservar el ZIP fuera de Git. No mezclar hashes.
 La revisión visual pendiente TMT-07 no queda cerrada por estas pruebas de adaptación.
+
+## TMT-09 — Lote mínimo Bird/Crab (2026-10-02)
+
+Entorno verificado operativo después de la desconexión. Ramas nuevas desde los
+masters fusionados TMT-08: datos b4dccffe, servidor c7ec3c55, cliente 9c3bd50e.
+Sus árboles son idénticos a los aprobados; no se sobrescribieron cambios locales.
+Los pins CI se actualizan a esos commits fusionados sólo para este nuevo trabajo;
+el pin de hechos heredados sigue siendo 2f5b2739. No se aplican ROMs ni se baja arte.
+
+Lote propuesto: Pidgey Bird, Pidgeotto Bird/Bird y Krabby Crab. Las tres filas
+están en la transcripción del creador entregada por Matías el 2026-09-30,
+mensaje Sentinel_51eeebf3c58c8191af721b1ca6a7eceb: `21 Pidgey Bird`,
+`22 Pidgeotto Bird Bird`, `280 Krabby Crab`. No se inventan coordenadas de celdas:
+estas filas no fueron corroboradas de nuevo en el tab Species por este ejecutor.
+La URL del tab no es legible con web aquí; la hoja pública enlazada por el creador
+sí permite leer el chart. Esa distinción se conserva en procedencia por fila.
+
+El chart primario [Documentation del creador](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing),
+columna rotulada CRAB, filas atacantes Normal3/Dark20/Water14/Rock8/Electric16/
+Grass15/Flying5:1×/1×/0.5×/1×/1×/0.5×/2×. Observado 2026-10-02 mediante el
+link Documentation del [release oficial](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/).
+Sin revisión ROM numerada. Bird reutiliza los cruces ya registrados; no necesita
+inventar un nuevo chart ni un tipo ofensivo Crab.
+
+Sets candidatos (todo nivel50/IV31/EV0/Hardy, sin ítem):
+- Pidgey, Keen Eye: Gust / Wing Attack / Quick Attack / Protect.
+- Pidgeotto, Keen Eye: Tackle / Wing Attack / Quick Attack / Protect.
+- Krabby, Shell Armor: Vise Grip / Water Pulse / Leer / Protect.
+
+El pin Gen9 contiene las habilidades y los cuatro movimientos nuevos
+`wingattack`, `visegrip`, `waterpulse`, `leer`; todos los learnsets seleccionados
+existen allí (algunos son entradas históricas permitidas por la adaptación).
+Stats, split físico/especial, secundarios, prioridad y Shell Armor se heredan
+explícitamente, no son hechos ROM. No se añade un ítem inventado.
+
+Resultado buscado: nueve especies base más Mega Pidgeot = diez especies/formas,
+quince movimientos. Alpha y beta no cambian. Un tercer premade fijo **gamma** usa
+las tres adiciones y el selector nativo existente; no habilita combinaciones libres
+ni constituye TMT-10. El schema sólo amplía el límite de premades de 2 a 3.
+Pruebas previstas: metadatos/procedencia, learnsets, damage de cada adición,
+Wing Attack físico, Leer (-1Def), confusión Water Pulse, bloqueo de críticos Shell
+Armor, defensas Crab y doble Bird, legalidad gamma y aislamiento; conservación
+TMT-08 y replay/hash deterministas. Nada está marcado aprobado antes de ejecutarlo.
+
+El ZIP local conserva sólo las seis especies originales. Los nuevos sprites y la
+mega quedan explícitamente como cards, sin fallback remoto ni alterar los GIF pins.
+QA visual del dueño y sprite Mega Pidgeot siguen abiertos por separado.
+No publicación, TMT-10, issues ni despliegue bajo esta autorización.

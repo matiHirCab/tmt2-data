@@ -37,7 +37,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Terminado: PRs fusionados y CI remota verificada |
 | 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Parcial: recorrido nativo automatizado y QA visual/replay con originales verificados; revisión del usuario pendiente |
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Hecho en adaptación aprobada: Mega Pidgeot; CI local completa |
-| 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Pendiente |
+| 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | En curso: lote Bird/Crab, fuentes y pruebas |
 | 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Pendiente |
 | 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Pendiente |
 | 4 | [TMT-12](#tmt-12--beta-reproducible) | TMT-11 + gate de derechos/proveniencia | Pendiente |
@@ -198,11 +198,14 @@ no se habilitan movimientos de cambio de tipo ni se atribuye su comportamiento a
 ### TMT-09 — Ampliar catálogo MVP
 
 **Prerrequisitos:** TMT-06; TMT-08 cuando se incluyan sus comportamientos.
-**Estado:** pendiente.
+**Estado:** en curso; lote acotado propuesto, todavía no habilitado.
 **DoD:** 10–20 especies/formas, 15–30 movimientos y habilidades/ítems/learnsets
 dependientes verificados; cada adición con referencias y pruebas de comportamiento.
 No completar huecos copiando defaults de Showdown sin evidencia.
-**Evidencia:** pendiente.
+**Alcance:** conserva la adaptación aprobada en TMT-02: tipos/chart del creador,
+campos y callbacks ordinarios heredados explícitamente del pin Showdown con
+referencias y pruebas. No se atribuyen esos campos a la ROM.
+**Evidencia:** [lote mínimo y límites de fuente](RULES_REFERENCE.md#tmt-09--lote-minimo-birdcrab-2026-10-02).
 
 ### TMT-10 — Teambuilder y equipos realmente legales
 
