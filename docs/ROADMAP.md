@@ -36,7 +36,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Terminado: tres PRs fusionados, CI remota verificada |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Terminado: PRs fusionados y CI remota verificada |
 | 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Parcial: recorrido nativo automatizado y QA visual/replay con originales verificados; revisión del usuario pendiente |
-| 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Pendiente |
+| 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Parcial: soporte de mega preparado; siete cruces Holy pendientes |
 | 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Pendiente |
 | 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Pendiente |
 | 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Pendiente |
@@ -183,11 +183,15 @@ Registrar versiones, pasos y resultados. HTTP/WS READY no cumple esta DoD.
 
 ### TMT-08 — Megas y cambios de tipo verificados
 
-**Prerrequisitos:** TMT-06. **Estado:** pendiente.
+**Prerrequisitos:** TMT-06. **Estado:** parcial: esquema/generador y consumidores
+preparados, sin mega habilitada en producción. Falta fuente primaria o aprobación
+explícita para siete defensas Holy; la consulta está pendiente.
 **DoD:** al menos una mega verificada; pruebas de cambios, resets, formas y tipos
 temporales. Oráculo explícito para duplicados y cuarto tipo; excluir comportamientos
 no verificados del formato. Holy/Bird/Bird no autoriza inferir su fórmula de STAB.
-**Evidencia:** pendiente; observación documental en registro, semántica pendiente.
+**Evidencia:** [candidato acotado y gate de Holy](RULES_REFERENCE.md#tmt-08--mega-pidgeot-acotado-y-gate-de-holy-2026-10-02).
+Las pruebas runtime de mega/cuarto tipo siguen pendientes; soporte preparado no
+cumple por sí solo la DoD.
 
 ### TMT-09 — Ampliar catálogo MVP
 

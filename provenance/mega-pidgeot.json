@@ -1,0 +1,72 @@
+{
+  "observedOn": "2026-10-02",
+  "versionBinding": "creator release v1.5.0; patch v1.5.2 mechanics not measured",
+  "creator": {
+    "sourceId": "SRC-02",
+    "url": "https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6",
+    "postNumber": 105,
+    "author": "Kobazco",
+    "facts": {
+      "id": "pidgeotmega",
+      "name": "Mega Pidgeot",
+      "types": [
+        "holy",
+        "bird",
+        "bird"
+      ],
+      "exists": true
+    },
+    "limitations": [
+      "No observed ROM stats, ability, activation timing, STAB formula or Holy defensive chart values"
+    ]
+  },
+  "inheritance": {
+    "serverCommit": "2f5b273925862ac242b419086c1e7a8868b51da1",
+    "form": {
+      "id": "pidgeotmega",
+      "name": "Pidgeot-Mega",
+      "baseSpecies": "pidgeot",
+      "forme": "Mega",
+      "requiredItem": "pidgeotite",
+      "baseStats": {
+        "hp": 83,
+        "atk": 80,
+        "def": 80,
+        "spa": 135,
+        "spd": 80,
+        "spe": 121
+      },
+      "abilities": [
+        "noguard"
+      ]
+    },
+    "item": {
+      "id": "pidgeotite",
+      "name": "Pidgeotite",
+      "megaStone": {
+        "Pidgeot": "Pidgeot-Mega"
+      },
+      "itemUser": [
+        "Pidgeot"
+      ]
+    },
+    "ability": {
+      "id": "noguard",
+      "name": "No Guard"
+    },
+    "behavior": "Modern Showdown activation before moves, one mega per side, permanent within battle; reset on fresh battle, no ROM equivalence claim"
+  },
+  "holyDefense": {
+    "status": "pending explicit policy decision or creator chart observations",
+    "attackers": [
+      "normal",
+      "dark",
+      "water",
+      "rock",
+      "electric",
+      "grass",
+      "flying"
+    ],
+    "multipliers": null
+  }
+}

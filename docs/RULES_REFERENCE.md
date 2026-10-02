@@ -1121,3 +1121,45 @@ reproducible y lifecycle HTTP/WS. Log local
 Los dos tests DNS y upstream slow quedaron excluidos explícitamente de core;
 `ci:network` no se ejecutó. Revisión visual del usuario aún pendiente antes de
 publicación. TMT-08 y derechos de redistribución del arte siguen fuera de alcance.
+
+## TMT-08 — Mega Pidgeot acotado y gate de Holy (2026-10-02)
+
+Bases fusionadas: cliente1737a360 y datosf48267f6; servidor4c218613. El viejo
+pin cliente37aeb639 sigue alcanzable, con árbol igual al merge; no faltaba código.
+La revisión visual TMT-07 sigue pendiente, independiente de esas fusiones.
+
+Kobazco, [release v1.5.0, post105](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6),
+confirma Mega Pidgeot Holy/Bird/Bird y disponibilidad de sus piedras. El registro
+`provenance/mega-pidgeot.json` separa esos hechos de los campos heredados del
+pin2f5b2739: HP83/Atk80/Def80/SpA135/SpD80/Spe121, No Guard y Pidgeotite.
+Activación moderna antes de moves, un uso por lado y permanencia dentro del
+combate son adaptación Showdown aprobada; no están medidos en ROM.
+
+**Gate único:** faltan Normal/Dark/Water/Rock/Electric/Grass/Flying → Holy.
+Web no pudo leer el spreadsheet y su HTML público fue rechazado; no se eludió
+acceso. La consulta enviada pide aprobar1× provisional para esos siete cruces
+como política explícita nueva, o dejar la mega deshabilitada hasta verificar
+los valores. No se presupone una respuesta. Seed0.1.0 y premades no cambiaron.
+
+Esquema/generador preparados: formas runtime separadas de especies iniciales,
+HP/learnset de base, piedra vinculada a su premade, tipos ordenados/duplicados,
+fuentes y cobertura de chart obligatorias. Holy no puede citar Showdown como
+si tuviera tabla heredada. El importador no genera la mega sin decisión registrada.
+Servidor consume sólo formas listadas y valida items exactos; cliente conserva
+piedra en copy/export y usa una card rotulada si la forma no tiene GIF local.
+No se baja artwork ni se usa el GIF base como si fuera el de mega.
+
+Seis casos server y uno client escritos pero **pendientes**, no aprobados:
+choice mega antes del move, HP158/SpA155/Spe141 y No Guard; switch mantiene
+Holy/Bird/Bird y limpia tipos temporales/reemplazo, nuevo combate restaura base;
+addType agrega/reemplaza cuarto slot y setType sustituye todo el array; Rock8×
+contra triple Bird vs4× contra mega sólo si Holy1× se aprueba; STAB Showdown una
+vez por hasType, no fórmula ROM inferida; inputs ilegales y aislamiento; replay
+detailschange con Dex propio. El cuarto tipo es un oráculo sintético del motor;
+Soak/Trick-or-Treat siguen fuera del equipo legal. No addedType permanente.
+
+TMT-08 sigue parcial: falta habilitar un candidato respaldado por chart/política
+y ejecutar esos casos. Fixtures de esquema no generan producción. Usar pins
+coordinados de `ci/pins.json`; publicación eventual servidor → cliente → datos
+requiere autorización nueva. No hubo excepción guest, batalla browser nueva ni
+trabajo TMT-09.

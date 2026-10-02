@@ -39,7 +39,8 @@ function shape(s, v, at, errors) {
 }
 export function inheritedPayload(d) {
   return {species:d.species.map(s=>({...s,types:undefined,fieldSources:undefined})),
-    moves:d.moves,abilities:d.abilities,types:d.types.filter(t=>t.fieldSources.id==='showdown'),chart:d.chart.filter(p=>p.source==='showdown')};
+    moves:d.moves,abilities:d.abilities,types:d.types.filter(t=>t.fieldSources.id==='showdown'),chart:d.chart.filter(p=>p.source==='showdown'),
+    ...(d.forms?{forms:d.forms.map(s=>({...s,types:undefined,fieldSources:undefined})),items:d.items.filter(i=>i.fieldSources.id==='showdown')}:{})};
 }
 export function validateSeed(d, {allowFixture = false} = {}) {
   const errors = []; shape(schema, d, '$', errors);
@@ -76,11 +77,15 @@ export function validateSeed(d, {allowFixture = false} = {}) {
   const seedChart=JSON.parse(fs.readFileSync(new URL('../../provenance/seed-chart.json',import.meta.url)));
   const seedSource=maps.sources.get('seedchart');
   if(!seedSource || seedSource.kind!=='creator' || seedSource.sha256!==stableHash(seedChart)) bad('Seed chart evidence hash mismatch');
+  for(const p of d.chart.filter(p=>p.source==='policymega')) {
+    const mega=JSON.parse(fs.readFileSync(new URL('../../provenance/mega-pidgeot.json',import.meta.url)));
+    if(mega.holyDefense.status!=='approved-adaptation'||p.defender!=='holy'||mega.holyDefense.multipliers?.[p.attacker]!==p.multiplier||maps.sources.get('policymega')?.sha256!==stableHash(mega)||maps.sources.get('policymega')?.kind!=='policy')bad('Holy matchup lacks approved adaptation policy');
+  }
   for(const p of d.chart.filter(p=>p.source==='seedchart')) if(!seedChart.pairs.some(q=>q.attacker===p.attacker && q.defender===p.defender && q.multiplier===p.multiplier)) bad('Seed chart contradicts registered observation');
   for(const p of d.chart.filter(p=>p.source==='creatorchart')) {
     if(!register.chartObservations.pairs.some(q=>q.attacker.toLowerCase()===p.attacker && q.defender.toLowerCase()===p.defender && q.multiplier===p.multiplier)) bad('Chart pair contradicts registered creator observation');
   }
-  for (const kind of ['types', 'species', 'moves', 'abilities', 'items']) for (const r of d[kind]) {
+  for (const kind of ['types', 'species', 'moves', 'abilities', 'items']) for (const r of (kind==='species'?[...d.species,...(d.forms??[])]:d[kind])) {
     for (const field of Object.keys(r).filter(k => k !== 'fieldSources')) {
       if (!r.fieldSources[field]) bad(`${kind}.${r.id}.${field}: missing field provenance`);
       else evidence(r.fieldSources[field], `${kind}.${r.id}.${field}`, {creatorOnly: kind === 'species' && field === 'types'});
@@ -91,6 +96,10 @@ export function validateSeed(d, {allowFixture = false} = {}) {
       const rows=JSON.parse(fs.readFileSync(new URL('../../provenance/seed-types.json',import.meta.url)));
       if(!rows.rows.some(row=>row.types.includes(r.id)) || r.name!==r.id[0].toUpperCase()+r.id.slice(1) || r.fieldSources.name!=='creatorspecies' || r.passive!=='none-adaptation') bad('Custom identity must match registered creator labels and adaptation passive policy');
     }
+    if(kind==='types' && r.fieldSources.id==='creatormega') {
+      const mega=JSON.parse(fs.readFileSync(new URL('../../provenance/mega-pidgeot.json',import.meta.url)));
+      if(r.id!=='holy'||r.name!=='Holy'||r.passive!=='none-adaptation'||maps.sources.get('creatormega')?.sha256!==stableHash(mega)) bad('Holy identity must cite registered mega evidence');
+    }
     if(kind==='types' && r.passive==='none-adaptation' && r.fieldSources.passive!=='policy') bad('Undocumented passive must cite adaptation policy');
     if (kind === 'species') {
       if (!r.types) bad(`species ${r.id}: creator type row missing`);
@@ -99,16 +108,38 @@ export function validateSeed(d, {allowFixture = false} = {}) {
         if (d.kind === 'production') {
           const rows=JSON.parse(fs.readFileSync(new URL('../../provenance/seed-types.json',import.meta.url)));
           const source=maps.sources.get(r.fieldSources.types);
-          const row=rows.rows.find(x=>x.id===r.id);
-          if (!/^\d{4}-\d{2}-\d{2}$/.test(rows.observedOn ?? '') || !source || source.id!=='creatorspecies' || source.sha256!==stableHash(rows) || !row || JSON.stringify(row.types)!==JSON.stringify(r.types) || !row.locator) bad(`species ${r.id}: no matching registered creator row`);
+          const mega=JSON.parse(fs.readFileSync(new URL('../../provenance/mega-pidgeot.json',import.meta.url)));
+          if(d.forms?.includes(r)) {
+            if(Object.entries(r.fieldSources).some(([field,id])=>field!=='types'&&id!=='showdown')) bad('Mega non-type fields must cite pinned inheritance');
+            if(r.id!==mega.creator.facts.id || source?.id!=='creatormega' || source.sha256!==stableHash(mega) || JSON.stringify(r.types)!==JSON.stringify(mega.creator.facts.types)) bad('Mega types lack matching creator evidence');
+            for(const [field,value] of Object.entries(mega.inheritance.form)) if(JSON.stringify(r[field])!==JSON.stringify(value)) bad(`Mega inherited ${field} differs from pin`);
+          } else {
+            const row=rows.rows.find(x=>x.id===r.id);
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(rows.observedOn ?? '') || !source || source.id!=='creatorspecies' || source.sha256!==stableHash(rows) || !row || JSON.stringify(row.types)!==JSON.stringify(r.types) || !row.locator) bad(`species ${r.id}: no matching registered creator row`);
+          }
         }
       }
       r.abilities.forEach(id => exists('abilities', id, r.id)); r.learnset.forEach(id => exists('moves', id, r.id));
     }
     if (kind === 'moves') exists('types', r.type, r.id);
   }
+  const formIDs=new Set();
+  for(const form of d.forms??[]) {
+    if(formIDs.has(form.id)||maps.species.has(form.id)) bad('Duplicate or starting form ID');
+    formIDs.add(form.id); exists('species',form.baseSpecies,'mega'); exists('items',form.requiredItem,'mega');
+    const base=maps.species.get(form.baseSpecies), item=maps.items.get(form.requiredItem);
+    if(d.kind==='production'){
+      const mega=JSON.parse(fs.readFileSync(new URL('../../provenance/mega-pidgeot.json',import.meta.url)));
+      for(const [field,value] of Object.entries(mega.inheritance.item))if(JSON.stringify(item?.[field])!==JSON.stringify(value))bad('Mega item differs from pinned inheritance');
+      if(maps.abilities.get('noguard')?.name!==mega.inheritance.ability.name)bad('Mega ability differs from pin');
+    }
+    if(!base || form.baseStats.hp!==base.baseStats.hp || JSON.stringify(form.learnset)!==JSON.stringify(base.learnset)) bad('Mega must retain base HP and selected learnset');
+    if(item?.megaStone?.[base?.name]!==form.name || JSON.stringify(item?.itemUser)!==JSON.stringify([base?.name])) bad('Mega stone identity does not match form/base');
+    if(!d.teams.some(t=>t.sets.some(s=>s.species===form.baseSpecies&&s.item===form.requiredItem))) bad('Mega stone must be on its base premade');
+  }
   const pairs = new Map();
   for (const p of d.chart) {
+    if(p.source==='showdown' && [p.attacker,p.defender].some(id=>maps.types.get(id)?.fieldSources.id!=='showdown'))bad('Custom chart pair cannot masquerade as inherited Showdown data');
     exists('types', p.attacker, 'chart'); exists('types', p.defender, 'chart'); evidence(p.source, 'chart');
     const key = `${p.attacker}/${p.defender}`; if (pairs.has(key)) bad(`duplicate chart pair ${key}`); pairs.set(key, p.multiplier);
   }
@@ -124,7 +155,7 @@ export function validateSeed(d, {allowFixture = false} = {}) {
       for (const id of set.moves) {
         exists('moves',id,'team'); const move=maps.moves.get(id);
         if (sp && !sp.learnset.includes(id)) bad(`illegal move ${id} for ${sp.id}`);
-        if (move) for (const defender of d.species) for (const type of defender.types ?? []) {
+        if (move) for (const defender of [...d.species,...(d.forms??[])]) for (const type of defender.types ?? []) {
           if (!pairs.has(`${move.type}/${type}`)) bad(`missing chart pair ${move.type}/${type}`);
         }
       }
