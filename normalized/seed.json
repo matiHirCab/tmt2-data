@@ -1,16 +1,21 @@
 {
   "schemaVersion": 1,
   "kind": "production",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "contract": "tmt04-bounded-adaptation-seed-v1",
   "rules": {"generation":9,"format":"private-unranked-singles-premade","level":50,"teamSize":3,"iv":31,"ev":0,"source":"policy"},
-  "scope": {"fullCatalog":false,"romFidelityProven":false,"excluded":["custom passives","megas","type changes","fourth type","unreviewed custom moves/abilities/items","all species outside premades"]},
+  "scope": {"fullCatalog":false,"romFidelityProven":false,"excluded":["custom passives","other megas","selectable type-change moves","fourth type","unreviewed custom moves/abilities/items","all species outside premades"]},
   "sources": [
-    {"id":"showdown","kind":"showdown","version":"2f5b273925862ac242b419086c1e7a8868b51da1","locator":"https://github.com/matiHirCab/Pokemon-Too-Many-Types-2/tree/2f5b273925862ac242b419086c1e7a8868b51da1/data; selected historical learnset entries allowed by adaptation","sha256":"a7998893cd088eaa6772d82f9ac45b0bf9ae993fbe9c31e25b8502ab41c9c50c"},
+    {"id":"showdown","kind":"showdown","version":"2f5b273925862ac242b419086c1e7a8868b51da1","locator":"https://github.com/matiHirCab/Pokemon-Too-Many-Types-2/tree/2f5b273925862ac242b419086c1e7a8868b51da1/data; selected historical learnset entries allowed by adaptation","sha256":"2fbdbfbc2faa5de0316ec97c6e04346260f18db60695c4c10d6a420cf60e9a69"},
     {"id":"creatorchart","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing; five chart coordinates in chartObservations","sha256":"7fb64afb266bfb5c50ac4f86ed1f84ee33b780b5e21d53916619ca69f51e7a6d"},
     {"id":"policy","kind":"policy","version":"approved-2026-09-30","locator":"provenance/sources.json#userApprovals","sha256":"3d540d19c7f631df11d9341bc44cbd5c31c0782539c14017556bedff22111922"},
     {"id":"creatorspecies","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"provenance/seed-types.json: user transcription corroborated by relayed primary-sheet cell observations","sha256":"9c6af5ceeb36128235599386fc4e45578ff2f2084d05966641e33a42e05ab8d4"},
-    {"id":"seedchart","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"provenance/seed-chart.json: exact primary chart coordinates","sha256":"5e1401bb8dc823b9c6ea0e8210dd8d82dd0704227c9c27dd0852f4fcbdc4963a"}
+    {"id":"seedchart","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"provenance/seed-chart.json: exact primary chart coordinates","sha256":"5e1401bb8dc823b9c6ea0e8210dd8d82dd0704227c9c27dd0852f4fcbdc4963a"},
+    {"id":"creatormega","kind":"creator","version":"documented-v1.5.0","locator":"https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6; creator post #105, types only","sha256":"8e5219b7418b72aae4f6c908652d81e3ba682e3bb5503c686c33260927af3812"},
+    {"id":"megachart","kind":"creator","version":"observed-2026-10-02-not-release-bound","locator":"https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing; BE2, seven attacking rows in provenance/mega-pidgeot.json#holyDefense","sha256":"8e5219b7418b72aae4f6c908652d81e3ba682e3bb5503c686c33260927af3812"}
+  ],
+  "forms": [
+    {"id":"pidgeotmega","name":"Pidgeot-Mega","baseSpecies":"pidgeot","forme":"Mega","requiredItem":"pidgeotite","types":["holy","bird","bird"],"baseStats":{"hp":83,"atk":80,"def":80,"spa":135,"spd":80,"spe":121},"abilities":["noguard"],"learnset":["tackle","gust","quickattack","protect"],"fieldSources":{"id":"showdown","name":"showdown","baseSpecies":"showdown","forme":"showdown","requiredItem":"showdown","types":"creatormega","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}}
   ],
   "types": [
     {"id":"bug","name":"Bug","passive":"ordinary-gen9","fieldSources":{"id":"showdown","name":"showdown","passive":"showdown"}},
@@ -36,7 +41,8 @@
     {"id":"cat","name":"Cat","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
     {"id":"frog","name":"Frog","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
     {"id":"magic","name":"Magic","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
-    {"id":"bird","name":"Bird","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}}
+    {"id":"bird","name":"Bird","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
+    {"id":"holy","name":"Holy","passive":"none-adaptation","fieldSources":{"id":"creatormega","name":"creatormega","passive":"policy"}}
   ],
   "species": [
     {"id":"rattata","name":"Rattata","types":["rat"],"baseStats":{"hp":30,"atk":56,"def":35,"spa":25,"spd":35,"spe":72},"abilities":["runaway"],"learnset":["tackle","quickattack","bite","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
@@ -64,10 +70,12 @@
     {"id":"torrent","name":"Torrent","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#torrent","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
     {"id":"sturdy","name":"Sturdy","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#sturdy","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
     {"id":"overgrow","name":"Overgrow","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#overgrow","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
-    {"id":"keeneye","name":"Keen Eye","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#keeneye","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}}
+    {"id":"keeneye","name":"Keen Eye","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#keeneye","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
+    {"id":"noguard","name":"No Guard","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#noguard","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}}
   ],
   "items": [
-    {"id":"none","name":"No item","behaviorRef":"policy:no-held-item","fieldSources":{"id":"policy","name":"policy","behaviorRef":"policy"}}
+    {"id":"none","name":"No item","behaviorRef":"policy:no-held-item","fieldSources":{"id":"policy","name":"policy","behaviorRef":"policy"}},
+    {"id":"pidgeotite","name":"Pidgeotite","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/items.ts#pidgeotite","megaStone":{"Pidgeot":"Pidgeot-Mega"},"itemUser":["Pidgeot"],"fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown","megaStone":"showdown","itemUser":"showdown"}}
   ],
   "chart": [
     {"attacker":"bug","defender":"bug","multiplier":1,"source":"showdown"},
@@ -435,10 +443,17 @@
     {"attacker":"water","defender":"cat","multiplier":2,"source":"seedchart"},
     {"attacker":"water","defender":"frog","multiplier":0,"source":"seedchart"},
     {"attacker":"water","defender":"magic","multiplier":1,"source":"seedchart"},
-    {"attacker":"water","defender":"bird","multiplier":1,"source":"seedchart"}
+    {"attacker":"water","defender":"bird","multiplier":1,"source":"seedchart"},
+    {"attacker":"normal","defender":"holy","multiplier":1,"source":"megachart"},
+    {"attacker":"dark","defender":"holy","multiplier":2,"source":"megachart"},
+    {"attacker":"water","defender":"holy","multiplier":0.5,"source":"megachart"},
+    {"attacker":"rock","defender":"holy","multiplier":2,"source":"megachart"},
+    {"attacker":"electric","defender":"holy","multiplier":1,"source":"megachart"},
+    {"attacker":"grass","defender":"holy","multiplier":1,"source":"megachart"},
+    {"attacker":"flying","defender":"holy","multiplier":1,"source":"megachart"}
   ],
   "teams": [
     {"id":"alpha","sets":[{"species":"rattata","ability":"runaway","item":"none","moves":["tackle","quickattack","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"eevee","ability":"runaway","item":"none","moves":["tackle","quickattack","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"froakie","ability":"torrent","item":"none","moves":["pound","watergun","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]},
-    {"id":"beta","sets":[{"species":"nosepass","ability":"sturdy","item":"none","moves":["tackle","rockthrow","thunderwave","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"floragato","ability":"overgrow","item":"none","moves":["scratch","magicalleaf","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"pidgeot","ability":"keeneye","item":"none","moves":["tackle","gust","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]}
+    {"id":"beta","sets":[{"species":"nosepass","ability":"sturdy","item":"none","moves":["tackle","rockthrow","thunderwave","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"floragato","ability":"overgrow","item":"none","moves":["scratch","magicalleaf","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"pidgeot","ability":"keeneye","item":"pidgeotite","moves":["tackle","gust","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]}
   ]
 }

@@ -144,6 +144,14 @@
       },
       "minItems": 2,
       "maxItems": 2
+    },
+    "forms": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/megaForm"
+      },
+      "minItems": 1,
+      "maxItems": 1
     }
   },
   "required": [
@@ -472,6 +480,23 @@
             "minLength": 1
           },
           "minProperties": 1
+        },
+        "megaStone": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minProperties": 1
+        },
+        "itemUser": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 1
         }
       },
       "required": [
@@ -648,6 +673,136 @@
       "required": [
         "id",
         "sets"
+      ],
+      "additionalProperties": false
+    },
+    "megaForm": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "types": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+$",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "maxItems": 3
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "baseStats": {
+          "type": "object",
+          "properties": {
+            "hp": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "atk": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "def": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "spa": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "spd": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            },
+            "spe": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 255
+            }
+          },
+          "required": [
+            "hp",
+            "atk",
+            "def",
+            "spa",
+            "spd",
+            "spe"
+          ],
+          "additionalProperties": false
+        },
+        "abilities": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "learnset": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "maxItems": 50
+        },
+        "fieldSources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "minLength": 1
+          },
+          "minProperties": 1
+        },
+        "baseSpecies": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "requiredItem": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+$",
+          "minLength": 1
+        },
+        "forme": {
+          "const": "Mega"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "types",
+        "baseStats",
+        "abilities",
+        "learnset",
+        "fieldSources",
+        "baseSpecies",
+        "forme",
+        "requiredItem"
       ],
       "additionalProperties": false
     }

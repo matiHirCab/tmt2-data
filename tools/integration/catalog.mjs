@@ -7,11 +7,13 @@ const engine = JSON.parse(fs.readFileSync(new URL('../../provenance/engine-moves
 export function catalog(seed) {
   const checked=validateSeed(seed);if(!checked.valid)throw Error(checked.errors.join('; '));
   const names=Object.fromEntries(seed.types.map(t=>[t.id,t.name]));
+  const speciesNames=Object.fromEntries([...seed.species,...(seed.forms??[])].map(s=>[s.id,s.name]));
+  const itemNames=Object.fromEntries(seed.items.map(i=>[i.id,i.name]));
   const abilityNames=Object.fromEntries(seed.abilities.map(a=>[a.id,a.name]));
   const fields=r=>Object.fromEntries(Object.entries(r).filter(([k])=>k!=='fieldSources'));
   const table={
     engineMoves: structuredClone(engine.moves),
-    species:Object.fromEntries(seed.species.map(s=>[s.id,{...fields(s),types:s.types.map(t=>names[t]),abilities:{0:abilityNames[s.abilities[0]]},tier:'TMT2',gen:9,exists:true}])),
+    species:Object.fromEntries([...seed.species,...(seed.forms??[])].map(s=>[s.id,{...fields(s),...(s.baseSpecies?{baseSpecies:speciesNames[s.baseSpecies],requiredItem:itemNames[s.requiredItem]}:{}),types:s.types.map(t=>names[t]),abilities:{0:abilityNames[s.abilities[0]]},tier:'TMT2',gen:9,exists:true}])),
     moves:Object.fromEntries(seed.moves.map(m=>[m.id,{...fields(m),type:names[m.type],gen:9,exists:true}])),
     abilities:Object.fromEntries(seed.abilities.map(a=>[a.id,{...fields(a),gen:9,exists:true}])),
     items:Object.fromEntries(seed.items.map(i=>[i.id,{...fields(i),gen:9,exists:true}])),
