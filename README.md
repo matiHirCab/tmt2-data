@@ -56,6 +56,8 @@ No license has been selected. Licensing and data redistribution remain an explic
 Run `npm run workspace:doctor`, `npm run workspace:build`,
 `npm run workspace:test`, or `npm run workspace:dev` from this repository.
 See [reproducible setup, configuration, snapshots and limitations](docs/DEVELOPMENT.md).
+For the TMT-07 draft branches, follow the
+[Windows/WSL native-client preview](docs/DEVELOPMENT.md#windowswsl-local-preview-from-the-draft-branches).
 Run `npm run integration:generate`, `integration:check`, `integration:assets` and
 `integration:test` for the shared catalog and pinned local assets. Full TMT2 data,
 no-EV runtime enforcement and battle fidelity remain TMT-06 and later.

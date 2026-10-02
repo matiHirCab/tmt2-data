@@ -201,12 +201,66 @@ split. Historical test results remain evidence, not competing implementation pla
 
 ## Private local seed battle (TMT-07)
 
-For the explicitly approved local guest test, run
+The earlier explicitly approved local guest test used
 `TMT2_LOCAL_GUESTS=1 npm run workspace:dev`. This opt-in enables unsigned,
 unregistered local names only in server memory after enforcing127.0.0.1; it is
-not production auth. No other auth/IP/throttle control changes. Without opt-in,
+not production auth and is **not required for the replay preview below**.
+Enabling it for another live-name test needs separate approval; do not add it
+to permanent config. No other auth/IP/throttle control changes. Without opt-in,
 normal config remains unchanged. Stop with Ctrl-C/SIGTERM when finished and
 confirm lock/listeners are gone. Never expose this test server publicly.
+
+### Windows/WSL local preview from the draft branches
+
+The coordinator uses POSIX process groups, so run these commands inside Ubuntu
+or another Linux WSL shell, not native PowerShell. Use Node24.19.0/npm11.9.0
+for the pinned CI environment (minimum runtime Node22.18), plus Git. The
+server SHA is already on master; the client and data changes are on separate
+draft-review branches until merged. Use fresh directories to preserve existing
+checkouts:
+
+```sh
+mkdir -p ~/tmt2 && cd ~/tmt2
+git clone https://github.com/matiHirCab/Pokemon-Too-Many-Types-2.git
+git clone --branch feat/tmt07-private-client https://github.com/matiHirCab/Pokemon-Too-Many-Types-2-client.git
+git clone --branch feat/tmt07-browser-evidence https://github.com/matiHirCab/tmt2-data.git
+git -C Pokemon-Too-Many-Types-2 switch --detach 4c21861353d77acf48b29e4b5c08a8b009d83fd3
+git -C Pokemon-Too-Many-Types-2-client switch --detach 37aeb63927ee625dd48ddb2744e23d29558777ee
+(cd Pokemon-Too-Many-Types-2 && npm ci)
+(cd Pokemon-Too-Many-Types-2-client && npm ci)
+(cd tmt2-data && npm ci)
+```
+
+Keep the exact received `sprites.zip` on your computer. In WSL, use its
+Windows path through `/mnt/c` and import it once before generating assets;
+replace `YOUR_WINDOWS_USER` with your account name. The importer verifies
+archive SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`
+and all16resources; do not unpack or repackage it.
+
+```sh
+SPRITES_ZIP="/mnt/c/Users/YOUR_WINDOWS_USER/Downloads/sprites.zip"
+(cd ~/tmt2/Pokemon-Too-Many-Types-2-client && node build-tools/import-tmt2-artwork "$SPRITES_ZIP")
+cd ~/tmt2/tmt2-data
+npm run workspace:doctor
+node tools/ci/pins.mjs verify
+npm run integration:generate
+npm run workspace:dev
+```
+
+Open the printed READY URL in a Windows browser, normally
+`http://127.0.0.1:8080/testclient-new.html?~~127.0.0.1:8000`.
+For a visual preview without a login, choose **Home → Load local replay JSON**
+and select
+`Pokemon-Too-Many-Types-2-client/test/fixtures/tmt2-native-browser-replay.json`
+from the WSL workspace. From another WSL terminal, `cd ~/tmt2 &&
+explorer.exe .` opens that folder in Windows Explorer to locate the fixture.
+The six-species catalog is at `http://127.0.0.1:8080/tmt2-seed.html`.
+The default launch does not enable unsigned local names; a fresh live
+two-player challenge requires separately approved loopback-only opt-in. Stop
+`workspace:dev` with Ctrl-C when finished. WSL-host execution has not yet
+been independently tested; the local Linux journey and CI are recorded in
+[RULES_REFERENCE.md](RULES_REFERENCE.md#tmt-07--qa-nativo-con-sprites-originales-2026-10-02).
 
 Open `/testclient-new.html?~~127.0.0.1:8000` in two independent browser
 profiles (replace8000 with the configured loopback server port). Use Choose name,
