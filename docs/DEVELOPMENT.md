@@ -203,8 +203,10 @@ login or security-setting change. npm only provides a convenient command alias.
 
 ```text
 npm run sprites:download
+npm run sprites:download -- --with-ui
 npm run sprites:download -- --pokemon rattata,eevee,pidgeot-mega
 npm run sprites:download -- --file ids.txt
+node tools/sprites/download.mjs --with-ui --file ids.json
 node tools/sprites/download.mjs --file ids.json
 ```
 
@@ -215,6 +217,19 @@ the tool does not guess aliases or remove form hyphens. Unknown filenames produc
 a real HTTP404 failure, not a fallback species. Requesting a form does not add it
 to the playable catalog. At most32 unique IDs; duplicate or unsafe IDs fail
 before creating output or making requests.
+
+`--with-ui` also requests exactly these four fixed PNG paths on the same official
+origin (no arbitrary URL/path option):
+
+- sprites/trainers/rosa.png
+- sprites/trainers/lyra.png
+- sprites/pokemonicons-sheet.png
+- sprites/pokemonicons-pokeball-sheet.png
+
+With default Pokemon IDs that is16 files (12GIF +4PNG); with a custom list it is
+twice the list length plus4. Omitting the flag retains the original GIF-only
+behavior. It can accompany --pokemon or --file; repeating the flag fails before
+writes/network. Trainer filenames are the native mappings of avatars265/102.
 
 ids.txt contains one ID per line (or comma-separated IDs), with optional whole
 comment lines beginning #. ids.json is a JSON array of strings, for example:
@@ -229,21 +244,29 @@ executable or command shim explicitly **without changing execution policies**:
 ```text
 node .\tools\sprites\download.mjs --pokemon rattata,pidgeot-mega
 npm.cmd run sprites:download -- --file ids.txt
+node .\tools\sprites\download.mjs --with-ui
+npm.cmd run sprites:download -- --with-ui
 ```
 
 Every run creates a unique ignored .local/sprites/download-*/ folder and preserves
-each validated original at sprites/ani/ID.gif or sprites/ani-back/ID.gif. Only
-HTTPS GETs to https://play.pokemonshowdown.com/sprites/ani/ and ani-back/ are made;
+each validated original at sprites/ani/ID.gif or sprites/ani-back/ID.gif, plus the
+exact four PNG paths above when requested. Only official HTTPS GETs to
+https://play.pokemonshowdown.com/ are made at those generated/allowlisted paths;
 no index crawling, alternate host, remote code execution or upstream git operation.
 Redirects are refused. TLS/certificate/proxy/credential settings are unchanged.
 GIF87a/89a headers, bounded dimensions, block framing/trailer and byte size are
 checked without executing or decompressing downloaded content. This is structural
 validation, not an artistic/provenance or pixel-decoding guarantee.
+PNG checks cover signature, IHDR dimensions/encoding, chunk lengths/order/CRCs,
+required IDAT data and a final IEND with no trailing bytes. PNG dimensions are
+bounded to16384 per axis and16Mi pixels (tall icon sheets can exceed the4096 GIF
+limit); the same8MiB response limit applies. Compressed pixels are not decoded.
 
 manifest.json records exact source URLs, SHA256, byte sizes, canvas dimensions,
-frame counts, attempts and policy. report.json records every failure and ZIP
+GIF frame counts or PNG dimensions, requested UI paths, attempts and policy.
+report.json records every failure and ZIP
 hash/size. ZIP contains successful originals plus that manifest **only when all
-front/back downloads succeed**; a partial run exits1 and leaves no ZIP. Existing
+requested GIF and PNG downloads succeed**; a partial run exits1 and leaves no ZIP. Existing
 runs are never overwritten. ZIP uses portable stored entries and requires no new
 dependency; the archive hash lives outside it to avoid a circular self-hash.
 
@@ -278,3 +301,17 @@ no ZIP. It did not overcome the previously confirmed cloud proxy403. No official
 asset transfer success, Windows-host execution or final graphic integration is
 claimed by these tests. No data lint script is configured; no sibling changes or
 extra server/client suite rerun is needed for this independent utility.
+
+UI option verification (2026-10-02, same Node/npm): five new synthetic/local test
+cases cover composition/allowlist, PNG structure/CRC/dimensions,16originals with
+hashes/complete ZIP, PNG403/redirect/corrupt failures, transient retry, byte limits
+and cancellation. The complete data suite passes50tests,0fail,0skip; typecheck,
+node --check and git diff --check pass. No data lint command is configured.
+An independent Python standard-library reader checked the synthetic17-entry ZIP's
+CRCs, original bytes/SHA256 and PNG chunk CRCs/pixel stream; Python is not required
+by the CLI. A bounded live HEAD to the official rosa.png URL failed curl exit56,
+“CONNECT tunnel failed, response403”, before reaching the origin. That cloud proxy
+restriction is a separate access blocker, not a fixture success. No official
+transfer, Windows-host run, client installation, graphical
+acceptance or full sibling CI is claimed. The saved TMT07 branches are preserved;
+this utility extension is isolated on a fresh branch from merged master.

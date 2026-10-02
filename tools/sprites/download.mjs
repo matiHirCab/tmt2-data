@@ -4,8 +4,11 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 import {setTimeout as delay} from 'node:timers/promises';
 import {writeZip} from './zip.mjs';
+import {validatePNG, pngLimits} from './png.mjs';
 
 export const seedIDs = ['rattata', 'eevee', 'froakie', 'nosepass', 'floragato', 'pidgeot'];
+export const uiAssetPaths = Object.freeze(['sprites/trainers/rosa.png', 'sprites/trainers/lyra.png',
+  'sprites/pokemonicons-sheet.png', 'sprites/pokemonicons-pokeball-sheet.png']);
 export const limits = Object.freeze({maxIDs: 32, maxFileBytes: 8 * 1024 * 1024,
   maxTotalBytes: 128 * 1024 * 1024, maxInputBytes: 32768, runTimeoutMs: 600000});
 const repo = fileURLToPath(new URL('../../', import.meta.url));
@@ -40,14 +43,15 @@ export function IDsFromFile(filename) {
     .join(',').split(',').map(id => id.trim()).filter(Boolean));
 }
 export function parseArgs(args) {
-  const result = {ids: seedIDs, timeoutMs: 15000, retries: 1};
+  const result = {ids: seedIDs, timeoutMs: 15000, retries: 1, withUI: false};
   let selector = false;
   const seen = new Set();
   for (let at = 0; at < args.length; at++) {
     const arg = args[at];
     if (arg === '--help' || arg === '-h') { result.help = true; continue; }
-    if (!['--pokemon', '--file', '--timeout-ms', '--retries'].includes(arg) || seen.has(arg)) throw Error(`Unknown or repeated option: ${arg}`);
+    if (!['--pokemon', '--file', '--timeout-ms', '--retries', '--with-ui'].includes(arg) || seen.has(arg)) throw Error(`Unknown or repeated option: ${arg}`);
     seen.add(arg);
+    if (arg === '--with-ui') { result.withUI = true; continue; }
     const value = args[++at];
     if (!value || value.startsWith('--')) throw Error(`Missing value for ${arg}`);
     if (arg === '--pokemon' || arg === '--file') {
@@ -64,6 +68,7 @@ export function parseArgs(args) {
 }
 function validateOptions(options) {
   validateIDs(options.ids);
+  if (typeof options.withUI !== 'boolean') throw Error('withUI must be a boolean');
   if (!Number.isInteger(options.timeoutMs) || options.timeoutMs < 100 || options.timeoutMs > 30000) throw Error('timeout-ms must be 100-30000');
   if (!Number.isInteger(options.retries) || options.retries < 0 || options.retries > 2) throw Error('retries must be 0-2');
 }
@@ -120,7 +125,7 @@ async function readResponse(response, signal) {
   const length = response.headers.get('content-length');
   if (length && /^\d+$/.test(length) && Number(length) > limits.maxFileBytes) {
     await response.body?.cancel().catch(() => {});
-    throw new DownloadError('too-large', 'GIF exceeds 8 MiB');
+    throw new DownloadError('too-large', 'Image exceeds 8 MiB');
   }
   if (!response.body) throw new DownloadError('empty-response', 'Missing response body');
   const reader = response.body.getReader();
@@ -132,13 +137,13 @@ async function readResponse(response, signal) {
       const next = await reader.read();
       if (next.done) break;
       size += next.value.length;
-      if (size > limits.maxFileBytes) throw new DownloadError('too-large', 'GIF exceeds 8 MiB');
+      if (size > limits.maxFileBytes) throw new DownloadError('too-large', 'Image exceeds 8 MiB');
       chunks.push(Buffer.from(next.value));
     }
     return Buffer.concat(chunks);
   } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
 }
-async function download(url, options, fetchImpl, signal) {
+async function download(url, format, options, fetchImpl, signal) {
   let attempts = 0;
   for (;;) {
     attempts++;
@@ -147,14 +152,16 @@ async function download(url, options, fetchImpl, signal) {
     try {
       requestSignal.throwIfAborted();
       const response = await fetchImpl(url, {method: 'GET', redirect: 'manual', credentials: 'omit', signal: requestSignal,
-        headers: {Accept: 'image/gif'}});
+        headers: {Accept: `image/${format}`}});
       if (response.status !== 200) {
         await response.body?.cancel().catch(() => {});
         throw new DownloadError(`http-${response.status}`, `Official source returned HTTP ${response.status}; redirects are not followed`,
           [408, 429, 500, 502, 503, 504].includes(response.status));
       }
       const bytes = await readResponse(response, requestSignal);
-      return {bytes, gif: validateGIF(bytes), attempts};
+      if (format === 'gif') return {bytes, metadata: {gif: validateGIF(bytes)}, attempts};
+      try { return {bytes, metadata: {png: validatePNG(bytes, limits.maxFileBytes)}, attempts}; }
+      catch { throw new DownloadError('invalid-png', 'Invalid, truncated, corrupt or oversized PNG'); }
     } catch (error) {
       const failure = signal.aborted ? new DownloadError('cancelled', 'Run cancelled or exceeded its 10-minute budget') :
         error instanceof DownloadError ? error : timeout.aborted ? new DownloadError('timeout', 'Request timed out', true) :
@@ -168,39 +175,42 @@ async function download(url, options, fetchImpl, signal) {
 // fetchImpl/outputBase injection is internal test support, never a CLI host override.
 export async function runDownload(options = {}, {fetchImpl = globalThis.fetch,
   outputBase = path.join(repo, '.local/sprites'), signal = new AbortController().signal} = {}) {
-  options = {ids: seedIDs, timeoutMs: 15000, retries: 1, ...options};
+  options = {ids: seedIDs, timeoutMs: 15000, retries: 1, withUI: false, ...options};
   validateOptions(options);
   const startedAt = new Date().toISOString();
   const folder = fs.mkdtempSync(path.join(safeDirectory(outputBase), 'download-'));
   const runSignal = AbortSignal.any([signal, AbortSignal.timeout(limits.runTimeoutMs)]);
   const files = [], failures = [];
   let total = 0;
-  for (const id of options.ids) for (const facing of ['ani', 'ani-back']) {
-    const relativePath = `sprites/${facing}/${id}.gif`;
+  const requests = options.ids.flatMap(id => ['ani', 'ani-back'].map(facing =>
+    ({id, facing, path: `sprites/${facing}/${id}.gif`, format: 'gif'})));
+  if (options.withUI) requests.push(...uiAssetPaths.map(asset => ({asset, path: asset, format: 'png'})));
+  for (const {path: relativePath, format, ...identity} of requests) {
     const sourceUrl = `https://play.pokemonshowdown.com/${relativePath}`;
-    const result = await download(sourceUrl, options, fetchImpl, runSignal);
+    const result = await download(sourceUrl, format, options, fetchImpl, runSignal);
     if (result.error) {
-      failures.push({id, facing, sourceUrl, attempts: result.attempts, code: result.error.code, message: result.error.message});
+      failures.push({...identity, sourceUrl, attempts: result.attempts, code: result.error.code, message: result.error.message});
       continue;
     }
     if (total + result.bytes.length > limits.maxTotalBytes) {
-      failures.push({id, facing, sourceUrl, attempts: result.attempts, code: 'run-too-large', message: 'Run exceeds 128 MiB'}); continue;
+      failures.push({...identity, sourceUrl, attempts: result.attempts, code: 'run-too-large', message: 'Run exceeds 128 MiB'}); continue;
     }
     const target = path.join(folder, relativePath);
     try {
       fs.mkdirSync(path.dirname(target), {recursive: true, mode: 0o700});
       fs.writeFileSync(target, result.bytes, {flag: 'wx', mode: 0o600});
       total += result.bytes.length;
-      files.push({id, facing, sourceUrl, path: relativePath, sizeBytes: result.bytes.length,
-        sha256: sha256(result.bytes), gif: result.gif, attempts: result.attempts});
-    } catch { failures.push({id, facing, sourceUrl, attempts: result.attempts, code: 'write', message: 'Could not preserve downloaded original'}); }
+      files.push({...identity, sourceUrl, path: relativePath, sizeBytes: result.bytes.length,
+        sha256: sha256(result.bytes), ...result.metadata, attempts: result.attempts});
+    } catch { failures.push({...identity, sourceUrl, attempts: result.attempts, code: 'write', message: 'Could not preserve downloaded original'}); }
   }
   const manifest = {schemaVersion: 1, kind: 'official-showdown-sprites-local-evaluation', requestedIDs: options.ids,
+    requestedUIAssets: options.withUI ? [...uiAssetPaths] : [],
     startedAt, finishedAt: new Date().toISOString(), complete: !failures.length,
     source: {origin: 'https://play.pokemonshowdown.com', indexes: ['https://play.pokemonshowdown.com/sprites/ani/',
       'https://play.pokemonshowdown.com/sprites/ani-back/'], credits: 'https://pokemonshowdown.com/credits'},
     redistributionRights: 'not-verified; public availability and code license do not establish asset redistribution rights',
-    policy: {...limits, timeoutMs: options.timeoutMs, retries: options.retries, redirects: 'refused'}, files};
+    policy: {...limits, pngLimits, timeoutMs: options.timeoutMs, retries: options.retries, redirects: 'refused'}, files};
   fs.writeFileSync(path.join(folder, 'manifest.json'), json(manifest), {flag: 'wx', mode: 0o600});
   let archive = null;
   if (!failures.length) {
@@ -217,12 +227,12 @@ export async function runDownload(options = {}, {fetchImpl = globalThis.fetch,
       failures.push({code: 'archive', message: 'ZIP creation failed; originals and manifest preserved'});
     }
   }
-  const report = {schemaVersion: 1, complete: !failures.length, requestedFiles: options.ids.length * 2,
+  const report = {schemaVersion: 1, complete: !failures.length, requestedFiles: requests.length,
     downloadedFiles: files.length, failures, archive};
   fs.writeFileSync(path.join(folder, 'report.json'), json(report), {flag: 'wx', mode: 0o600});
   return {folder, manifest, report};
 }
-const help = `Usage: npm run sprites:download -- [--pokemon rattata,eevee,pidgeot-mega | --file ids.txt]\n  Default: ${seedIDs.join(',')}\n  Files: UTF-8 IDs (one per line/comma, # comment lines), or a JSON array.\n  --timeout-ms 100..30000 (default15000); --retries 0..2 (default1).\n  Exact lowercase sprite filename IDs; forms retain hyphens. No alias/name lookup.\n  Outputs: unique ignored .local/sprites/download-*/ folder, manifest.json, report.json; ZIP only on full success.\n  Local evaluation only; redistribution rights are not established.\n`;
+const help = `Usage: npm run sprites:download -- [--pokemon rattata,eevee,pidgeot-mega | --file ids.txt] [--with-ui]\n  Default: ${seedIDs.join(',')}\n  --with-ui: also download rosa/lyra trainer PNGs and Pokemon/Pokeball icon sheets.\n  Files: UTF-8 IDs (one per line/comma, # comment lines), or a JSON array.\n  --timeout-ms 100..30000 (default15000); --retries 0..2 (default1).\n  Exact lowercase sprite filename IDs; forms retain hyphens. No alias/name lookup.\n  Outputs: unique ignored .local/sprites/download-*/ folder, manifest.json, report.json; ZIP only on full success.\n  Local evaluation only; redistribution rights are not established.\n`;
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const controller = new AbortController();
   let interrupted = 0;
@@ -236,7 +246,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     if (options.help) console.log(help);
     else {
       const {folder, report} = await runDownload(options, {signal: controller.signal});
-      console.log(`Saved ${report.downloadedFiles}/${report.requestedFiles} valid GIFs: ${folder}`);
+      console.log(`Saved ${report.downloadedFiles}/${report.requestedFiles} valid ${options.withUI ? 'images (GIF/PNG)' : 'GIFs'}: ${folder}`);
       console.log(report.complete ? 'Complete: sprites.zip contains originals and manifest.json' : 'Incomplete: no ZIP; inspect report.json for failures');
       process.exitCode = interrupted || (report.complete ? 0 : 1);
     }
