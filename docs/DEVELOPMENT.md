@@ -264,9 +264,12 @@ It does not install assets into the client or complete TMT07 graphical acceptanc
 The cloud proxy403 is an actual access blocker; synthetic/local tests do not count
 as successful official downloads, and the tool never bypasses that restriction.
 
-Local verification (2026-10-01, Node24.19.0/npm11.9.0): npm test47passed,
-including8new sprite tests; npm run typecheck, node --check on both modules and
-the test file, and git diff --check passed. An independent Python ZIP reader
+Local verification (2026-10-01, Node24.19.0/npm11.9.0): the original combined
+branch passed47 tests, including8new sprite tests and2unpublished TMT07 local-guest
+tests. The isolated publication branch passes45 tests, including all8sprite tests;
+the2TMT07 tests are outside this PR, not skipped or suppressed. npm run typecheck,
+node --check on both modules and the test file, and git diff --check passed.
+An independent Python ZIP reader
 verified CRCs, entries, original bytes and source hashes of a synthetic successful
 download; Python is not a runtime dependency of this CLI. The live command
 `npm run sprites:download -- --pokemon rattata --timeout-ms 1000 --retries 0`
