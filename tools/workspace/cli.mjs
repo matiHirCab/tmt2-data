@@ -59,7 +59,7 @@ try {
       }
       if (command === 'dev') {
         const assets = clientAssetStatus(c);
-        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. This list includes legacy optional assets. The native TMT2 entry uses pinned local scene/formatter assets and labeled sprite placeholders, with external data fallback disabled. Original sprite/audio completeness is not certified.`);
+        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. This list includes legacy optional assets. The native TMT2 entry uses pinned local scene/formatter and imported artwork when available (otherwise labeled developer cards), with external data fallback disabled. Doctor does not certify artwork/audio completeness.`);
         await free(c.serverPort); await free(c.clientPort);
         const result = await supervise(builds);
         if (result) process.exitCode = result;

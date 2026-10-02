@@ -1061,7 +1061,7 @@ Log local `.local/evidence/tmt07-native/ci-core-original-artwork.log`, SHA256
 Este core usó cliente bd7667d6 limpio y datos b186d036 con los cambios documentales/
 pin actuales todavía sin commit; no se presenta como CI remota ni certificación ROM.
 
-**Pendiente:** no hay captura browser nueva con los originales. Chromium abortó
+**Pendiente en ese checkpoint (supersedido por el QA siguiente):** no había captura browser nueva con los originales. Chromium abortó
 con el sandbox SUID mal configurado y tampoco pudo usar el de namespaces. No se
 cambió su configuración global ni se lanzó con `--no-sandbox`; se solicitó
 autorización concreta para una instancia efímera local con ese flag, aún pendiente.
@@ -1069,3 +1069,55 @@ La prueba visual/replay y revisión del usuario siguen abiertas, por eso TMT-07
 sigue parcial. La excepción guest del servidor no se reactivó: config persistente
 false; el smoke sólo probó guests sin nombres firmados. No se afirma una nueva
 batalla browser ni fidelidad ROM a partir de estas pruebas de generación/simulador.
+
+## TMT-07 — QA nativo con sprites originales (2026-10-02)
+
+Esta prueba **supersede el bloqueo visual/Chromium del checkpoint anterior**. El
+cliente `feat/tmt07-private-client` en `37aeb63927ee625dd48ddb2744e23d29558777ee`
+importó el ZIP validado arriba y generó los16recursos ligados al `datasetHash`:
+12GIF front/back, Rosa/Lyra y dos hojas de iconos. La generación repetida produjo
+el mismo SHA256 de manifest,
+`2cafa8187b32156d06400fd481e2191d4e554ffc8cae41fd83d72f50f21c8675`.
+El cliente corrige además el tooltip de velocidad a **Spe121** para Pidgeot a
+nivel50, IV31, EV0 y naturaleza Hardy: el rango genérico previo incluía EVs
+ilegales en este formato. Bird/Bird/Bird sigue visible y ordenado. El resto de
+formatos conserva su presentación ordinaria. El pin del cliente quedó actualizado
+en `ci/pins.json`; servidor sigue en `4c21861353d77acf48b29e4b5c08a8b009d83fd3`.
+
+Dos perfiles Chromium independientes abrieron el cliente nuevo en
+`127.0.0.1:8080/testclient-new.html?~~127.0.0.1:8000`. El selector/teambuilder
+nativo mostró alpha y beta, sus seis iconos y el formato oculto. Ambos importaron
+el replay browser registrado `test/fixtures/tmt2-native-browser-replay.json` y
+mostraron perspectivas opuestas en `BattleScene` real: layout, HP, log, animación,
+GIF front/back y avatares Rosa/Lyra decodificados en browser (16/16). Reload
+conservó el replay compatible y terminó en turno11 con `NativeBeta` ganador;
+`Dex.modid=gen9tmt2seed`. No hubo imágenes rotas, etiquetas `undefined`, errores
+JS ni solicitudes fuera del origen local. Un replay con `datasetHash` manipulado
+mostró “TMT2 server/client dataset mismatch” y no abrió sala de batalla.
+
+Capturas locales ignoradas en `.local/evidence/tmt07-native/`:
+`originals-alpha-final.png` (SHA256 `e3dff83a5e2201277b07106a2ffa67aa5da307928db1e51ddcff3ed7dec3dafc`),
+`originals-beta-final.png` (`c08193084c7883223986abbe2df1135850c617158960c04592b6cff859ee09e4`),
+`originals-premades.png` (`bc3220c746918ad8c654d1fea17c6406d0f7d18c15f40e73258f7e08aa1ad761`),
+`originals-drift-rejected.png` (`d4eda86e5a2e75b36d2a5bdc032333e3473a529dcc3638383e393ff7f9e466f0`).
+No se comitearon ni distribuyeron sprites/capturas. Guardarlas en Library con
+el helper oficial falló antes de transferir archivos (`tools/list request failed:
+network`); las rutas locales son la evidencia disponible.
+
+Chromium requirió `--no-sandbox` en perfiles efímeros por el sandbox SUID/userns
+inoperante en este contenedor; el usuario autorizó expresamente **sólo** esa
+excepción local. No se activó `noguestsecurity` ni se repitió un desafío live;
+el desafío, cancel/retry, reconexión, rechazo de equipo ilegal, batalla completa
+y replay nativos previos constan arriba. Esta sesión agrega QA gráfico/replay con
+originales, no playtest humano ni otra prueba de reglas ROM. Browser/perfiles y
+servicios de prueba cerrados, puertos8000/8080 y lock libres; configuración
+persistente `noguestsecurity=false`.
+
+`npm run ci:core` final aprobó datos47/0fallos, servidor2406aprobados/74pendientes
+y cliente68aprobados/1omitido, además de paridad, builds, types, lint, manifiesto
+reproducible y lifecycle HTTP/WS. Log local
+`.local/evidence/tmt07-native/ci-core-native-visual-final.log` SHA256
+`4f2f075cdecc0b12d6af3eaf755f097f7a3fa015fbb5073a7187329f02cd8466`.
+Los dos tests DNS y upstream slow quedaron excluidos explícitamente de core;
+`ci:network` no se ejecutó. Revisión visual del usuario aún pendiente antes de
+publicación. TMT-08 y derechos de redistribución del arte siguen fuera de alcance.
