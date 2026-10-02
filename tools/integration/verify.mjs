@@ -4,13 +4,14 @@ import path from 'node:path';
 import {createRequire} from 'node:module';
 import {config,preflight} from '../workspace/core.mjs';
 import {assertGenerated} from './cli.mjs';
+import {megaReplay} from './mega-replay.mjs';
 const c=config();preflight(c);
 assertGenerated(c);
 const catalog=JSON.parse(fs.readFileSync(path.join(c.client,'tmt2/catalog.json')));
 const {Dex}=createRequire(import.meta.url)(path.join(c.server,'dist/sim/dex.js'));
 const mod=Dex.forFormat(catalog.metadata.formatID);
 assert.equal(mod.currentMod,catalog.metadata.modID);
-for(const s of catalog.seed.species)assert.deepEqual(mod.species.get(s.id).types,catalog.table.species[s.id].types);
+for(const s of [...catalog.seed.species,...(catalog.seed.forms??[])])assert.deepEqual(mod.species.get(s.id).types,catalog.table.species[s.id].types);
 assert.equal(mod.species.get('Mew').exists,false);
 assert.deepEqual(Dex.forFormat('gen9ou').species.get('Pidgeot').types,['Normal','Flying']);
 for(const [id, record] of Object.entries(catalog.table.engineMoves)) {
@@ -36,4 +37,8 @@ try {
     assert.deepEqual(global.TMT2.stats(p.species.id),{...p.storedStats,hp:p.maxhp},'client stats must equal actual battle stats');
   }
 }finally{battle.destroy();}
-console.log('TMT-05/06 cross-repository identity, isolated catalog and pinned engine intrinsic passed; client/runtime tests run in consumer suites.');
+if(catalog.seed.forms?.length) {
+  const recorded=JSON.parse(fs.readFileSync(path.join(c.client,'test/fixtures/tmt2-mega-simulator-replay.json')));
+  assert.deepEqual(megaReplay(),recorded,'selected mega simulator replay must reproduce exactly (public channel, no wall clock)');
+}
+console.log('TMT-05/06/08 cross-repository identity, isolated catalog and pinned engine intrinsic passed; client/runtime tests run in consumer suites.');

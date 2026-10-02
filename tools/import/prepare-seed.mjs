@@ -35,7 +35,7 @@ try {
   const forms=(selected.forms??[]).map(input=>{
     const sp=dex.species.get(input.id), base=species.find(s=>s.id===input.baseSpecies);
     if(!base || input.id!=='pidgeotmega' || sp.baseSpecies!=='Pidgeot' || sp.requiredItem!=='Pidgeotite')throw Error('Unsupported mega input');
-    if(!fixture && mega.holyDefense.status!=='approved-adaptation')throw Error('Holy defense decision pending; no production mega generated');
+    if(!fixture && mega.holyDefense.status!=='documented-primary')throw Error('Holy primary chart evidence missing; no production mega generated');
     const ab=dex.abilities.get('noguard');abilities.set(ab.id,provenance({id:ab.id,name:ab.name,behaviorRef:`server@${expected.server.commit}:data/abilities.ts#${ab.id}`},'showdown'));
     const record=provenance({id:sp.id,name:sp.name,baseSpecies:base.id,forme:sp.forme,requiredItem:'pidgeotite',types:fixture?sp.types.map(t=>dex.types.get(t).id):mega.creator.facts.types,baseStats:sp.baseStats,abilities:[ab.id],learnset:base.learnset},'showdown');
     record.fieldSources.types=fixture?'fixture':'creatormega';return record;
@@ -58,7 +58,7 @@ try {
     const official=register.chartObservations.pairs.find(p=>p.attacker.toLowerCase()===a.id&&p.defender.toLowerCase()===b.id);
     chart.push({attacker:a.id,defender:b.id,multiplier:official?.multiplier??(dex.getImmunity(a.name,b.name)?2**dex.getEffectiveness(a.name,b.name):0),source:official?'creatorchart':'showdown'});
   }
-  if(forms.length&&!fixture)for(const [attacker,multiplier] of Object.entries(mega.holyDefense.multipliers))chart.push({attacker,defender:'holy',multiplier,source:'policymega'});
+  if(forms.length&&!fixture)for(const [attacker,multiplier] of Object.entries(mega.holyDefense.multipliers))chart.push({attacker,defender:'holy',multiplier,source:'megachart'});
   const items=[provenance({id:'none',name:'No item',behaviorRef:'policy:no-held-item'},'policy')];
   if(forms.length){const item=dex.items.get('pidgeotite');items.push(provenance({id:item.id,name:item.name,behaviorRef:`server@${expected.server.commit}:data/items.ts#${item.id}`,megaStone:item.megaStone,itemUser:item.itemUser},'showdown'));}
   const sources=[
@@ -67,7 +67,7 @@ try {
     {id:'policy',kind:'policy',version:'approved-2026-09-30',locator:'provenance/sources.json#userApprovals',sha256:stableHash(register.userApprovals)},
     {id:'creatorspecies',kind:'creator',version:creatorRows.versionBinding??(creatorRows.observedOn?'observed-'+creatorRows.observedOn+'-not-release-bound':'unavailable'),locator:'provenance/seed-types.json: user transcription corroborated by relayed primary-sheet cell observations',sha256:stableHash(creatorRows)},
     {id:'seedchart',kind:'creator',version:'observed-2026-09-30-not-release-bound',locator:'provenance/seed-chart.json: exact primary chart coordinates',sha256:stableHash(seedChart)},
-    ...(forms.length?[{id:'creatormega',kind:'creator',version:'documented-v1.5.0',locator:mega.creator.url+'; creator post #105, types only',sha256:stableHash(mega)},...(!fixture?[{id:'policymega',kind:'policy',version:'tmt08-adaptation',locator:'provenance/mega-pidgeot.json#holyDefense',sha256:stableHash(mega)}]:[])]:[]),
+    ...(forms.length?[{id:'creatormega',kind:'creator',version:'documented-v1.5.0',locator:mega.creator.url+'; creator post #105, types only',sha256:stableHash(mega)},...(!fixture?[{id:'megachart',kind:'creator',version:'observed-2026-10-02-not-release-bound',locator:mega.holyDefense.url+'; BE2, seven attacking rows in provenance/mega-pidgeot.json#holyDefense',sha256:stableHash(mega)}]:[])]:[]),
     ...(fixture?[{id:'fixture',kind:'test-fixture',version:'synthetic-v1',locator:'Pinned base-Dex types used ONLY for validator fixture',sha256:stableHash(species.map(s=>s.types))}]:[])
   ];
   const sets=selected.species.map(s=>({species:s.id,ability:s.ability,item:s.item??'none',moves:s.moves,nature:'Hardy',level:50,ivs:{hp:31,atk:31,def:31,spa:31,spd:31,spe:31},evs:{hp:0,atk:0,def:0,spa:0,spd:0,spe:0}}));

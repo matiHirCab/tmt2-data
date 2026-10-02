@@ -1124,42 +1124,89 @@ publicación. TMT-08 y derechos de redistribución del arte siguen fuera de alca
 
 ## TMT-08 — Mega Pidgeot acotado y gate de Holy (2026-10-02)
 
-Bases fusionadas: cliente1737a360 y datosf48267f6; servidor4c218613. El viejo
-pin cliente37aeb639 sigue alcanzable, con árbol igual al merge; no faltaba código.
+Bases fusionadas: cliente 1737a360 y datos f48267f6; servidor 4c218613. El viejo
+pin cliente 37aeb639 sigue alcanzable, con árbol igual al merge; no faltaba código.
 La revisión visual TMT-07 sigue pendiente, independiente de esas fusiones.
 
-Kobazco, [release v1.5.0, post105](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6),
+Kobazco, [release v1.5.0, post 105](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6),
 confirma Mega Pidgeot Holy/Bird/Bird y disponibilidad de sus piedras. El registro
 `provenance/mega-pidgeot.json` separa esos hechos de los campos heredados del
-pin2f5b2739: HP83/Atk80/Def80/SpA135/SpD80/Spe121, No Guard y Pidgeotite.
+pin 2f5b2739: HP83 / Atk80 / Def80 / SpA135 / SpD80 / Spe121, No Guard y Pidgeotite.
 Activación moderna antes de moves, un uso por lado y permanencia dentro del
 combate son adaptación Showdown aprobada; no están medidos en ROM.
 
-**Gate único:** faltan Normal/Dark/Water/Rock/Electric/Grass/Flying → Holy.
-Web no pudo leer el spreadsheet y su HTML público fue rechazado; no se eludió
-acceso. La consulta enviada pide aprobar1× provisional para esos siete cruces
-como política explícita nueva, o dejar la mega deshabilitada hasta verificar
-los valores. No se presupone una respuesta. Seed0.1.0 y premades no cambiaron.
+### Evidencia primaria que resuelve el gate
 
-Esquema/generador preparados: formas runtime separadas de especies iniciales,
-HP/learnset de base, piedra vinculada a su premade, tipos ordenados/duplicados,
-fuentes y cobertura de chart obligatorias. Holy no puede citar Showdown como
-si tuviera tabla heredada. El importador no genera la mega sin decisión registrada.
-Servidor consume sólo formas listadas y valida items exactos; cliente conserva
-piedra en copy/export y usa una card rotulada si la forma no tiene GIF local.
-No se baja artwork ni se usa el GIF base como si fuera el de mega.
+La consulta provisional Holy 1× queda supersedida, sin presumir aprobación: se
+pudo abrir el enlace **Documentation** de la publicación oficial. Las observaciones
+primarias recibidas del investigador de la conversación fueron corroboradas en
+esa vista read-only el 2026-10-02. [Hoja del creador](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing),
+columna Holy **BE2**, filas atacantes/columnas defensoras:
 
-Seis casos server y uno client escritos pero **pendientes**, no aprobados:
-choice mega antes del move, HP158/SpA155/Spe141 y No Guard; switch mantiene
-Holy/Bird/Bird y limpia tipos temporales/reemplazo, nuevo combate restaura base;
-addType agrega/reemplaza cuarto slot y setType sustituye todo el array; Rock8×
-contra triple Bird vs4× contra mega sólo si Holy1× se aprueba; STAB Showdown una
-vez por hasType, no fórmula ROM inferida; inputs ilegales y aislamiento; replay
-detailschange con Dex propio. El cuarto tipo es un oráculo sintético del motor;
-Soak/Trick-or-Treat siguen fuera del equipo legal. No addedType permanente.
+| Ataque | Celda | Contra Holy | Contra Holy/Bird/Bird en adaptación |
+| --- | --- | --- | --- |
+| Normal | BE3 | 1× | 1× |
+| Dark | BE20 | 2× | 2× |
+| Water | BE14 | 0.5× | 0.5× |
+| Rock | BE8 | 2× | 8× |
+| Electric | BE16 | 1× | 4× |
+| Grass | BE15 | 1× | 0.25× |
+| Flying | BE5 | 1× | 1× |
 
-TMT-08 sigue parcial: falta habilitar un candidato respaldado por chart/política
-y ejecutar esos casos. Fixtures de esquema no generan producción. Usar pins
-coordinados de `ci/pins.json`; publicación eventual servidor → cliente → datos
-requiere autorización nueva. No hubo excepción guest, batalla browser nueva ni
-trabajo TMT-09.
+La última columna combina esos hechos con Bird de `seed-chart.json` y la
+multiplicación por slot heredada del motor. No es una medición ROM. La hoja no
+publica revisión numerada: no se atribuyen esos valores a bytes BPS v1.5.2.
+`provenance/mega-pidgeot.json` fija celdas, fecha, limitaciones y campos heredados.
+Fuentes falsas, hashes alterados y cambios en valores Holy fallan la validación.
+
+### Contrato implementado y límites
+
+Seed **0.2.0** mantiene las seis especies/sets/moves de 0.1.0; agrega sólo la forma
+runtime Pidgeot-Mega, Holy, No Guard y Pidgeotite en beta Pidgeot. Formas iniciales
+siguen prohibidas. No se pueden reasignar la piedra, habilidad o movimientos,
+mezclar premades ni cambiar nivel50/IV31/EV0/Hardy. Las formas conservan HP y
+learnset de base; el servidor crea el learnset propio de la mega desde el catálogo,
+pues no existe un learnset upstream separado. Motor central y formatos normales
+permanecen aislados. Callbacks No Guard/Pidgeotite son heredados, no generados.
+
+Seis casos reales del mod prueban elección mega antes del move; HP158/SpA155/Spe141,
+No Guard y un uso por lado; switches preservan mega y limpian tipos temporales;
+combate nuevo restaura Bird/Bird/Bird; defensas por slot de los siete ataques;
+STAB una sola vez por pertenencia; inputs ilegales y aislamiento Gen9.
+El oráculo `addType/setType` prueba cuarto slot, reemplazo y reset **sintéticos**.
+Soak/Trick-or-Treat y otras megas siguen excluidos del formato legal. No se utiliza
+`addedType` para ninguno de los tres tipos permanentes. La fórmula ROM y pasivas
+custom no están verificadas: se mantiene la adaptación aprobada el 2026-09-30.
+
+`tools/integration/mega-replay.mjs --output NEW.json` reproduce una batalla completa
+por el simulador real, semilla [1,2,3,4], beta contra alpha, elección Gust+mega,
+resto elecciones default, victoria **MegaBeta**, turno 20. Sólo se exporta canal
+espectador y se omiten timestamps de pared para determinismo; no se alteran eventos.
+El fixture del cliente conserva método y hashes; CI lo regenera y compara exactamente.
+El parser nativo resuelve Holy/Bird/Bird en turno 2 y el resultado final. No es una
+batalla de dos navegadores ni playtest humano. Replays históricos 0.1.0 se conservan
+intactos y son rechazados por 0.2.0: requieren su cliente/catalog original, sin fallback.
+
+El ZIP entregado (SHA256 `533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`)
+coincide con el ya importado y no incluye Mega Pidgeot. La forma usa card explícita
+“sprite unavailable”; los seis GIF base/trainer/iconos conservan pins. No se baja
+artwork, no se disfraza el GIF base como mega y no se comete el ZIP a Git.
+
+### Verificación y coordinación
+
+- `node --test tests/mega-data.test.mjs tests/seed.test.mjs`: 16 pasados.
+- Servidor Mocha `--no-config test/main.js test/sim/tmt2-{integration,runtime,mega}.js --exit`: 47 pasados.
+- Cliente `npm test`: 70 pasados, 1 omitido heredado; build/types/lint incluidos.
+- `node tools/integration/verify.mjs`: paridad, aislamiento, stats y replay reproducible.
+- Extracción a dos archivos nuevos y comparación:datos byte-idénticos; generación
+  server/client también idéntica. Fixtures sintéticos siguen separados de producción.
+- CI-core final y manifiesto se registran después de fijar los commits consumidores.
+  DNS en vivo no corre en core; diagnóstico previo `IPtools should resolve unknown
+  IPs correctly` timeout 2000ms permanece documentado, no se atribuye a la mega.
+
+Compatibilidad en `ci/pins.json`: servidor `6fae9fe32a19db5e8b00f1f90b4637149a5aad82`,
+cliente `813a3909579e1dc3e89ab3618c892a2d40d2d554`. Publicación eventual servidor→cliente→datos
+requiere autorización nueva. No excepción guest ni browser nuevo ni trabajo TMT-09.
+Rollback:detener servicios, volver conjuntamente a los tres masters previos a TMT-08,
+instalar lockfiles y regenerar 0.1.0; conservar el ZIP fuera de Git. No mezclar hashes.
+La revisión visual pendiente TMT-07 no queda cerrada por estas pruebas de adaptación.

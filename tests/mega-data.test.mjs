@@ -34,21 +34,17 @@ test('mega chart coverage includes every temporary form defensive type',()=>{
  const d=fixture();d.chart=d.chart.filter(p=>!(p.attacker==='normal'&&p.defender==='fire'));rehash(d);
  assert.match(check(d).errors.join(';'),/missing chart pair normal\/fire/);
 });
-test('production Holy defenses fail closed without a recorded approval or primary chart evidence',()=>{
- const d=JSON.parse(fs.readFileSync(new URL('../normalized/seed.json',import.meta.url)));
+test('production Holy defenses reject inherited attribution, forged evidence and changed primary values',()=>{
+ const original=JSON.parse(fs.readFileSync(new URL('../normalized/seed.json',import.meta.url)));
  const mega=JSON.parse(fs.readFileSync(new URL('../provenance/mega-pidgeot.json',import.meta.url)));
- const fields=r=>({...r,fieldSources:Object.fromEntries(Object.keys(r).map(k=>[k,'showdown']))});
- const base=d.species.find(s=>s.id==='pidgeot');
- const form=fields({...mega.inheritance.form,types:mega.creator.facts.types,learnset:base.learnset});
- form.fieldSources.types='creatormega';d.forms=[form];
- d.types.push({id:'holy',name:'Holy',passive:'none-adaptation',fieldSources:{id:'creatormega',name:'creatormega',passive:'policy'}});
- d.abilities.push(fields({...mega.inheritance.ability,behaviorRef:'pinned:NoGuard'}));
- d.items.push(fields({...mega.inheritance.item,behaviorRef:'pinned:Pidgeotite'}));
- d.teams[1].sets.find(s=>s.species==='pidgeot').item='pidgeotite';
- d.sources.push({id:'creatormega',kind:'creator',version:'v1.5.0',locator:mega.creator.url,sha256:stableHash(mega)},
-  {id:'policymega',kind:'policy',version:'pending',locator:'pending-user-decision',sha256:stableHash(mega)});
- for(const attacker of mega.holyDefense.attackers)d.chart.push({attacker,defender:'holy',multiplier:1,source:'showdown'});
- rehash(d);assert.match(validateSeed(d).errors.join(';'),/Custom chart pair cannot masquerade/);
- for(const pair of d.chart.filter(p=>p.defender==='holy'))pair.source='policymega';
- rehash(d);assert.match(validateSeed(d).errors.join(';'),/Holy matchup lacks approved adaptation policy/);
+ assert.equal(mega.holyDefense.status,'documented-primary');
+ assert.deepEqual(mega.holyDefense.multipliers,{normal:1,dark:2,water:0.5,rock:2,electric:1,grass:1,flying:1});
+ assert.deepEqual(validateSeed(original).errors,[]);
+ for(const mutate of [d=>{d.chart.find(p=>p.defender==='holy').source='showdown';},
+  d=>{d.chart.find(p=>p.defender==='holy').source='creatormega';},
+  d=>{d.chart.find(p=>p.defender==='holy'&&p.attacker==='rock').multiplier=1;},
+  d=>{d.sources.find(s=>s.id==='megachart').sha256='0'.repeat(64);},
+  d=>{d.sources.find(s=>s.id==='megachart').kind='policy';}]) {
+  const d=structuredClone(original);mutate(d);rehash(d);assert.equal(validateSeed(d).valid,false);
+ }
 });

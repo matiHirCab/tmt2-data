@@ -77,9 +77,12 @@ export function validateSeed(d, {allowFixture = false} = {}) {
   const seedChart=JSON.parse(fs.readFileSync(new URL('../../provenance/seed-chart.json',import.meta.url)));
   const seedSource=maps.sources.get('seedchart');
   if(!seedSource || seedSource.kind!=='creator' || seedSource.sha256!==stableHash(seedChart)) bad('Seed chart evidence hash mismatch');
-  for(const p of d.chart.filter(p=>p.source==='policymega')) {
+  if(d.kind==='production')for(const p of d.chart.filter(p=>p.defender==='holy')) {
+    if(p.source!=='megachart')bad('Holy defensive pair must cite its registered primary chart source');
+  }
+  for(const p of d.chart.filter(p=>p.source==='megachart')) {
     const mega=JSON.parse(fs.readFileSync(new URL('../../provenance/mega-pidgeot.json',import.meta.url)));
-    if(mega.holyDefense.status!=='approved-adaptation'||p.defender!=='holy'||mega.holyDefense.multipliers?.[p.attacker]!==p.multiplier||maps.sources.get('policymega')?.sha256!==stableHash(mega)||maps.sources.get('policymega')?.kind!=='policy')bad('Holy matchup lacks approved adaptation policy');
+    if(mega.holyDefense.status!=='documented-primary'||p.defender!=='holy'||mega.holyDefense.multipliers?.[p.attacker]!==p.multiplier||maps.sources.get('megachart')?.sha256!==stableHash(mega)||maps.sources.get('megachart')?.kind!=='creator'||!mega.holyDefense.cells?.[p.attacker])bad('Holy matchup contradicts registered primary observation');
   }
   for(const p of d.chart.filter(p=>p.source==='seedchart')) if(!seedChart.pairs.some(q=>q.attacker===p.attacker && q.defender===p.defender && q.multiplier===p.multiplier)) bad('Seed chart contradicts registered observation');
   for(const p of d.chart.filter(p=>p.source==='creatorchart')) {

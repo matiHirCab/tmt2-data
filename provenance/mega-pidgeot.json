@@ -17,7 +17,7 @@
       "exists": true
     },
     "limitations": [
-      "No observed ROM stats, ability, activation timing, STAB formula or Holy defensive chart values"
+      "No observed ROM stats, ability, activation timing or STAB formula; creator chart is documentation, not a measured ROM oracle"
     ]
   },
   "inheritance": {
@@ -57,7 +57,13 @@
     "behavior": "Modern Showdown activation before moves, one mega per side, permanent within battle; reset on fresh battle, no ROM equivalence claim"
   },
   "holyDefense": {
-    "status": "pending explicit policy decision or creator chart observations",
+    "status": "documented-primary",
+    "url": "https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing",
+    "observedOn": "2026-10-02",
+    "versionBinding": "creator-linked documentation; no numbered ROM revision",
+    "headerCell": "BE2",
+    "orientation": "attacking row, defending column; TOTAL OFFENSE/DEFENSE labels",
+    "verification": "Parent primary-sheet observations independently corroborated through the official release Documentation hyperlink (read-only web view).",
     "attackers": [
       "normal",
       "dark",
@@ -67,6 +73,23 @@
       "grass",
       "flying"
     ],
-    "multipliers": null
+    "cells": {
+      "normal": "BE3",
+      "dark": "BE20",
+      "water": "BE14",
+      "rock": "BE8",
+      "electric": "BE16",
+      "grass": "BE15",
+      "flying": "BE5"
+    },
+    "multipliers": {
+      "normal": 1,
+      "dark": 2,
+      "water": 0.5,
+      "rock": 2,
+      "electric": 1,
+      "grass": 1,
+      "flying": 1
+    }
   }
 }
