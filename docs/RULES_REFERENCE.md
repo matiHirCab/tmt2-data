@@ -874,3 +874,73 @@ mínimos mediante un canal soportado con acceso al origin; recién entonces pinn
 hashes, preservar originales, integrar dimensiones contra Dex pinneado y verificar
 replay local sin noguestsecurity. No hay nuevo replay visual con sprites originales.
 Repos de gameplay intactos, servidor/excepción apagados; gráfico final bloqueado.
+
+## TMT-07 — auditoría de cierre (2026-10-02)
+
+Master de datos verificado tras PR7: `854f128dfc3ba75f2c8af48c4bb9206865861448`.
+Se integró ese master mediante merge local conservando el trabajo TMT07 y ambos
+bloques de DEVELOPMENT; no se publicó esta rama. Servidor master/pin
+`4c21861353d77acf48b29e4b5c08a8b009d83fd3`; cliente master
+`8ad840a70e2c96c4382305cb4de105c1cc57e976`, rama nativa/pin
+`34ffc4952eaa2ff659450be812219aece00457c0`. Ningún cambio nuevo en esos forks.
+
+**Acreditado:** el recorrido nativo descrito arriba, no la página plana: selección
+alpha/beta, challenge/accept, combate terminado, cancel/retry, rechazo EV252,
+reload/rejoin y replay compatible con rechazo de drift. La fixture persistente
+`test/fixtures/tmt2-native-browser-replay.json` conserva 156 líneas, turno11,
+`|win|NativeBeta`, catalogHash/datasetHash y Bird/Bird/Bird. Su reproducción unitaria
+se volvió a verificar; usa SceneStub y no constituye una prueba browser nueva.
+Las capturas y el replay final de `/tmp` citados arriba ya no están disponibles en
+este executor; la fixture en Git sí. Hay que volver a capturar evidencia visual.
+No ZIP de sprites visible entre los adjuntos de esta tarea; búsqueda acotada de
+Library tampoco encontró uno. Eso no prueba ausencia en otros chats ni providers.
+
+**Assets para esa semilla:** las tres primeras filas son el mínimo para reemplazar
+sprites/trainers/tarjetas de equipo (16archivos). Las dos últimas restauran iconos
+estándar como mejora visual opcional; sus etiquetas legibles actuales no inventan
+datos ni bloquean mecánicas. No se añade ese pulido como nuevo gate del ticket.
+
+| Archivos originales | Uso y ruta oficial |
+| --- | --- |
+| `rattata.gif`, `eevee.gif`, `froakie.gif`, `nosepass.gif`, `floragato.gif`, `pidgeot.gif`, cada uno front/back (12) | `https://play.pokemonshowdown.com/sprites/ani/` y `/sprites/ani-back/`; el downloader de PR7 sólo cubre este grupo |
+| `rosa.png`, `lyra.png` (2) | `https://play.pokemonshowdown.com/sprites/trainers/`; la fixture usa avatares265/102, mapeados en battle-dex-data.ts. Para otra prueba live se seleccionan esos dos mediante el control/comando nativo existente, sin ampliar catálogo ni seguridad |
+| `pokemonicons-sheet.png`, `pokemonicons-pokeball-sheet.png` (2) | `https://play.pokemonshowdown.com/sprites/`; selección/preview y estados de equipo (normal, status, fainted, vacío) |
+| Opcional: `Physical.png`, `Special.png`, `Status.png` (3) | `https://play.pokemonshowdown.com/sprites/categories/`; categorías de los11movimientos seleccionados |
+| Opcional: `Normal.png`, `Dark.png`, `Water.png`, `Rock.png`, `Electric.png`, `Grass.png`, `Flying.png` (7) | `https://play.pokemonshowdown.com/sprites/types/`; exactamente los tipos estándar de especies/movimientos usados, sin arte inventado para tipos custom |
+
+La propuesta previa de avatares1/170 corresponde a `lucas.png`/`hilda.png`, no
+`1.png`/`170.png`; no eran los avatares reales de la fixture. No hacen falta para
+reproducirla. Los índices oficiales corroboran los nombres; los bytes/hash/dimensiones
+siguen pendientes, no verificados por leer índices. Fondo `fx/bg-city.png`, estilos,
+fonts/logo, scripts de animación, formatter y efectos de movimientos ya están
+locales. Audio permanece opcional; itemicons no es requisito con policy no-held-item.
+No se necesita un catálogo completo de sprites ni `data/graphics.js` remoto si se
+genera metadata acotada desde los originales validados.
+
+**Implementación pendiente:** validar/pinnear origen/hash de los archivos recibidos
+sin ejecutarlos ni publicarlos; conectar front/back y dimensiones reales en
+getSpriteData (hoy siempre devuelve SVG96x96), avatares en resolveAvatar (hoy un
+trainer genérico) e iconos/estados en getPokemonIcon. Categorías/tipos estándar
+pueden seguir como etiquetas legibles o usar los iconos opcionales recibidos.
+El generador todavía produce tarjetas: copiar GIFs por sí solo no cambia esas
+rutas. Tipos custom conservan etiquetas exactas; ningún placeholder se cuenta como
+gráfico final. Añadir regresiones de facing/dimensiones/hash/archivo faltante,
+estados de Pokéball y ausencia de recursos externos, preservando formatos normales.
+
+**Aceptación restante:** replay local con originales, avance/reload, tooltips,
+HP/movimientos/log y cero recursos externos/errores; capturas nuevas para revisión
+del usuario; checks finales de build/lint/typecheck/CI-core, generación y manifiesto
+en los commits finales. El replay estático no requiere servidor ni excepción guest.
+Repetir live con dos invitados sí requiere nueva autorización expresa únicamente
+para noguestsecurity=true en memoria tras comprobar bind127.0.0.1 y retirar
+proceso/listeners/opt-in al terminar. No se activó en esta auditoría; config
+persistente false y puertos8000/8080 libres. Exclusiones DNS/slow siguen vigentes.
+
+Checks actuales: datos `npm test`47/0fail/0skip; `npm run typecheck`,
+`npm run integration:check` y `npm run integration:test` aprobados. Cliente
+`node --test test/tmt2-native.test.js`5/0fail/0skip. No se repitió batalla browser,
+QA con sprites originales ni CI-core completo en esta auditoría documental.
+Publicación eventual requiere revisión visual y autorización nueva: cliente
+primero, datos después con pin cliente fetchable y CI remoto verificado. Servidor
+ya está en master; sin nuevo PR servidor salvo cambio concreto necesario.
+Derechos de evaluación local no autorizan redistribución de artwork ni despliegue.
