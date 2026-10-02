@@ -63,9 +63,12 @@ records source and output hashes; `--fresh` forces regeneration. The catalog and
 runtime each verify both canonical dataset and derived-table hashes.
 
 Generated public assets remain ignored. Text, species/move/ability data and
-search/teambuilder tables now come from the local pinned checkout. Other assets,
-including graphics.js, commands.js, chat-formatter.js and sprite/logo/audio
-resources, can remain absent or use remote fallbacks; doctor reports them.
+search/teambuilder tables now come from the local pinned checkout. Legacy optional
+graphics.js/commands.js remain absent and doctor reports them. The native TMT2
+entry loads local scene/move animations and pinned chat-formatter instead, disables
+external data fallback and uses the locally imported/pinned sprite package when
+available (otherwise clearly labeled developer cards). Artwork redistribution
+rights are unverified; audio is optional. Unrelated legacy entries may still use upstream fallback.
 READY is HTTP readiness, not a playable battle certificate. `full`, `minidex` and
 other independent upstream generators are not invoked by coordination.
 
@@ -75,7 +78,8 @@ Open the printed READY URL, normally:
 `http://127.0.0.1:8080/testclient-new.html?~~localhost:8000`.
 The isolated catalog view is `http://127.0.0.1:8080/tmt2-seed.html`; it renders all
 six names/types, filters by every type slot, and displays dataset identity.
-The hidden format is deliberately absent from public challenge/search menus.
+The hidden format stays absent from public challenge/search menus; this local
+native entry adds it only to its private Challenge selector.
 The server bootstrap changes bind address/port/SSL/watchconfig only in memory.
 It loads the user's other server settings unchanged. This is the existing Showdown
 test client; remote assets/login features may still require internet access.
@@ -194,6 +198,125 @@ and status. The former next-slice registration proposal is superseded by TMT-05,
 which now depends on a verified seed (TMT-04); it is not an independent task.
 Use [CI.md](CI.md) for reproducible verification and the explicit DNS diagnostic
 split. Historical test results remain evidence, not competing implementation plans.
+
+## Private local seed battle (TMT-07)
+
+The earlier explicitly approved local guest test used
+`TMT2_LOCAL_GUESTS=1 npm run workspace:dev`. This opt-in enables unsigned,
+unregistered local names only in server memory after enforcing127.0.0.1; it is
+not production auth and is **not required for the replay preview below**.
+Enabling it for another live-name test needs separate approval; do not add it
+to permanent config. No other auth/IP/throttle control changes. Without opt-in,
+normal config remains unchanged. Stop with Ctrl-C/SIGTERM when finished and
+confirm lock/listeners are gone. Never expose this test server publicly.
+
+### Windows/WSL local preview from the draft branches
+
+The coordinator uses POSIX process groups, so run these commands inside Ubuntu
+or another Linux WSL shell, not native PowerShell. Use Node24.19.0/npm11.9.0
+for the pinned CI environment (minimum runtime Node22.18), plus Git. The
+server SHA is already on master; the client and data changes are on separate
+draft-review branches until merged. Use fresh directories to preserve existing
+checkouts:
+
+```sh
+mkdir -p ~/tmt2 && cd ~/tmt2
+git clone https://github.com/matiHirCab/Pokemon-Too-Many-Types-2.git
+git clone --branch feat/tmt07-private-client https://github.com/matiHirCab/Pokemon-Too-Many-Types-2-client.git
+git clone --branch feat/tmt07-browser-evidence https://github.com/matiHirCab/tmt2-data.git
+git -C Pokemon-Too-Many-Types-2 switch --detach 4c21861353d77acf48b29e4b5c08a8b009d83fd3
+git -C Pokemon-Too-Many-Types-2-client switch --detach 37aeb63927ee625dd48ddb2744e23d29558777ee
+(cd Pokemon-Too-Many-Types-2 && npm ci)
+(cd Pokemon-Too-Many-Types-2-client && npm ci)
+(cd tmt2-data && npm ci)
+```
+
+Keep the exact received `sprites.zip` on your computer. In WSL, use its
+Windows path through `/mnt/c` and import it once before generating assets;
+replace `YOUR_WINDOWS_USER` with your account name. The importer verifies
+archive SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`
+and all16resources; do not unpack or repackage it.
+
+```sh
+SPRITES_ZIP="/mnt/c/Users/YOUR_WINDOWS_USER/Downloads/sprites.zip"
+(cd ~/tmt2/Pokemon-Too-Many-Types-2-client && node build-tools/import-tmt2-artwork "$SPRITES_ZIP")
+cd ~/tmt2/tmt2-data
+npm run workspace:doctor
+node tools/ci/pins.mjs verify
+npm run integration:generate
+npm run workspace:dev
+```
+
+Open the printed READY URL in a Windows browser, normally
+`http://127.0.0.1:8080/testclient-new.html?~~127.0.0.1:8000`.
+For a visual preview without a login, choose **Home → Load local replay JSON**
+and select
+`Pokemon-Too-Many-Types-2-client/test/fixtures/tmt2-native-browser-replay.json`
+from the WSL workspace. From another WSL terminal, `cd ~/tmt2 &&
+explorer.exe .` opens that folder in Windows Explorer to locate the fixture.
+The six-species catalog is at `http://127.0.0.1:8080/tmt2-seed.html`.
+The default launch does not enable unsigned local names; a fresh live
+two-player challenge requires separately approved loopback-only opt-in. Stop
+`workspace:dev` with Ctrl-C when finished. WSL-host execution has not yet
+been independently tested; the local Linux journey and CI are recorded in
+[RULES_REFERENCE.md](RULES_REFERENCE.md#tmt-07--qa-nativo-con-sprites-originales-2026-10-02).
+
+Open `/testclient-new.html?~~127.0.0.1:8000` in two independent browser
+profiles (replace8000 with the configured loopback server port). Use Choose name,
+Find a user, Look up, Challenge. Select the private [Gen9] TMT2 Seed format in
+the existing format picker and TMT2 alpha; the recipient selects TMT2 beta and
+Accept. Premades are installed locally without replacing saved teams. Choose lead
+and play through the native move/switch controls. Cancel/retry respects the
+inherited10-second cooldown. Reload restores the local name and rejoins after its
+acknowledgement. No public auth requests or keys are used by this loopback-only
+entry; server guest security is unchanged unless the explicit opt-in is present.
+
+Use the native Download replay button, then Home's Load local replay JSON.
+Replay retains the real BattleScene, HP/log, controls and isolated catalog; reload
+restores it from session storage. Downloaded JSON, rather than the session-local
+Copy/Visit URL, is how another profile receives the replay. Public upload is
+disabled. Tier/dataset/version/catalogHash mismatch fails, with no official Dex
+fallback. Replays require this compatible built client, not public replay hosting.
+
+`build-tools/build-native-tmt2` consumes only the clean exact local server SHA
+passed by pinned build-indexes: MIT chat-formatter source and optional locally
+imported artwork. No git pull/download. The user-supplied ZIP is pinned by archive,
+manifest and all16file hashes in client `tmt2/native-artwork.json`; the original
+bytes are not committed or redistributed. This is Showdown artwork for local
+evaluation, not extracted TMT2 ROM artwork or verified redistribution permission.
+
+From the client checkout, import the received immutable package once:
+
+```sh
+node build-tools/import-tmt2-artwork /path/to/sprites.zip
+```
+
+The default ignored destination is `caches/tmt2-native-artwork`. The importer
+accepts only the exact pinned stored ZIP and its17whitelisted entries (16images
+plus manifest), validates hashes, refuses symlinks/existing destinations and never
+executes image content. No Python or unpacking program is needed. An optional
+second argument selects a new destination; set `TMT2_SPRITES_DIR` to that folder
+for coordinated builds/dev. Missing/corrupt explicit inputs fail before public
+outputs are written. Import into a new folder for recovery rather than overwriting
+an existing one; an interrupted filesystem copy may leave a partial destination
+that must be reviewed before removal. A newly downloaded archive with different
+manifest timestamps is not the pinned input and requires explicit verification.
+
+The generated `data/tmt2-native-assets.js` binds visual metadata to datasetHash;
+`data/tmt2-native-assets.json` records generator/validator/pin hashes and output
+hashes. Actual GIF front/back paths and dimensions, Rosa/Lyra and native cropped
+team/Pokéball icons are local. If artwork is absent, CI builds use an explicitly
+labeled developer-card mode; this does not satisfy visual acceptance. A present
+but damaged package never silently falls back. Audio remains disabled for this
+local entry. Custom types and categories use legible text labels. The native
+scene/layout/HP/move animations are retained; no ROM fidelity is claimed.
+`/tmt2-private.html` is a developer-only protocol harness using BattleSceneStub;
+its earlier results cannot certify the user-facing native UX. See RULES_REFERENCE
+for the superseding native browser evidence and known limits.
+Rollback: stop services, switch clean client/data to the recorded TMT-06 masters,
+regenerate compatible catalogs/assets and restart without the guest opt-in. Preserve
+unrelated edits/feature branches; no destructive reset or history rewriting.
 
 ## Official sprite downloader
 

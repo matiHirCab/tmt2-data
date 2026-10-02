@@ -59,12 +59,13 @@ try {
       }
       if (command === 'dev') {
         const assets = clientAssetStatus(c);
-        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. Pinned local indexes are generated; these remaining assets may use remote fallbacks. This is not a complete TMT2 client.`);
+        if (assets.missing.length) console.warn(`[workspace] Client runtime assets incomplete: ${assets.missing.join(', ')}. This list includes legacy optional assets. The native TMT2 entry uses pinned local scene/formatter and imported artwork when available (otherwise labeled developer cards), with external data fallback disabled. Doctor does not certify artwork/audio completeness.`);
         await free(c.serverPort); await free(c.clientPort);
         const result = await supervise(builds);
         if (result) process.exitCode = result;
         else process.exitCode = await supervise([
-          node(c.server, [path.join(root, 'tools/workspace/server.cjs'), String(c.serverPort)], 'local server'),
+          node(c.server, [path.join(root, 'tools/workspace/server.cjs'), String(c.serverPort),
+            ...(process.env.TMT2_LOCAL_GUESTS === '1' ? ['--local-guests'] : [])], 'local server'),
           node(c.client, [path.join(root, 'tools/workspace/static.mjs'), path.join(c.client, 'play.pokemonshowdown.com'), String(c.clientPort)], 'local client'),
         ], {services: true, ready: async stopped => {
           const url = `http://127.0.0.1:${c.clientPort}/testclient-new.html?~~localhost:${c.serverPort}`;

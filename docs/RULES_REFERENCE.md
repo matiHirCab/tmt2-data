@@ -612,3 +612,512 @@ core/base-format isolation, generación/protocol hash y browser. No falta un inp
 para este contrato de adaptación. La próxima tarea autorizable es TMT-07; no se
 ha iniciado. Server `b195c4176fd2647c92943ad56cc59e679f431b07`, client
 `e9597d09c557b5003801861d356f76f5bde9a082` son los pins revisados locales.
+
+## TMT-07 — checkpoint de autenticacion local
+
+2026-10-01. Continuación autorizada después de serverPR2/clientPR2/dataPR6.
+Merges comprobados por API y fetch, sin squash/rebase:
+server `4c21861353d77acf48b29e4b5c08a8b009d83fd3`,
+client `8ad840a70e2c96c4382305cb4de105c1cc57e976`,
+data `619dc5c970f961d5840ad3761456aad752dde29a`.
+Los commits TMT-06 son ancestros y los árboles consumidores son idénticos al código
+probado. `ci/pins.json` pasa ahora a esos masters revisados; original facts pin y
+seed/catálogos no cambian. TMT-06 CI remota
+[36788694795](https://github.com/matiHirCab/tmt2-data/actions/runs/36788694795)
+aprobó own37, server2410/70pending, client52/1skip; se fusionaron los tres PRs.
+
+**Bloqueo concreto, no aceptación TMT-07:** el config local tiene
+`noguestsecurity=false`. `server/users.ts:User.validateToken` exige assertion
+firmada para cambiar a un nombre no-Guest; `server/chat-commands/core.ts:challenge`
+rechaza `!user.named`. Un Guest automático no puede desafiar. No se configuró
+login externo, no se transmitieron tokens/passwords, no se cambiaron auth/security
+ni permisos, ni se eludió ese guard. El modo `noguestsecurity` ya existe en Showdown
+(`config/config-example.js`, documentación exclusivamente dev); habilitarlo sería
+una excepción que requiere aclaración del usuario dado su límite explícito de
+no ampliar seguridad. No se presenta esa excepción como ya autorizada.
+
+`npm run workspace:dev` construyó los forks/índices locales fijados y arrancó
+127.0.0.1:8000 (server) y127.0.0.1:8080 (client). Dos sesiones Chromium
+`agent-browser --session tmt07-a` / `tmt07-b`, páginas `/tmt2-seed.html`, abrieron
+WebSockets reales hacia `/showdown/websocket`. Respuestas `updateuser`:
+Guest1 y Guest2, named0. La primera envió `/challenge guest2, gen9tmt2seed` y
+recibió exactamente `|popup|You must choose a username before you challenge someone.`
+No errores JS en ninguna sesión; la vista previa readonly muestra el seed.
+Esto fue un **probe browser del protocolo**, no UX de desafío implementada ni
+combate. Captura temporal `/tmp/tmt07-guest-blocker.png` con anotación del error
+agregada sólo al DOM del probe; no asset/código de producto ni prueba de batalla.
+Ambas sesiones cerradas y servicios detenidos mediante SIGTERM, sin borrar locks
+manualmente. Quedan los avisos de assets opcionales/PHP ya documentados.
+
+Acción mínima propuesta, aún **no aplicada**: permitir `noguestsecurity=true`
+sólo en memoria del launcher local ya ligado a127.0.0.1, exclusivamente para
+nombres no registrados/sin autoridad en esta prueba. No `--no-security`, no
+`nothrottle`/`noipchecks`, ningún cambio de config persistente, binding o permisos.
+Requiere una respuesta explícita antes de continuar challenge/battle/replay.
+La alternativa con assertions externas contradice el requisito de no transmitir
+tokens y no se intenta. No solicitud de ROM/BPS/mGBA.
+
+Ramas nuevas preservadas: server `feat/tmt07-private-journey`, client
+`feat/tmt07-private-client`, data `feat/tmt07-browser-evidence`. No código servidor
+ni cliente modificado. TMT-07 permanece parcial/bloqueado: premade selection UX,
+challenge cancel/retry/accept, combate completo, rejoin/replay y evidencia final
+siguen sin satisfacer; no se inicia catálogo/megas/TMT-10 ni se publica nada.
+
+Verificación del checkpoint: `node tools/ci/pins.mjs verify` aprobado;
+`npm run integration:check` aprobado sin cambios de catálogos; `npm test` own37
+passed/0skip y `npm run typecheck` aprobados. Shutdown exit143, lock ausente y
+bind de prueba a ambos puertos aprobado. Full CI-core TMT-07, partida y replay
+no ejecutados: falta la decisión anterior, no se declaran aprobados por CI TMT-06.
+
+## TMT-07 — recorrido privado completado
+
+**Evidencia histórica de protocolo, supersedida para acceptance de UI:** este
+recorrido usaba una página plana/BattleSceneStub. La revisión del usuario reabrió
+el ticket; ver la corrección nativa al final. No acredita UX Showdown nativa.
+
+2026-10-01: el usuario respondió «si» a habilitar temporalmente `noguestsecurity`
+sólo en memoria y con127.0.0.1, sin verificar firmas de nombres locales y retirarlo
+al terminar. Esa aprobación resuelve el checkpoint anterior; no autoriza otros
+controles ni producción. Launcher opt-in `TMT2_LOCAL_GUESTS=1 npm run workspace:dev`
+construye inputs fijados y fuerza/verifica loopback antes de activar sólo ese flag.
+No cambia archivos config, autoridad, `nothrottle`, `noipchecks`, SSL público ni
+interfaces públicas. Sin flag, guestsecurity queda como estaba. Dos tests del
+launcher comprueban opt-in, binding y conservación de los otros controles.
+
+Cliente mínimo aislado `/tmt2-private.html`, enlazado desde `/tmt2-seed.html`:
+selección alpha/beta, guest name local, challenge privado con `/inviteonlynext`,
+cancel/accept, preview, botones move/switch y resultado. Usa WebSocket real de
+Showdown, `/utm` y autoridad de TeamValidator; ninguna llamada a login/replay
+hosting. Sólo admite endpoint loopback sin credenciales. Recuerda nombre/premade/
+room en sessionStorage para reconnect/rejoin; replay se carga explícitamente offline.
+No es teambuilder general ni cliente gráfico completo.
+
+**Evidencia browser, no simulador directo ni humano:** dos sesiones Chromium
+independientes `tmt07-alpha`/`tmt07-beta`, nombres locales TmtAlpha/TmtBeta.
+Server8000/client8080, ambos127.0.0.1. Premades escogidos con select y verificados en
+request real: Rattata/Eevee/Froakie frente a Nosepass/Floragato/Pidgeot, tres por lado.
+Challenge enviado con botón, recibido/aceptado en segunda sesión y preview mediante
+botón. Automatización seleccionó botones move/switch de requests reales cada200ms,
+priorizando basePower; no inyección de equipos al simulador ni falsificación de win.
+Alpha recargó durante turno1 y rejoined la misma room/request. El combate final
+`battle-gen9tmt2seed-3` (sufijo de acceso privado omitido aquí) terminó en12turnos:
+ambos mostraron `Result: TmtBeta`, sin errores de elección. Log incluye aviso real
+«This battle is invite-only!», tier y `tmt2data` de la identidad canonical v0.1.0.
+
+Replay JSON descargado desde beta, cargado como archivo en alpha y recargado:
+`Replay result: TmtBeta`, las seis especies y Bird/Bird/Bird. Usa el parser/Dex
+real del cliente con BattleSceneStub, sin graphics ni recursos externos (0 recursos
+fuera de origin). `test/fixtures/tmt2-browser-replay.json` conserva el log registrado
+por alpha; elimina el room capability/sufijo y añade clasificación de evidencia,
+no fixture ROM ni battle synthetic. Prueba automática lo reproduce con Battle real,
+mod aislado y tipos/result. Replay exige tier, dataset/version/catalogHash y win;
+rechaza drift/incompleto/auth/private request payloads, sin fallback a Dex oficial.
+Live drift cierra conexión y retira elecciones. El artefacto no es autosuficiente
+para gráficos: requiere el cliente local de estos pins y su catálogo generado;
+no depende de hosting ni descarga oficial para su validación.
+
+Errores/flows comprobados: EV252 import manipulado fue rechazado por servidor
+`rattata: EVS must all be 0`; cancelación quitó challenge y deshabilitó Accept;
+retry inmediato fue bloqueado por cooldown heredado10s, conservado. Retry tras
+esperar creó una partida nueva. Primer probe reveló doble envío de rqid y falta de
+animation globals al reproducir flinch; corregidos mediante latch por request y
+skip de animación cuando SceneStub no anima. Tests ejercen ambos. Se corrigió el
+reset de selección de equipo al reload. Una repetición accidental alpha/alpha no
+se usa para certificar los dos premades; se repitió con beta y requests comprobados.
+Hash de replay alterado fue rechazado con `dataset mismatch`; reload restauró el
+replay válido. No se esconden esos intentos fallidos como acceptance.
+
+Capturas temporales fuera de Git: `/tmp/tmt07-private-battle.png`,
+`/tmp/tmt07-alpha-result.png`, `/tmp/tmt07-beta-result.png`, `/tmp/tmt07-replay.png`.
+Artefacto descargado `/tmp/tmt07-actual-replay.json`; contiene sólo log de perspectiva
+battle, no requests/auth/tokens. Se mantuvieron los límites de assets opcionales y
+PHP/news. Se cerraron ambas sesiones y el launcher: exit143, lock ausente, ports8000/
+8080 reutilizables, config persistente `noguestsecurity=false`. La excepción vive
+sólo en ese proceso; no hay servidor con unsigned names al terminar.
+
+Pins de esta revisión: server merge `4c21861353d77acf48b29e4b5c08a8b009d83fd3`
+(código sin cambios TMT-07), client `34303b39fb6c423788f158058f0f5bea74d137ed`.
+Ramas `feat/tmt07-private-journey` (server sin commit nuevo),
+`feat/tmt07-private-client`, `feat/tmt07-browser-evidence`. Publicación eventual:
+cliente primero, luego datos con pin fetchable; servidor ya fusionado. Si squash/
+rebase altera consumerSHA, repin explícito y repetir core antes de merge datos.
+No push/PR/merge/deploy ni etapas08+ hechos en este alcance.
+
+
+Verificación final: repetición con controlador final y guard live de compatibilidad:
+alpha/beta, ambos `compatible=true`, ganador TmtBeta, 11 turnos, sin error de
+choices. Descarga, carga y reload del replay en cliente final: seis especies,
+Bird/Bird/Bird, socket null y cero recursos externos. La inspección independiente
+de consola descubrió `Config is not defined` en battle-log; bootstrap local
+corregido antes del parser y cubierto por el mismo test. Perfil limpio posterior:
+`errors=[]` y `console.messages=[]`, replay y reload aprobados. No se declara
+limpia la consola de intentos previos. Capturas finales full-page:
+`/tmp/tmt07-alpha-final.png`, `/tmp/tmt07-beta-final.png`,
+`/tmp/tmt07-replay-final.png`; replay descargado `/tmp/tmt07-final-replay.json`.
+
+`npm run ci:core` aprobado: datos39/0skip, server2406passing/74pending,
+client56passing/1skip, typechecks/lints/builds, validación seed, integración,
+manifest reproducible y lifecycle. La política existente excluye exactamente dos
+casos DNS externos y suite upstream slow; no se declaran pasados ni hay cambio de
+red/seguridad para ocultarlos. Assets opcionales/PHP-news siguen incompletos fuera
+de esta página mínima. Tras pin/bootstrap final se repite core sobre commits
+limpios y se comprueba manifest/check y generación sin drift. No fidelidad ROM,
+playtest humano, TMT08+, gráficos completos ni CI remoto/publicación aquí.
+
+## TMT-07 — corrección nativa verificada (2026-10-01)
+
+Esta evidencia **supersede la aceptación prematura de la página plana**. La página
+tmt2-private era un atajo de protocolo, no una necesidad arquitectónica. El cliente
+nuevo ya tenía layout/controles; faltaban scripts locales BattleScene/animaciones
+de moves y formatter. El cliente viejo dependía de config remoto. Se eligió el
+nuevo para reutilizar sus selectores, desafíos, HP, log, tooltips y replay, sin
+nuevo framework. La página plana queda explícitamente developer-only.
+
+Bootstrap native loopback y datos locales fallan sin fallback remoto. Alpha/beta
+se añaden sin borrar equipos guardados y el formato oculto aparece sólo en el
+selector Challenge local (no ladder). /inviteonlynext usa el flujo normal.
+Reconexión espera nombre confirmado; replay importado no intenta /join ni hosting.
+El guard live/replay rechaza drift de dataset. Download replay JSON y Home's
+file picker usan el parser y **BattleScene real**; public upload deshabilitado,
+Copy/Visit sólo apunta a la sesión local. Otro perfil necesita el JSON compatible.
+
+Assets: build-indexes invoca build-native-tmt2 con server limpio/SHA exacto.
+Formatter MIT se compila del server/chat-formatter.ts pinneado; SVG text cards
+locales deterministas muestran “sprite unavailable”; manifest registra fuente y
+hashes. No upstream pull, ROM, BPS ni arte externo. Petición oficial de sprites
+recibió403 y no se eludió. **Arte, trainers y audio originales siguen ausentes**:
+cards no son sprites Pokémon, audio se omite sólo en este entry. Layout/animaciones
+nativas funcionan; no se afirma acabado visual ni fidelidad ROM.
+
+Prueba browser automatizada: dos perfiles independientes NativeFinalA/NativeFinalB
+en testclient-new.html?~~127.0.0.1:8000. Choose name → Find a user → Look up →
+Challenge → formato TMT2 Seed → alpha; beta eligió beta/Accept. Choose lead mediante
+botones nativos; alpha recargó/rejoined durante turno1 bajo su nombre. Automatización
+posterior clicó los botones reales /move y /switch, usando mayor basePower y el
+choice-builder normal; no comandos battle falsificados ni win inyectado. Room
+battle-gen9tmt2seed-24 (capability omitido) terminó turno11: ambos |win|NativeFinalB.
+Ambos BattleScene, modgen9tmt2seed, arrays Bird/Bird/Bird y cero recursos fuera de
+origin; errors=[] en los dos perfiles limpios finales.
+
+Download desde alpha → tercer perfil independiente → Load local replay JSON →
+reload: ganador NativeFinalB, BattleScene, mismo Dex/tipos, cero recursos externos.
+Hash manipulado mostró “dataset mismatch” en popup nativo y no creó replay válido.
+El último ajuste quitó un enlace psim.us heredado: se descubrió y corrigió un
+error de montaje ChatTextEntry, luego reload/ended=true, sin excepción, errors=[],
+publicLinks=0. La regresión anterior no cuenta como aceptación.
+
+Cancel/retry desde controles nativos probado en el primer recorrido: cancel quita
+desafío, retry espera cooldown10s. Equipo manipulado EV252 en memoria rechazado
+por servidor “rattata: EVS must all be0” antes del combate; restaurado alpha. Primer
+combate nativo también terminó NativeBeta/11turnos y su log saneado está en
+test/fixtures/tmt2-native-browser-replay.json. Esa fixture es evidencia de browser,
+no ROM/humano; su test unitario usa SceneStub, separado del recorrido nativo real.
+
+Capturas finales: /tmp/tmt07-native-final-alpha.png,
+ /tmp/tmt07-native-final-beta.png, /tmp/tmt07-native-final-replay.png.
+Replay descargado: /tmp/tmt07-native-final-replay.json. Capturas no se comiten.
+La carga por helper oficial de Biblioteca falló: tools/list request failed: network;
+no archivo publicado ni intento de eludir acceso.
+
+Seguridad: aprobación expresa nueva “autorizo”, únicamente noguestsecurity=true en
+memoria. ss confirmó listeners127.0.0.1:8000/8080. Sin cambios auth/IP/throttle,
+sin credenciales. Todos los perfiles propios cerrados; launcher PID58617 SIGTERM,
+exit143, lock ausente, listeners ausentes, config persistente noguestsecurity=false.
+No servidor unsigned activo al terminar.
+
+Pins: server4c21861353d77acf48b29e4b5c08a8b009d83fd3 sin cambios nuevos;
+client34ffc4952eaa2ff659450be812219aece00457c0. Publicación eventual cliente primero, datos después con
+ese SHA fetchable. Servidor ya fusionado. Revisión visual del usuario pendiente;
+no push/PR/merge/deploy, playtest humano ni etapas08+.
+
+
+Verificación adicional sin servidor de batalla ni excepción guest: sólo static
+127.0.0.1:8080. Replay cargó y recargó hasta win NativeFinalB con BattleScene real,
+sin recursos externos. Se sustituyó el fondo Gen9 ausente por fx/bg-city.png ya
+trackeado en el cliente; no asset descargado. Ese fondo destapó race de extracción
+de paleta antes de PS: corregido con paleta local explícita, test de inicialización
+sin PS, nuevo perfil limpio errors=[]. Captura final replay muestra estado Offline
+porque no había servidor de batalla: es prueba de replay local autónomo, no un
+fallo de aceptación live. Static y browser propios cerrados después; puertos libres.
+
+Checks: npm test cliente final =61passing/1skip (5 regresiones nativas nuevas);
+incluye build, ambos typechecks y lint --max-warnings0. CI-core preliminar completo
+=datos39/0skip, server2406passing/74pending, client60passing/1skip, integración,
+manifest reproducible, lifecycle. Se repite core con el último pin/background test.
+Se mantienen dos exclusiones DNS y upstream slow, no acreditadas como pasadas.
+Aviso heredado de PHP ausente/news durante build no afecta native battle/replay.
+
+## TMT-07 — assets oficiales: evaluación local autorizada, transferencia bloqueada
+
+2026-10-01: el usuario autoriza lectura/descarga mínima de recursos estáticos
+públicos oficiales para evaluación local. No requiere nueva aprobación sólo para
+descargarlos. No se autoriza distribución/publicación bajo derechos no verificados.
+Las tarjetas siguen siendo un fallback provisional, no el resultado gráfico final.
+
+Fuente primaria verificada: https://play.pokemonshowdown.com/sprites/ani/ y
+/ani-back/ (Rattata y Floragato observados en índice), /sprites/trainers/ y
+/sprites/categories/. Créditos: https://pokemonshowdown.com/credits, que identifica
+proyectos/autores de sprites; no se encontró una concesión general de redistribución
+de esos bytes por la licencia AGPL del código. No se aceptaron acuerdos nuevos.
+Scope mínimo: ani/ani-back de rattata, eevee, froakie, nosepass, floragato, pidgeot;
+avatares1/170, hojas Pokemon/Pokeball y arte de tipos estándar/categorías disponible.
+Tipos TMT2 sin arte aprobado conservan etiquetas; audio no bloquea esta corrección.
+
+Prueba real de acceso: HEAD a
+https://play.pokemonshowdown.com/sprites/ani/rattata.gif falló curl exit56:
+“CONNECT tunnel failed, response403”; proxy HTTP403 Forbidden, serverenvoy,
+antes de llegar al origin. El lector web sí abre los índices, pero abrir ese GIF
+devuelve “URL ... is not accessible via this tool”. No se eludieron restricciones
+ni cambiaron controles de red. No bytes adquiridos, no SHA256 inventados, no asset
+ejecutado/redistribuido. Siguiente paso concreto: transferir los archivos oficiales
+mínimos mediante un canal soportado con acceso al origin; recién entonces pinnear
+hashes, preservar originales, integrar dimensiones contra Dex pinneado y verificar
+replay local sin noguestsecurity. No hay nuevo replay visual con sprites originales.
+Repos de gameplay intactos, servidor/excepción apagados; gráfico final bloqueado.
+
+## TMT-07 — auditoría de cierre (2026-10-02)
+
+Master de datos verificado tras PR7: `854f128dfc3ba75f2c8af48c4bb9206865861448`.
+Se integró ese master mediante merge local conservando el trabajo TMT07 y ambos
+bloques de DEVELOPMENT; no se publicó esta rama. Servidor master/pin
+`4c21861353d77acf48b29e4b5c08a8b009d83fd3`; cliente master
+`8ad840a70e2c96c4382305cb4de105c1cc57e976`, rama nativa/pin
+`34ffc4952eaa2ff659450be812219aece00457c0`. Ningún cambio nuevo en esos forks.
+
+**Acreditado:** el recorrido nativo descrito arriba, no la página plana: selección
+alpha/beta, challenge/accept, combate terminado, cancel/retry, rechazo EV252,
+reload/rejoin y replay compatible con rechazo de drift. La fixture persistente
+`test/fixtures/tmt2-native-browser-replay.json` conserva 156 líneas, turno11,
+`|win|NativeBeta`, catalogHash/datasetHash y Bird/Bird/Bird. Su reproducción unitaria
+se volvió a verificar; usa SceneStub y no constituye una prueba browser nueva.
+Las capturas y el replay final de `/tmp` citados arriba ya no están disponibles en
+este executor; la fixture en Git sí. Hay que volver a capturar evidencia visual.
+No ZIP de sprites visible entre los adjuntos de esta tarea; búsqueda acotada de
+Library tampoco encontró uno. Eso no prueba ausencia en otros chats ni providers.
+
+**Assets para esa semilla:** las tres primeras filas son el mínimo para reemplazar
+sprites/trainers/tarjetas de equipo (16archivos). Las dos últimas restauran iconos
+estándar como mejora visual opcional; sus etiquetas legibles actuales no inventan
+datos ni bloquean mecánicas. No se añade ese pulido como nuevo gate del ticket.
+
+| Archivos originales | Uso y ruta oficial |
+| --- | --- |
+| `rattata.gif`, `eevee.gif`, `froakie.gif`, `nosepass.gif`, `floragato.gif`, `pidgeot.gif`, cada uno front/back (12) | `https://play.pokemonshowdown.com/sprites/ani/` y `/sprites/ani-back/`; el downloader de PR7 sólo cubre este grupo |
+| `rosa.png`, `lyra.png` (2) | `https://play.pokemonshowdown.com/sprites/trainers/`; la fixture usa avatares265/102, mapeados en battle-dex-data.ts. Para otra prueba live se seleccionan esos dos mediante el control/comando nativo existente, sin ampliar catálogo ni seguridad |
+| `pokemonicons-sheet.png`, `pokemonicons-pokeball-sheet.png` (2) | `https://play.pokemonshowdown.com/sprites/`; selección/preview y estados de equipo (normal, status, fainted, vacío) |
+| Opcional: `Physical.png`, `Special.png`, `Status.png` (3) | `https://play.pokemonshowdown.com/sprites/categories/`; categorías de los11movimientos seleccionados |
+| Opcional: `Normal.png`, `Dark.png`, `Water.png`, `Rock.png`, `Electric.png`, `Grass.png`, `Flying.png` (7) | `https://play.pokemonshowdown.com/sprites/types/`; exactamente los tipos estándar de especies/movimientos usados, sin arte inventado para tipos custom |
+
+La propuesta previa de avatares1/170 corresponde a `lucas.png`/`hilda.png`, no
+`1.png`/`170.png`; no eran los avatares reales de la fixture. No hacen falta para
+reproducirla. Los índices oficiales corroboran los nombres; los bytes/hash/dimensiones
+siguen pendientes, no verificados por leer índices. Fondo `fx/bg-city.png`, estilos,
+fonts/logo, scripts de animación, formatter y efectos de movimientos ya están
+locales. Audio permanece opcional; itemicons no es requisito con policy no-held-item.
+No se necesita un catálogo completo de sprites ni `data/graphics.js` remoto si se
+genera metadata acotada desde los originales validados.
+
+**Implementación pendiente:** validar/pinnear origen/hash de los archivos recibidos
+sin ejecutarlos ni publicarlos; conectar front/back y dimensiones reales en
+getSpriteData (hoy siempre devuelve SVG96x96), avatares en resolveAvatar (hoy un
+trainer genérico) e iconos/estados en getPokemonIcon. Categorías/tipos estándar
+pueden seguir como etiquetas legibles o usar los iconos opcionales recibidos.
+El generador todavía produce tarjetas: copiar GIFs por sí solo no cambia esas
+rutas. Tipos custom conservan etiquetas exactas; ningún placeholder se cuenta como
+gráfico final. Añadir regresiones de facing/dimensiones/hash/archivo faltante,
+estados de Pokéball y ausencia de recursos externos, preservando formatos normales.
+
+**Aceptación restante:** replay local con originales, avance/reload, tooltips,
+HP/movimientos/log y cero recursos externos/errores; capturas nuevas para revisión
+del usuario; checks finales de build/lint/typecheck/CI-core, generación y manifiesto
+en los commits finales. El replay estático no requiere servidor ni excepción guest.
+Repetir live con dos invitados sí requiere nueva autorización expresa únicamente
+para noguestsecurity=true en memoria tras comprobar bind127.0.0.1 y retirar
+proceso/listeners/opt-in al terminar. No se activó en esta auditoría; config
+persistente false y puertos8000/8080 libres. Exclusiones DNS/slow siguen vigentes.
+
+Checks actuales: datos `npm test`47/0fail/0skip; `npm run typecheck`,
+`npm run integration:check` y `npm run integration:test` aprobados. Cliente
+`node --test test/tmt2-native.test.js`5/0fail/0skip. No se repitió batalla browser,
+QA con sprites originales ni CI-core completo en esta auditoría documental.
+Publicación eventual requiere revisión visual y autorización nueva: cliente
+primero, datos después con pin cliente fetchable y CI remoto verificado. Servidor
+ya está en master; sin nuevo PR servidor salvo cambio concreto necesario.
+Derechos de evaluación local no autorizan redistribución de artwork ni despliegue.
+
+### Evidencia recuperada y preparación independiente (2026-10-02)
+
+Al reanudar el executor, las capturas y el replay final sí estaban conservados en
+`.local/evidence/tmt07-native/`. Esto corrige la observación anterior sobre `/tmp`:
+no son capturas nuevas ni sprites originales recibidos. El replay recuperado tiene
+148 líneas, cero `|error|`, turno11 y `|win|NativeFinalB`; SHA256 del original
+`09fdd6bc86ca40615d4b1894384ac61a43caf501c00077f3f46f90369b148605`.
+Se conserva ahora como `test/fixtures/tmt2-native-final-replay.json` con procedencia,
+separado del primer recorrido NativeAlpha/NativeBeta. Una regresión reproduce ambos
+registros, tipos repetidos y rechazo de identidad alterada con SceneStub, no browser
+nuevo. El primer registro mantiene su error de reingreso, pero su clave privada de
+room fue sustituida por un nombre neutral; no se oculta el intento fallido.
+
+El log recuperado `ci-core.log` acredita el core final de datos739ee968/server4c218613/
+cliente34ffc495: datos39aprobadas/0omitidas, servidor2406aprobadas/74pendientes,
+cliente61aprobadas/1omitida, builds/lint/typechecks, manifiesto y lifecycle aprobados.
+SHA256 del log: `fde5a3b4e159dd5110276e09ec371bad490ff899901fac4362b8bc9c5758517a`.
+Es evidencia histórica: no describe los commits nuevos ni valida artwork ausente.
+
+PR8 del downloader sigue abierto en borrador, no fusionado, head
+`615894b8921579bbf59f10b4e903482d2ced2fdb`; master datos continúa854f128df.
+No ZIP/GIF/PNG originales nuevo visible en adjuntos ni búsquedas recientes; no se
+repitió la descarga proxy-bloqueada ni se activó servidor guest. Entrada concreta
+pendiente: `sprites.zip` de `npm run sprites:download -- --with-ui` en esa rama,
+con16originales y manifest; sólo un ZIP completo, no una carpeta/report de fallo.
+Rosa/Lyra corresponden al primer recorrido. El registro final usa avatares1/170,
+renderizados entonces como cards genéricas; su regresión prueba protocolo, no
+identidad visual de trainers. No se añaden Lucas/Hilda al paquete requerido:
+la siguiente prueba visual debe seleccionar explícitamente los avatares aprobados
+Rosa/Lyra. Tipos/categorías decorativos y audio siguen opcionales.
+
+Cliente actualizado únicamente en fixtures/regresión, commit
+`423bb07784f84aa6fc4173a7ec179fc1f688bcc3`: npm test62aprobadas/1omitida,
+incluidos build, ambos typechecks y lint;6regresiones nativas aprobadas. Pin local
+coordinado actualizado. Pendiente: importar originales verificados, rutas/facing/
+dimensiones/iconos, QA browser/replay con esos originales y capturas nuevas,
+CI-core de los cambios gráficos finales y revisión/publicación autorizadas.
+Ninguna de esas aceptaciones se cierra con las cards recuperadas.
+
+### Sprites recibidos; transferencia pendiente (2026-10-02)
+
+El usuario entregó `sprites.zip`, `manifest.json` y `report.json`. Esto supersede
+la observación anterior de adjunto ausente. Se pudo leer el manifiesto y el informe
+completos en Library: declaran éxito16/16, exactamente los12GIF front/back de las
+seis especies y los4PNG solicitados (Rosa, Lyra y ambas hojas de iconos), sin
+rutas adicionales ni duplicadas. Todas las rutas y URLs declaradas corresponden
+al origen oficial; los campos de tamaño y SHA256 tienen formato válido.
+El ZIP declara816661bytes y SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+**Son metadatos leídos, no hashes/dimensiones/contenidos verificados contra bytes.**
+
+La transferencia autorizada de los tres adjuntos falló sin instalar archivos en
+el executor. Refrescar la transferencia del ZIP con sus identificadores completos
+produjo el mismo fallo; no se eludió el acceso ni se modificó la red. El bloqueo
+concreto es recibir localmente el ZIP para validar entradas, tamaños, hashes y
+contenido de imágenes antes de importarlo. No hay evidencia de ZIP corrupto ni
+necesidad de una carpeta sin comprimir o de repetir la descarga de sprites.
+Reanudar con la materialización autorizada del adjunto `sprites.zip`, conservando
+su identidad Library; luego comprobar su hash declarado y los16archivos, conectar
+las rutas nativas y realizar el QA gráfico/replay pendiente. Las copias pequeñas
+de ZIP usadas por pruebas unitarias anteriores son fixtures sintéticas, no este
+paquete, y no pueden sustituirlo.
+
+En esta reanudación no se cambió código del cliente/servidor, no se ejecutó una
+batalla browser nueva ni se activó la excepción guest. Puertos8000/8080 libres y
+`noguestsecurity=false` persistente. TMT-07 sigue parcial; derechos de
+redistribución de artwork siguen sin verificar y no se publica el paquete.
+Checks de este cambio documental: `git diff --check`, `npm test`47aprobadas/
+0fallos/0omitidas y `npm run typecheck` aprobados. No se repitió CI-core completo
+ni se validaron ZIP/imágenes/replay gráfico; el bloqueo de transferencia permanece.
+
+### Sprites originales integrados (2026-10-02)
+
+El nuevo adjunto directo `sprites.zip` resolvió el bloqueo de transferencia.
+Se verificaron sus816661bytes y SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+El ZIP contiene exactamente17entradas permitidas: los16recursos de la tabla
+anterior y `manifest.json`, sin rutas repetidas, traversal, symlinks ni entradas
+cifradas. Tamaños/hashes de todos los archivos coinciden. Pillow12.3.0 decodificó
+todos los cuadros GIF y píxeles PNG; dimensiones y conteos de cuadros coinciden
+con el manifiesto. Su SHA256 es
+`205c2188cc5428ed241c15fa8403c6b291d0a6ea8acf00f6a4fbc27ef83c7ca5`.
+Los URLs oficiales son procedencia declarada por el manifiesto recibido, no una
+nueva descarga HTTP propia ni prueba de artwork del ROM/derechos de redistribución.
+
+Cliente `feat/tmt07-private-client`, commit
+`bd7667d6593d7f335998c882e0f0fc24f3369e0d`: importador Node del ZIP pinneado,
+validación no destructiva de inputs/symlinks/hashes, metadata visual ligada a
+datasetHash y generación local sin red. `getSpriteData` usa GIF front/back y sus
+dimensiones reales; `resolveAvatar` usa Rosa/Lyra; `getPokemonIcon` conserva los
+recortes de hoja y estados Pokéball. Las otras entradas normales mantienen su
+comportamiento. Se conservan cards rotuladas para previews sin paquete/avatares
+fuera del par soportado; un paquete presente dañado falla, no activa fallback.
+Los originales/cache/outputs están ignorados, sin artwork binario en Git. Ver
+[setup reproducible](DEVELOPMENT.md#private-local-seed-battle-tmt-07) y
+[pin de artwork](../../Pokemon-Too-Many-Types-2-client/tmt2/native-artwork.json).
+Servidor permanece4c21861353d77acf48b29e4b5c08a8b009d83fd3, sin cambios nuevos;
+el pin de CI cliente se actualizó a bd7667d6. Publicación futura: cliente primero,
+datos después con ese commit fetchable. No se publica/fusiona/despliega ahora.
+
+Checks: importación real exit0; hashes de todos los outputs verificados;
+generación repetida byte-idéntica (manifest SHA256
+`2cafa8187b32156d06400fd481e2191d4e554ffc8cae41fd83d72f50f21c8675`).
+Input explícito ausente rechazado sin cambiar outputs públicos. Tests cliente:
+67aprobados/1omitido, incluidos7nativos y4del importador. La suite también pasó
+en modo developer-placeholders con los originales temporalmente apartados y
+restaurados después. `npm test` incluye build, ambos typechecks y lint.
+`npm run ci:core` pasó datos47, servidor2406/74pendientes, cliente67/1omitido,
+paridad/aislamiento, manifiesto reproducible y lifecycle HTTP/WS con SIGTERM143,
+lock retirado/puertos reutilizables. Dos tests DNS y upstream slow siguen excluidos
+explícitamente del core; no se ejecutó el diagnóstico DNS en esta reanudación.
+Log local `.local/evidence/tmt07-native/ci-core-original-artwork.log`, SHA256
+`5b891ace3987b288c7fa7c3aa6212346c8db109f07522ea7757d0f79d51e5bea`.
+Este core usó cliente bd7667d6 limpio y datos b186d036 con los cambios documentales/
+pin actuales todavía sin commit; no se presenta como CI remota ni certificación ROM.
+
+**Pendiente en ese checkpoint (supersedido por el QA siguiente):** no había captura browser nueva con los originales. Chromium abortó
+con el sandbox SUID mal configurado y tampoco pudo usar el de namespaces. No se
+cambió su configuración global ni se lanzó con `--no-sandbox`; se solicitó
+autorización concreta para una instancia efímera local con ese flag, aún pendiente.
+La prueba visual/replay y revisión del usuario siguen abiertas, por eso TMT-07
+sigue parcial. La excepción guest del servidor no se reactivó: config persistente
+false; el smoke sólo probó guests sin nombres firmados. No se afirma una nueva
+batalla browser ni fidelidad ROM a partir de estas pruebas de generación/simulador.
+
+## TMT-07 — QA nativo con sprites originales (2026-10-02)
+
+Esta prueba **supersede el bloqueo visual/Chromium del checkpoint anterior**. El
+cliente `feat/tmt07-private-client` en `37aeb63927ee625dd48ddb2744e23d29558777ee`
+importó el ZIP validado arriba y generó los16recursos ligados al `datasetHash`:
+12GIF front/back, Rosa/Lyra y dos hojas de iconos. La generación repetida produjo
+el mismo SHA256 de manifest,
+`2cafa8187b32156d06400fd481e2191d4e554ffc8cae41fd83d72f50f21c8675`.
+El cliente corrige además el tooltip de velocidad a **Spe121** para Pidgeot a
+nivel50, IV31, EV0 y naturaleza Hardy: el rango genérico previo incluía EVs
+ilegales en este formato. Bird/Bird/Bird sigue visible y ordenado. El resto de
+formatos conserva su presentación ordinaria. El pin del cliente quedó actualizado
+en `ci/pins.json`; servidor sigue en `4c21861353d77acf48b29e4b5c08a8b009d83fd3`.
+
+Dos perfiles Chromium independientes abrieron el cliente nuevo en
+`127.0.0.1:8080/testclient-new.html?~~127.0.0.1:8000`. El selector/teambuilder
+nativo mostró alpha y beta, sus seis iconos y el formato oculto. Ambos importaron
+el replay browser registrado `test/fixtures/tmt2-native-browser-replay.json` y
+mostraron perspectivas opuestas en `BattleScene` real: layout, HP, log, animación,
+GIF front/back y avatares Rosa/Lyra decodificados en browser (16/16). Reload
+conservó el replay compatible y terminó en turno11 con `NativeBeta` ganador;
+`Dex.modid=gen9tmt2seed`. No hubo imágenes rotas, etiquetas `undefined`, errores
+JS ni solicitudes fuera del origen local. Un replay con `datasetHash` manipulado
+mostró “TMT2 server/client dataset mismatch” y no abrió sala de batalla.
+
+Capturas locales ignoradas en `.local/evidence/tmt07-native/`:
+`originals-alpha-final.png` (SHA256 `e3dff83a5e2201277b07106a2ffa67aa5da307928db1e51ddcff3ed7dec3dafc`),
+`originals-beta-final.png` (`c08193084c7883223986abbe2df1135850c617158960c04592b6cff859ee09e4`),
+`originals-premades.png` (`bc3220c746918ad8c654d1fea17c6406d0f7d18c15f40e73258f7e08aa1ad761`),
+`originals-drift-rejected.png` (`d4eda86e5a2e75b36d2a5bdc032333e3473a529dcc3638383e393ff7f9e466f0`).
+No se comitearon ni distribuyeron sprites/capturas. Guardarlas en Library con
+el helper oficial falló antes de transferir archivos (`tools/list request failed:
+network`); las rutas locales son la evidencia disponible.
+
+Chromium requirió `--no-sandbox` en perfiles efímeros por el sandbox SUID/userns
+inoperante en este contenedor; el usuario autorizó expresamente **sólo** esa
+excepción local. No se activó `noguestsecurity` ni se repitió un desafío live;
+el desafío, cancel/retry, reconexión, rechazo de equipo ilegal, batalla completa
+y replay nativos previos constan arriba. Esta sesión agrega QA gráfico/replay con
+originales, no playtest humano ni otra prueba de reglas ROM. Browser/perfiles y
+servicios de prueba cerrados, puertos8000/8080 y lock libres; configuración
+persistente `noguestsecurity=false`.
+
+`npm run ci:core` final aprobó datos47/0fallos, servidor2406aprobados/74pendientes
+y cliente68aprobados/1omitido, además de paridad, builds, types, lint, manifiesto
+reproducible y lifecycle HTTP/WS. Log local
+`.local/evidence/tmt07-native/ci-core-native-visual-final.log` SHA256
+`4f2f075cdecc0b12d6af3eaf755f097f7a3fa015fbb5073a7187329f02cd8466`.
+Los dos tests DNS y upstream slow quedaron excluidos explícitamente de core;
+`ci:network` no se ejecutó. Revisión visual del usuario aún pendiente antes de
+publicación. TMT-08 y derechos de redistribución del arte siguen fuera de alcance.
