@@ -98,12 +98,15 @@ try {
  }
  for(const page of pages)await page.waitForFunction(()=>Object.values(PS.rooms).some(r=>r.type==='battle'&&r.request?.requestType==='move'));
  for(const [i,page]of pages.entries()){
-  const s=await state(page);assert.equal(s.request.side.pokemon.length,3);
-  for(const pokemon of s.request.side.pokemon)assert.match(pokemon.details,/, L50/);
-  assert.deepEqual(s.actives[1][0].types,['Bird','Bird','Bird']);
   const room=page.locator(`#room-${battleID}`);
   await room.locator('.battle').waitFor();
   await room.locator('button[data-cmd^="/move "]:visible:not(:disabled)').first().waitFor();
+  const s=await state(page);assert.equal(s.request.side.pokemon.length,3);
+  for(const pokemon of s.request.side.pokemon)assert.match(pokemon.details,/, L50/);
+  assert.deepEqual(s.actives[1][0].types,['Bird','Bird','Bird']);
+  await room.locator('.battle img').evaluateAll(async nodes=>{
+   await Promise.all(nodes.filter(n=>n.src.includes('/sprites/ani')).map(n=>n.decode()));
+  });
   const images=await room.locator('.battle img').evaluateAll(nodes=>nodes.filter(n=>n.src.includes('/sprites/ani')).map(n=>({src:n.getAttribute('src'),width:n.naturalWidth,height:n.naturalHeight,loaded:n.complete})));
   assert(images.some(f=>f.src.includes('/ani/'))&&images.some(f=>f.src.includes('/ani-back/')));
   assert(images.every(f=>f.loaded&&f.width>0&&f.height>0));
