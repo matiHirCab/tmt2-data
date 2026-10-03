@@ -1401,7 +1401,7 @@ ejercitan textos/packed teams legales y negativos. La verificación coordinada
 compara 24 entradas válidas/ilegales con el gate autoritativo sin mutar los datos,
 además de stats reales y replay. Estas pruebas no son capturas de navegador.
 
-**Límite visual:** Chromium sandboxed aborta antes de cargar una página:
+**Primer checkpoint visual (supersedido por el QA autorizado siguiente):** Chromium sandboxed aborta antes de cargar una página:
 `setuid_sandbox_host.cc:166`, helper SUID sin propietario/permisos requeridos.
 No se cambiaron permisos ni seguridad. La autorización puntual para un navegador
 efímero sin sandbox, restringido a loopback, fue solicitada y sigue pendiente;
@@ -1426,3 +1426,68 @@ Dos `seed:prepare --output NEW.json` reproducen byte a byte normalized/seed.json
 `npm run ci:network` no ejecutado; dos casos DNS y upstream slow siguen separados.
 Los 74 pendientes locales incluyen los cuatro SQLite opcionales ya documentados;
 no son cuatro fallos TMT-10. El hook PHP opcional del build continúa ausente.
+
+#### QA nativo autorizado de TMT-10 — 2026-10-03
+
+Este registro **supersede el bloqueo visual anterior**. El usuario autorizó el
+proceso temporal Chromium sin sandbox, únicamente contra la aplicación local.
+Se usó agent-browser 0.38.2, Chromium del sistema, perfil efímero y allowlist
+127.0.0.1/localhost; servidor8000 y cliente8080 ligados a127.0.0.1. Guest sin
+nombre basta para `/vtm`; no se activó noguestsecurity ni otra excepción de
+autenticación/IP/throttle. No cuentas, credenciales o publicación de replays.
+
+El guard de dominios de agent-browser reemplaza WebSocket sin sus constantes
+OPEN/CLOSED/etc: el worker nativo recibía datos pero dejaba los envíos en cola.
+La prueba reprodujo OPEN=undefined en página/worker y queryresponse exitoso por
+WebSocket directo. El harness restauró sólo esas constantes estándar en el
+contexto de prueba y worker local, conservando guard/allowlist; ninguna corrección
+de transporte o seguridad se introdujo en la aplicación. Esto debe reproducirse
+al usar esa versión del harness; no confundirlo con un fallo del servidor.
+
+**20 comprobaciones visuales aprobadas**, con controles reales del editor nativo:
+- Alpha, beta y gamma: selección, exportación de texto, reimportación y popup
+  autoritativo de aceptación; sets completos de tres especies.
+- Paneles de stats/detalles sin inputs de EV/IV/naturaleza/nivel/Tera.
+- Importación Level100/EV252 conservada, errores orientativos iguales al popup
+  real de rechazo; reload conserva datos inválidos y su rechazo. Reparación con
+  premade, validación repetida y reload de equipo válido aprobados.
+- Búsqueda nativa Grass/Magic/Cat, Bird y Crab: resultados esperados en cualquiera
+  de los tres slots, Bird/Bird/Bird visible y Mega excluida como starting choice.
+- Información nativa de Water Pulse (20%), Shell Armor (critical hit) y Pidgeotite
+  desde el catálogo local; stats reales del formato en los paneles correspondientes.
+- Texto con forma Mega, Surf, No Guard, Leftovers, IV0, Tera y roster duplicado:
+  rechazo orientativo y autoritativo iguales. Cancelar/botón Back y repetir búsqueda
+  conserva el roster y sus valores; mayúsculas normalizadas no cambian identidades.
+- Cero errores de página y, tras corregir CSS, recursos observados únicamente
+  locales, sin fallback remoto de datos/arte.
+
+**Correcciones descubiertas en browser:** vista de texto aún mostraba Tera; se
+oculta sólo para TMT2. El packing/export estándar omite Level100: el editor TMT2
+ahora lo conserva explícito para mostrar/rechazar el error después de reabrir o
+recargar. El comportamiento de packing ordinario permanece igual. La pista del
+importador TMT2 sólo ofrece texto exportado: no promete JSON arbitrario ni URLs
+remotas. Finalmente sim-types.css contenía imágenes remotas para los glifos de
+tipo; tmt2-local.css elimina sólo esos fondos, manteniendo etiquetas/colores del
+cliente nativo. No se añade arte no fijado.
+
+La regresión nueva renderiza el resumen real de TeamTextbox y demuestra Tera
+ausente en TMT2/presente en gen9ou. Otra extensión prueba exportación/packing/
+reapertura con nivel100 ilegal, además del packing ordinario sin cambios.
+`npm test` cliente: 77 pass, 1 skip, builds, ambos typechecks y lint aprobados.
+
+Artefactos locales de esta tarea (no archivos de Git):
+`.local/evidence/tmt10/native-visual-results.json` (20 checks),
+`native-teambuilder-review.png`, `native-beta-full-final.png`,
+`native-invalid-import-server.png`, `native-invalid-reload.png`,
+`native-unsupported-server.png`, `native-search-magic.png`,
+`native-search-cat.png`, `native-search-bird.png`,
+`native-fixed-stats-final.png`, `native-fixed-details.png` y
+`native-lookup-water-pulse.png`/`native-lookup-shell-armor.png`/
+`native-lookup-pidgeotite.png`. Los drivers y shim están bajo el mismo directorio
+o /tmp; no forman un segundo framework/backlog ni introducen dependencias de CI.
+
+Navegador cerrado y supervisor dev terminado con SIGTERM143; puertos8000/8080
+liberados, lock retirado y config persistente noguestsecurity=false verificada.
+No se modificó ninguna política de seguridad. QA automatizado, **no playtesting
+humano ni fidelidad ROM**. La revisión visual del dueño y arte original de gamma/
+Mega siguen separados del DoD funcional: no se declara acabado gráfico completo.
