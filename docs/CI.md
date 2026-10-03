@@ -139,11 +139,36 @@ Gen9/Gen8 format Dexes and ordinary Mew availability remain isolated. Consumer
 pins now name the exact merged TMT-10 master commits, whose trees were verified
 identical to the reviewed feature inputs; this is not a repair of failed TMT-10 CI.
 
-The browser-in-CI portion of TMT-11 is **not implemented or passed**. The local
-sandboxed Chromium launch failed because its SUID sandbox helper is misconfigured.
-No helper permissions, global settings or auth controls were changed, and no
-no-sandbox process was launched. The earlier one-off browser approval is closed;
-the requested fresh bounded browser exception remains unanswered. Existing native
-TMT-07/TMT-10 browser captures are historical evidence, not new CI execution or
-owner acceptance. TMT-11 remains partial while that browser coverage and the
-TMT-07 owner visual review are missing. No unused browser dependency is added.
+The native browser runner is now prepared as `npm run ci:browser`, separately
+from `ci:core`; a successful core run cannot substitute for its own result.
+Playwright 1.62.1 is lockfile-pinned. The core workflow installs its pinned Chromium
+revision with `npx --no-install playwright install chromium` (no sudo/with-deps,
+permission/security changes), then runs the native browser step. The hosted
+Ubuntu 24.04 agent must support the sandbox: `chromiumSandbox: true` is explicit
+because Playwright's default is false ([launch API](https://playwright.dev/docs/api/class-browsertype#browser-type-launch-option-chromium-sandbox)).
+There is no no-sandbox fallback or bypass option in the CLI/CI. If that host lacks
+sandbox capabilities/libraries, the browser step fails with its real error; it
+never reclassifies core success as browser success.
+
+The runner exercises two isolated browser contexts, real anonymous Guest WS and
+server `/utm`/`/vtm`, native alpha/beta/gamma roundtrips, invalid EV/level rejection
+and reload persistence, fixed stats/type searches, four compatible completed
+replays in both contexts, viewpoint/reload and drift rejection. Requests may
+reach only the configured credential-free loopback services; native WS is passed
+through, never mocked or replaced. Page/console errors, HTTP missing resources
+and remote fallback attempts fail. It starts the actual supervised dev commands,
+forces local-guests off, and checks SIGTERM143/lock/port/persistent-config cleanup.
+Screenshots and results are ignored local evidence, not redistributed assets.
+CI lacks imported original sprites and must disclose its labeled developer cards.
+This is replay/editor regression, **not a new live named two-player challenge**.
+
+A local sandboxed launch failed before starting services (helper owned by nobody
+with mode4755). No helper permissions or host settings were altered. The user
+subsequently authorized one ephemeral local no-sandbox test; an external browser
+may be passed programmatically to the reusable suite for that bounded test only.
+The CLI remains sandbox-required. External-launch results are explicitly labeled
+local/externally controlled with a separate launcher record, never CI evidence.
+Local permission can help debug selectors and collect review captures; it cannot
+close the hosted-CI gate or owner review. TMT-11 stays partial until its remaining
+gates are actually verified; see ROADMAP and the owner checklist below in
+RULES_REFERENCE. Historical TMT-07/TMT-10 captures retain their original limits.

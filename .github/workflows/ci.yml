@@ -82,9 +82,18 @@ jobs:
           CI: true
           CI_MODE: ${{ matrix.mode }}
         run: npm run "ci:$CI_MODE"
+      - name: Install pinned browser (no host/security changes)
+        if: matrix.mode == 'core'
+        run: npx --no-install playwright install chromium
+      - name: Native browser regression (sandbox required)
+        if: matrix.mode == 'core'
+        env:
+          CI: true
+          TMT2_LOCAL_GUESTS: '0'
+        run: npm run ci:browser
       - name: Explain scope and exclusions even on failure
         if: always()
         env:
           CI_MODE: ${{ matrix.mode }}
         run: |
-          node -e 'const fs=require("fs"); fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Profile: ${process.env.CI_MODE}. Core does NOT run the two named live-DNS tests; use workflow_dispatch network_diagnostics=true to run them with real exit status. Upstream slow tests remain excluded. Missing client assets can skip upstream tests. This is coordination CI, not production data validation or TMT2 gameplay. See docs/CI.md and docs/BASELINE_COMPARISON.md.\n`);'
+          node -e 'const fs=require("fs"); fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Profile: ${process.env.CI_MODE}. Core does NOT run the two named live-DNS tests; use workflow_dispatch network_diagnostics=true to run them with real exit status. Upstream slow tests remain excluded. Missing client assets can skip upstream tests. Core includes bounded adaptation simulator checks; browser regression requires its own successful step. Neither is owner review, live two-player acceptance or ROM fidelity. See docs/CI.md and docs/BASELINE_COMPARISON.md.\n`);'

@@ -1556,9 +1556,10 @@ aprobados. El resultado del head posterior de documentación se registra en
 
 **Gates concretos pendientes:** Chromium con sandbox no inició: helper SUID
 mal configurado. No se ejecutó sin sandbox ni se alteraron controles/permisos.
-La nueva autorización solicitada sigue pendiente. Falta automatizar los flujos
-nativos en CI y la revisión visual del dueño de TMT-07; no se reaprovecha permiso
-cerrado ni se marca Done por capturas históricas.
+En aquel checkpoint la nueva autorización estaba pendiente. Después el usuario
+aprobó una sola sesión local efímera sin sandbox, ya cerrada; no autoriza cambiar
+CI ni activar excepciones de autenticación. La cobertura nativa en CI y la revisión
+visual del dueño siguen sin aprobación; no se marca Done por capturas históricas.
 
 El ZIP `sprites.zip` recibido se inspeccionó sin extracción/ejecución: dieciséis
 archivos tienen tamaños y SHA-256 iguales a su manifiesto. SHA-256 del archivo
@@ -1566,3 +1567,66 @@ archivos tienen tamaños y SHA-256 iguales a su manifiesto. SHA-256 del archivo
 Coincide archivo por archivo con el lote local previamente validado (16/16).
 Es el lote original de seis especies más UI; no aporta sprites de las nuevas
 adiciones ni prueba derechos de redistribución. No se añadieron assets al Git.
+
+
+### TMT-11: preparación del navegador y revisión del dueño
+
+Runner `tools/regression/browser.mjs` y política/test de red preparados:
+CLI/CI siempre `chromiumSandbox: true`; Playwright 1.62.1 y browser revision
+fijados por lockfile. La CI alojada usa su entorno normal, sin cambiar AppArmor,
+SUID, permisos, DNS, autenticación ni flags para desactivar sandbox. El resultado
+del nuevo paso debe verificarse en PR #13: la CI verde anterior sólo cubría core.
+La prueba local sin sandbox aprobada después se identifica como excepción local
+efímera, con reporte/launcher propios; no prueba que ese paso de CI pase.
+
+**Checklist de revisión visual TMT-07 para el dueño (aún sin respuesta):**
+- [ ] La pantalla es el cliente nativo Showdown esperado: escena, barras HP,
+  elecciones de movimiento y log legibles; no la página plana de desarrollo.
+  Capturas históricas `tmt07-native/originals-alpha-final.png` y
+  `originals-beta-final.png`, más el replay de aquel recorrido, conservan la
+  identidad del dataset de entonces; no son una partida nueva de 0.3.1.
+- [ ] La selección de premades y la información se entienden: editor actual
+  `tmt10/native-teambuilder-review.png`, `valid-alpha.png`, `valid-beta.png`,
+  `valid-gamma.png`; stats IV31/EV0 y avisos de importación inválida claros.
+- [ ] El replay nativo, su resultado y controles de perspectiva/reload son
+  comprensibles; captura original y nuevas capturas locales TMT-11 cuando el
+  runner termine. Rechazo de dataset incompatible visible, sin fallback oficial.
+- [ ] Se aceptan para esta etapa los límites declarados: arte original del lote
+  de seis especies/UI, tarjetas etiquetadas para arte faltante, audio ausente;
+  no fidelidad ROM ni playtesting humano inferidos de capturas automatizadas.
+
+Evidencia está bajo `.local/evidence/` ignorado; no se suben imágenes/assets al
+repositorio. Respuesta mínima propuesta al dueño: «Apruebo la interfaz nativa
+mostrada y sus límites», o señalar pantalla/punto concreto a corregir. Esa
+respuesta cierra sólo revisión visual; no reemplaza navegador CI ni mediciones ROM.
+
+
+**Resultado local de preparación (2026-10-03):** la sesión aprobada recorrió
+22 controles, incluidos dos perfiles independientes, alpha/beta/gamma aceptados
+por servidor real, EV/nivel ilegales rechazados y retenidos tras reload, cinco
+búsquedas de tipos, cuatro replays en cada perfil con win/perspectiva/reload y
+rechazo de drift. Sin intentos remotos en el recorrido final. **Resultado global
+fallido**, porque las solicitudes locales de imágenes dan 404: `sprites/home-centered/`
+para las nueve bases, `sprites/types/` para los tipos del catálogo,
+`sprites/itemicons-sheet.png` y `sprites/ani[-back]/substitute.gif`.
+Los consumidores estaban en masters sin cambios (server db159 / client49af);
+los checks nuevos detectan ese límite de recursos del cliente existente, no una
+mecánica añadida por TMT-11. No se descargaron assets ni se reescribió el cliente.
+El manifiesto del ZIP original no contiene esas rutas y no cierra el gap.
+
+Reportes separados: `.local/evidence/tmt11-native-local/results.json`,
+`local-launcher.json`, `agent-browser-home.png`, `native-editor.png` y los ocho
+`*-session[12].png`. El launcher deja explícito sandbox desactivado sólo en ese
+proceso local autorizado; el runner CLI/CI sigue requiriéndolo. SIGTERM143,
+lock/puertos liberados, config original byte-identical/noguestsecurity=false y
+Chrome/CDP40229 cerrado verificados. Sin nombres autenticados ni bypass auth.
+Los errores de selectors/namespace del harness se corrigieron antes del resultado
+final; no son fallos de la app ni se cuentan como controles aprobados.
+
+**Qué falta:** ejecutar/verificar el paso alojado con sandbox en su host normal,
+y corregir o resolver explícitamente los recursos ausentes sin ocultar 404 ni
+atribuirles derechos desconocidos; la suite permanece roja mientras los detecte.
+Los tests de aislamiento de formatos ordinarios siguen en core; su teambuilder
+online de muestras Smogon no forma parte del recorrido local acotado. Durante
+un probe descartado sus requests de muestras se bloquearon, nunca se consultaron
+ni usaron como datos TMT2. Revisión humana sigue abierta y separada de ambos tests.
