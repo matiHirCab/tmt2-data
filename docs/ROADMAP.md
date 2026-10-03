@@ -38,7 +38,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Parcial: recorrido nativo automatizado y QA visual/replay con originales verificados; revisión del usuario pendiente |
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Hecho en adaptación aprobada: Mega Pidgeot; CI local completa |
 | 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Hecho: lote Bird/Crab, 10 especies/formas y 15 movimientos |
-| 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Pendiente |
+| 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | En curso: teambuilder nativo y legalidad |
 | 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Pendiente |
 | 4 | [TMT-12](#tmt-12--beta-reproducible) | TMT-11 + gate de derechos/proveniencia | Pendiente |
 
@@ -213,7 +213,9 @@ referencias y pruebas. No se atribuyen esos campos a la ROM.
 
 ### TMT-10 — Teambuilder y equipos realmente legales
 
-**Prerrequisitos:** TMT-09. **Estado:** pendiente.
+**Prerrequisitos:** TMT-09. **Estado:** en curso (2026-10-03); implementación
+nativa y pruebas iniciales aprobadas; verificación visual pendiente por sandbox
+de Chromium, con autorización temporal específica solicitada.
 **DoD:** búsqueda por cualquiera de los tres tipos, tooltips de stats/ítems/
 habilidades/movimientos correctos, import/export probado, sin manipulación de EVs,
 equipos legales aceptados y errores de servidor claros para los ilegales.
