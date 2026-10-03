@@ -25,9 +25,9 @@ try {
     for(const id of input.moves){
       if(!inherited?.[id]?.length)throw Error(`Move absent from pinned learnset: ${input.id}/${id}`);
       const m=dex.moves.get(id); if(!m.exists)throw Error(`Missing move ${id}`);
-      moves.set(id,provenance({id:m.id,name:m.name,type:dex.types.get(m.type).id,category:m.category,basePower:m.basePower,accuracy:m.accuracy,pp:m.pp,priority:m.priority,flags:m.flags,behaviorRef:`server@${expected.server.commit}:data/moves.ts#${id}`},'showdown'));
+      moves.set(id,provenance({id:m.id,name:m.name,shortDesc:dex.text.get(m).shortDesc,type:dex.types.get(m.type).id,category:m.category,basePower:m.basePower,accuracy:m.accuracy,pp:m.pp,priority:m.priority,flags:m.flags,behaviorRef:`server@${expected.server.commit}:data/moves.ts#${id}`},'showdown'));
     }
-    const ab=dex.abilities.get(input.ability);abilities.set(ab.id,provenance({id:ab.id,name:ab.name,behaviorRef:`server@${expected.server.commit}:data/abilities.ts#${ab.id}`},'showdown'));
+    const ab=dex.abilities.get(input.ability);abilities.set(ab.id,provenance({id:ab.id,name:ab.name,shortDesc:dex.text.get(ab).shortDesc,behaviorRef:`server@${expected.server.commit}:data/abilities.ts#${ab.id}`},'showdown'));
     const record=provenance({id:sp.id,name:sp.name,types:fixture?sp.types.map(t=>dex.types.get(t).id):(creatorRows.rows.find(r=>r.id===sp.id)?.types ?? null),baseStats:sp.baseStats,abilities:[ab.id],learnset:input.moves},'showdown');
     record.fieldSources.types=fixture?'fixture':record.types?'creatorspecies':'missing';return record;
   });
@@ -36,7 +36,7 @@ try {
     const sp=dex.species.get(input.id), base=species.find(s=>s.id===input.baseSpecies);
     if(!base || input.id!=='pidgeotmega' || sp.baseSpecies!=='Pidgeot' || sp.requiredItem!=='Pidgeotite')throw Error('Unsupported mega input');
     if(!fixture && mega.holyDefense.status!=='documented-primary')throw Error('Holy primary chart evidence missing; no production mega generated');
-    const ab=dex.abilities.get('noguard');abilities.set(ab.id,provenance({id:ab.id,name:ab.name,behaviorRef:`server@${expected.server.commit}:data/abilities.ts#${ab.id}`},'showdown'));
+    const ab=dex.abilities.get('noguard');abilities.set(ab.id,provenance({id:ab.id,name:ab.name,shortDesc:dex.text.get(ab).shortDesc,behaviorRef:`server@${expected.server.commit}:data/abilities.ts#${ab.id}`},'showdown'));
     const record=provenance({id:sp.id,name:sp.name,baseSpecies:base.id,forme:sp.forme,requiredItem:'pidgeotite',types:fixture?sp.types.map(t=>dex.types.get(t).id):mega.creator.facts.types,baseStats:sp.baseStats,abilities:[ab.id],learnset:base.learnset},'showdown');
     record.fieldSources.types=fixture?'fixture':'creatormega';return record;
   });
@@ -59,8 +59,8 @@ try {
     chart.push({attacker:a.id,defender:b.id,multiplier:official?.multiplier??(dex.getImmunity(a.name,b.name)?2**dex.getEffectiveness(a.name,b.name):0),source:official?'creatorchart':'showdown'});
   }
   if(forms.length&&!fixture)for(const [attacker,multiplier] of Object.entries(mega.holyDefense.multipliers))chart.push({attacker,defender:'holy',multiplier,source:'megachart'});
-  const items=[provenance({id:'none',name:'No item',behaviorRef:'policy:no-held-item'},'policy')];
-  if(forms.length){const item=dex.items.get('pidgeotite');items.push(provenance({id:item.id,name:item.name,behaviorRef:`server@${expected.server.commit}:data/items.ts#${item.id}`,megaStone:item.megaStone,itemUser:item.itemUser},'showdown'));}
+  const items=[provenance({id:'none',name:'No item',shortDesc:'No held item in this premade.',behaviorRef:'policy:no-held-item'},'policy')];
+  if(forms.length){const item=dex.items.get('pidgeotite');items.push(provenance({id:item.id,name:item.name,shortDesc:dex.text.get(item).shortDesc,behaviorRef:`server@${expected.server.commit}:data/items.ts#${item.id}`,megaStone:item.megaStone,itemUser:item.itemUser},'showdown'));}
   const sources=[
     {id:'showdown',kind:'showdown',version:expected.server.commit,locator:`https://github.com/${expected.server.repository}/tree/${expected.server.commit}/data; selected historical learnset entries allowed by adaptation`,sha256:null},
     {id:'creatorchart',kind:'creator',version:'observed-2026-09-30-not-release-bound',locator:register.sources.find(s=>s.id==='SRC-03').url+'; five chart coordinates in chartObservations',sha256:stableHash(register.chartObservations)},
