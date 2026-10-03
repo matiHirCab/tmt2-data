@@ -77,6 +77,9 @@ jobs:
           npm ci --no-audit --no-fund
           npm ci --prefix ../Pokemon-Too-Many-Types-2 --no-audit --no-fund
           npm ci --prefix ../Pokemon-Too-Many-Types-2-client --no-audit --no-fund
+      - name: Install byte-pinned matching Showdown art (setup only)
+        if: matrix.mode != 'network'
+        run: npm run sprites:install
       - name: Run the selected CI profile
         env:
           CI: true
@@ -96,8 +99,9 @@ jobs:
         env:
           CI: true
           TMT2_LOCAL_GUESTS: '0'
+          TMT2_REQUIRE_SHOWDOWN_ART: '1'
         run: npm run ci:browser
-      - name: Preserve native browser report and developer-card screenshots
+      - name: Preserve native browser report and local sprite screenshots
         if: always() && matrix.mode == 'browser'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, reviewed 2026-10-03
         with:

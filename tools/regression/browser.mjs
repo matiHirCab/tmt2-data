@@ -68,7 +68,36 @@ async function run(){
   assert.equal(pages[0].context()===pages[1].context(),false,'Independent browser storage required');
   // Ordinary-format mechanics/Dex isolation remain in the real core simulator
   // and cross-repository tests; avoid unrelated online sample-set UI here.
-  const page=pages[0];await page.goto(url+'#teambuilder');
+  const page=pages[0];
+  const art=await page.evaluate(()=>window.BattleTMT2Assets);
+  if(process.env.TMT2_REQUIRE_SHOWDOWN_ART==='1')assert(art.sources?.showdown,'Pinned official artwork required for this CI profile');
+  if(art.sources?.showdown){
+    const reviewed=await page.evaluate(async()=>{
+      const art=window.BattleTMT2Assets,box=document.createElement('div');box.id='tmt2-artwork-review';
+      box.style.cssText='position:fixed;top:60px;left:40px;z-index:999;background:white;color:black;padding:20px;display:grid;grid-template-columns:repeat(10,128px);gap:4px';
+      document.body.append(box);const results=[];
+      for(const [name,file]of Object.entries(art.files).filter(([name])=>/^sprites\/(ani|ani-back|home-centered)\//.test(name))){
+        const image=new Image();image.src=file.path;image.style.cssText='width:96px;height:96px;object-fit:contain;background:#edf2f7';
+        const cell=document.createElement('div');cell.style.cssText='font-size:10px;overflow-wrap:anywhere';cell.append(name,image);box.append(cell);await image.decode();
+        const bytes=await(await fetch(file.path)).arrayBuffer();
+        const digest=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(b=>b.toString(16).padStart(2,'0')).join('');
+        const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;
+        const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+        let transparent=0,visible=0;for(let at=3;at<pixels.length;at+=4){if(pixels[at]===0)transparent++;else visible++;}
+        results.push({name,width:image.naturalWidth,height:image.naturalHeight,sha256:digest,transparent,visible});
+      }
+      return results;
+    });
+    for(const image of reviewed){
+      const file=art.files[image.name];assert.equal(image.sha256,file.sha256);assert.equal(image.width,file.width);assert.equal(image.height,file.height);
+      assert(image.transparent>0&&image.visible>0,`Transparency/visible pixels: ${image.name}`);
+    }
+    assert.equal(reviewed.length,30,'All ten matching Pokemon/forms need front/back/centered views');
+    await page.screenshot({path:path.join(dir,'matching-sprites-review.png'),fullPage:true});
+    await page.evaluate(()=>document.getElementById('tmt2-artwork-review').remove());
+    checks.push({check:'thirty byte-verified decoded transparent local images at contained scale',passed:true,images:reviewed});
+  }
+  await page.goto(url+'#teambuilder');
   await page.locator('a[href="team-tmt2beta"]').first().click();
   const editor=page.locator('#room-team-tmt2beta');await editor.waitFor();
   async function select(id){await editor.getByRole('combobox',{name:'TMT2 premade'}).selectOption(id);}

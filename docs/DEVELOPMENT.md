@@ -438,3 +438,36 @@ restriction is a separate access blocker, not a fixture success. No official
 transfer, Windows-host run, client installation, graphical
 acceptance or full sibling CI is claimed. The saved TMT07 branches are preserved;
 this utility extension is isolated on a fresh branch from merged master.
+
+
+## Matching Showdown sprites — optional local/private evaluation
+
+User authorized canonical Pokemon Showdown artwork for matching Pokemon on
+2026-10-03. Current nine bases plus Mega Pidgeot have exact source mappings in
+client `tmt2/showdown-artwork.json`: immutable smogon/sprites commit, each Git
+blob hash/size and explicit front/back/HOME128 centered path. `-omega` is the
+source repository's documented Mega naming, not a new gameplay alias. Source
+files are preserved byte-for-byte; centered sprites fit by CSS `contain`.
+
+Run `npm run sprites:install` from tmt2-data, then `npm run workspace:build`.
+Installation fetches only declared immutable raw GitHub URLs, refuses redirects,
+validates hashes and GIF/PNG structure and writes deterministic metadata with
+SHA-256 into ignored client `caches/tmt2-showdown-artwork`. An existing validated
+cache is reused without network; changed/unsafe/existing unrelated paths fail
+without overwrite. `TMT2_SHOWDOWN_SPRITES_DIR` selects another local directory
+(relative to client). Setup downloads are explicit; native runtime has no remote
+fallback and ordinary builds never pull or download art automatically.
+
+Existing `TMT2_SPRITES_DIR` or `caches/tmt2-native-artwork` user package is left
+untouched and wins for overlapping files, including front sprites in the editor.
+Missing genuine-custom appearances remain labeled cards; the current catalog
+has no unmatched Pokemon. Imported trainers/icon sheets remain available; without
+them native local icons use centered Pokemon images/labeled UI fallbacks.
+No binary art is committed. Source README distinguishes code MIT from asset
+rights; this approval is local/private evaluation, not a redistribution license
+or public-release authorization. Source is
+https://github.com/smogon/sprites/blob/bad55c7b7e7292f459366505460d41dcab08d4cd/README.md .
+
+Rollback: stop dev, select the previous reviewed branches/commits and rebuild.
+Keep the supplied user cache intact. The optional official cache can be moved
+aside explicitly; scripts never reset/delete user inputs or replace directories.

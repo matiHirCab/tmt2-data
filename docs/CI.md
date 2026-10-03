@@ -210,3 +210,26 @@ zero page/HTTP errors or blocked remote requests, no authentication exception,
 cleanup verified. Report/screenshots artifact11278923702 expires2026-10-10.
 Owner TMT-07 visual review remains open. The following evidence-only commit's
 exact run is tracked on PR#13, with unchanged consumer pins and dataset identity.
+
+
+The limited matching-sprite follow-up adds an explicit setup-only pinned artwork
+installation before core/browser. Runtime requests remain loopback-only. Browser
+CI requires this artwork and extends regression with decoding/hashing all thirty
+front/back/centered images, transparency and contained-size inspection, alongside
+native premades/battle replay/scale/reload. The review grid is test-only DOM,
+removed before normal native journey; it is not an alternative application UI.
+Original-sprite captures are local/private evaluation evidence, not a rights grant.
+Local executor source download returned proxy CONNECT403; no network/security
+settings were changed. Hosted CI must actually verify the source bytes; Git blob
+identities/paths were read from the official immutable repository tree, never
+invented from names or ROM mechanics. Failed setup remains a real CI failure.
+
+
+Publication/asset verification checkpoint: local73 data and83 client tests
+(1 inherited client skip), typechecks/lint and hash/path/priority fixtures pass.
+They do not prove the thirty actual new source images. Draft PR creation was
+rejected by automatic approval review citing the earlier native-UX publication
+pause; the client branch push had already succeeded. No workaround, data push,
+new browser/security exception or hosted setup run is used while explicit fresh
+publication approval is pending. No real downloaded SHA256/image evidence is
+invented; pinned Git blob hashes were read from official source trees.
