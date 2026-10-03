@@ -88,7 +88,7 @@ export async function main(command) {
   if(command==='dev'){
     checkSnapshot(JSON.parse(fs.readFileSync(path.join(root,'.local/private-beta.json'))),betaSnapshot(c));
     process.env.TMT2_PRIVATE_BETA_CHECK='1'; // Child rechecks after its locked build, before starting listeners.
-    return supervise([{file:process.execPath,args:['tools/workspace/cli.mjs','dev'],cwd:root,label:'private native beta (normal authentication)'}]);
+    return supervise([{file:process.execPath,args:['tools/workspace/cli.mjs','dev'],cwd:root,label:'private native beta (normal authentication)'}],{graceMs:5000});
   }
   const release=lockWorkspace();
   try{
