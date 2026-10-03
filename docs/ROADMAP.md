@@ -20,7 +20,8 @@ Primer formato aprobado 2026-09-30: singles privado, no clasificado, dos equipos
 prefijados de 3, nivel50, IV31 y EV0. **Decisión competitiva del usuario**,
 no regla demostrada del ROM ni inferencia del postgame.
 Fuera del MVP: catálogo completo, ladder aleatoria, torneos y rediseño visual.
-Publicar una beta o desplegarla requiere autorización separada.
+Preparar la beta privada fue aprobado2026-10-03 en TMT-12. Publicar una beta
+pública o desplegarla requiere autorización separada.
 
 Estados: **pendiente**, **en progreso**, **parcial/bloqueado**, **implementado local
 (pendiente CI remoto)**, **terminado**. «Terminado» exige toda la DoD y evidencia,

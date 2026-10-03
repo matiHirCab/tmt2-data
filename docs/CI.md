@@ -312,3 +312,17 @@ through the same smoke harness. The snapshot resolves three current commits
 The hosted fresh-lockfile/browser profile remains unchanged except these added
 readiness checks; it imports the recorded live match as Guests, not a new named
 challenge/security exception. See [private checklist/limits](PRIVATE_BETA.md).
+
+Hosted core/browser jobs now exercise `beta:prepare` directly on fresh clean
+checkouts instead of maintaining a separate installer sequence. The optional
+network-only diagnostic keeps its minimal three npm-ci commands. Official art
+setup remains explicit and separate; subsequent core builds/snapshot record that
+actual profile. No new action permissions, security flags or runner are introduced.
+
+Local initial failures are preserved: prepare installed/built successfully but
+rejected the native root-relative `/js/lib/ps-polyfill.js` URL; normalization was
+fixed while filesystem paths still reject traversal/symlinks. The first private
+launch smoke found its outer2s supervisor grace could kill the inner supervisor
+before lock cleanup; beta's outer grace is now5s. The stale owned lock was removed
+only after verifying its recorded PID dead and listeners absent. Focused repeated
+launch then passed SIGTERM143, lock removal and released ports; no auth exception.
