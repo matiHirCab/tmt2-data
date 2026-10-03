@@ -168,12 +168,14 @@ fidelidad ROM. La prueba local del simulador no cumple el recorrido de TMT-07.
 ### TMT-07 — Primer combate privado de dos jugadores
 
 **Prerrequisitos:** TMT-03 y TMT-06. **Estado:** parcial hasta revisión visual del
-usuario. El recorrido funcional nativo de dos jugadores se automatizó antes con
-cards provisionales. Los16recursos originales están ahora validados e integrados;
-dos perfiles independientes verificaron la interfaz y el replay local con ellos,
-sin errores de recursos ni fallback remoto. Esta última prueba no repitió un
-desafío live, pues no se reactivó la excepción guest. Ver el
-[QA con originales](RULES_REFERENCE.md#tmt-07--qa-nativo-con-sprites-originales-2026-10-02).
+usuario. El recorrido actual con sprites reales también fue completado: dos
+sesiones locales independientes eligieron alpha/beta, enviaron/aceptaron el desafío
+y coincidieron en la victoria de SpriteBeta (turno22, 47 decisiones nativas).
+La importación posterior falló por un selector del harness; una ejecución separada
+verificó el mismo replay en dos perfiles con autenticación normal. No se convierte
+ese primer job fallido en aprobado. La captura queda fijada en Git e incorporada a
+la regresión habitual, separada de los cuatro controles sintéticos del simulador.
+Ver [captura real y límites](RULES_REFERENCE.md#captura-live-y-regresion-permanente-2026-10-03).
 **DoD:** dos navegadores independientes eligen premades, se desafían y finalizan
 un combate con resultados consistentes; replay reproducible en cliente compatible.
 Registrar versiones, pasos y resultados. HTTP/WS READY no cumple esta DoD.
@@ -246,7 +248,10 @@ ausentes quedan explícitos; publicar esta preparación no los convierte en apro
 Cuatro combates/replays deterministas y controles de aislamiento incorporados al
 core. Instalación limpia alojada aprobó core y 22 controles del navegador nativo
 con sandbox obligatorio, sin errores/404/fallback remoto; [CI verificada](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494)
-para código `be7d901` y cliente `85552fa0`. La corrección reutiliza sprites locales,
+para código `be7d901` y cliente `85552fa0`. La regresión agrega también la
+captura auténtica alpha/beta (sin repetir nombres unsigned ni desafío live en CI),
+con hash y procedencia explícitos.
+La corrección reutiliza sprites locales,
 labels y tarjetas explícitas, sin nuevos originales. El recorrido local anterior
 falló por 404 y permanece como evidencia histórica, no se reescribe como pass.
 Revisión visual del dueño de TMT-07 sigue pendiente: CI automatizada no completa
@@ -274,6 +279,6 @@ and authorized canonical Showdown art for matching Pokemon. This is limited
 feedback, **not blanket TMT-07 visual acceptance or public-release approval**.
 Optional byte-pinned local artwork for the existing nine bases and Mega Pidgeot
 was verified by sandboxed CI run37148132057: actual30 source files and native
-rendering passed; the final SHA256-pinned follow-up is tracked on draftPR14. No types/stats/rules,
+rendering passed; the final SHA256-pinned follow-up was merged by the user in PR14. No types/stats/rules,
 catalog additions or TMT-12 scope. User-supplied assets retain priority; rights
 and actual verification results stay explicit in the existing evidence/PR.

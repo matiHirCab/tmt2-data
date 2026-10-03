@@ -1,0 +1,46 @@
+{
+  "kind": "tmt07-recorded-browser-battle-v1",
+  "classification": "recorded-live-approved-showdown-adaptation",
+  "romOracle": false,
+  "humanPlaytesting": false,
+  "fullCatalog": false,
+  "fixtureSha256": "33119398d055d5f12af7dcce4d93e2a0d5264d657d5ba364a924af46ead7b5c6",
+  "recordedAt": "2026-10-03",
+  "sources": {
+    "data": "b186cc1d67da28785e1c347a2c73e7fe1625fd2c",
+    "client": "75a5cdef759cb30f391ebf7e9dfe6e3384f6c931",
+    "server": "db159373b132babf016cf78ced737dec05d23d97"
+  },
+  "players": [
+    "SpriteAlpha",
+    "SpriteBeta"
+  ],
+  "premades": [
+    "alpha",
+    "beta"
+  ],
+  "winner": "SpriteBeta",
+  "turns": 22,
+  "nativeDecisions": 47,
+  "liveEvidence": {
+    "run": "https://github.com/matiHirCab/tmt2-data/actions/runs/37151791118",
+    "artifact": "https://github.com/matiHirCab/tmt2-data/actions/runs/37151791118/artifacts/11284880038",
+    "archiveSha256": "3c8a14d90d17d3a4a2737f5b04554ec99c46ca18731cfb2f404fe54b3692ce1a",
+    "overallConclusion": "failure",
+    "limitation": "Completed match and cleanup passed; post-match replay import selector timed out."
+  },
+  "replayEvidence": {
+    "run": "https://github.com/matiHirCab/tmt2-data/actions/runs/37152352388",
+    "artifact": "https://github.com/matiHirCab/tmt2-data/actions/runs/37152352388/artifacts/11283753643",
+    "archiveSha256": "0af7e62141eb107d3469ceab7fe3a88b1a93daaefb7406eb2a4d62cf0898a4c2",
+    "overallConclusion": "success",
+    "authException": false
+  },
+  "limits": [
+    "Unseeded captured browser battle; not deterministic simulator reproduction or ROM oracle.",
+    "Controlled local names; no private request/authentication messages exported.",
+    "One-off loopback in-memory guest exception ended with verified SIGTERM, released listeners and unchanged persistent false config. It is not renewed by this fixture.",
+    "Current regression imports this capture as normal Guests; it does not execute a new live challenge.",
+    "Artifacts expire after seven days; committed spectator replay remains available."
+  ]
+}

@@ -8,6 +8,7 @@ import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import {config,root,manifest} from '../workspace/core.mjs';
 import {checkRegression} from './simulator.mjs';
+import {readVerifiedLiveReplay} from './live-recording.mjs';
 import {allowedRequest,launchOptions} from './browser-policy.mjs';
 
 const timeout=(promise,ms,message)=>{
@@ -25,7 +26,7 @@ const configFile=path.join(c.server,'config/config.js'),configBefore=fs.readFile
 async function run(){
   assert.equal(process.argv.length,2,'Usage: browser.mjs (sandbox always enabled)');
   assert.equal(require(path.join(c.server,'config/config.js')).noguestsecurity,false,'Persistent guest security must remain enabled');
-  const replays=checkRegression();
+  const replays=[...checkRegression(),readVerifiedLiveReplay(c)];
   // Launch first: sandbox failure starts no services and needs no cleanup exception.
   browser ||= await chromium.launch(launchOptions());
   child=spawn(process.execPath,['tools/workspace/cli.mjs','dev'],{

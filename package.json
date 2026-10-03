@@ -27,7 +27,8 @@
     "integration:assets": "node tools/integration/assets.mjs",
     "regression:check": "node tools/regression/simulator.mjs",
     "ci:browser": "node tools/regression/browser.mjs",
-    "sprites:install": "node tools/sprites/install-pinned.mjs"
+    "sprites:install": "node tools/sprites/install-pinned.mjs",
+    "regression:live-recording": "node tools/regression/live-recording.mjs"
   },
   "devDependencies": {
     "playwright": "1.62.1",
