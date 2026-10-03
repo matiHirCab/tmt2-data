@@ -199,3 +199,13 @@ retained for seven days as a pinned upload-artifact action output, even if the
 browser step fails. Only its exact evidence directory is uploaded, no imported
 original artwork, local config or credentials. Missing evidence does not make a
 failed job pass. These captures support owner review but cannot imply acceptance.
+
+
+Verified implementation head be7d901: run
+[37136473494](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494)
+passed both clean-install core and sandbox-required macOS native browser jobs.
+68 own tests, server2428pass/70pending, client80pass/1skip; browser22 checks,
+zero page/HTTP errors or blocked remote requests, no authentication exception,
+cleanup verified. Report/screenshots artifact11278923702 expires2026-10-10.
+Owner TMT-07 visual review remains open. The following evidence-only commit's
+exact run is tracked on PR#13, with unchanged consumer pins and dataset identity.

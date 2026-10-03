@@ -1650,3 +1650,35 @@ No se alteraron permisos ni seguridad; resultado del nuevo head/browser se
 registra en PR #13. Merge coordinado: cliente → datos, servidor sin cambios.
 La excepción local sin sandbox anterior está cerrada y no se reutiliza; no hubo
 nuevo recorrido local después del fix. Revisión visual del dueño sigue pendiente.
+
+
+**CI alojada verificada (2026-10-03):**
+[37136473494](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494),
+head de código `be7d901f35ebbfead4eaaee8634679d3b048d023`, terminó **success**
+en core Ubuntu y navegador macOS15. Ambos hicieron checkout/instalación limpia
+por tres lockfiles, con server `db159373b132babf016cf78ced737dec05d23d97` y
+client `85552fa0f5c94b205f0a7c32010320218795ffe1`. Datos 68/68, servidor
+2428 passing / 70 pending, cliente 80 passing / 1 inherited skip; builds,
+ambos lints/typechecks, validación/paridad, cuatro regresiones repetidas,
+manifiesto reproducible y lifecycle aprobados. Dos DNS separados y `(slow)`
+no ejecutados siguen explícitos; pending/skip no cuentan como pass.
+
+Navegador: **22 controles aprobados**, `chromiumSandbox: true`, `errors: []`,
+`blocked: []`, `authException: false`; editor nativo/WS Guest/servidor real,
+rechazo de import ilegítimo + reload, cinco filtros, cuatro replays en cada
+uno de dos contextos, perspectiva/reload/identidad y rechazo de drift. Cleanup
+SIGTERM143, puertos/lock liberados, config byte-identical/noguestsecurity=false.
+[Reporte y capturas](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494/artifacts/11278923702)
+(retención siete días, hasta 2026-10-10) muestran tarjetas developer de código,
+no sprites originales ausentes ni la sesión local anterior. Los 404 observados
+quedan cerrados para este recorrido mediante el fix explícito, no ignorando
+respuestas. No hace falta otro archivo de arte para este gate; arte original y
+sus derechos permanecen fuera de esa afirmación. No hubo nueva excepción local
+sin sandbox ni bypass auth. Cliente no tiene checks standalone activos; su
+commit fue comprobado aquí, no se atribuye un run inexistente al PR cliente.
+
+Esto cierra el gate técnico del navegador en CI para el código indicado. El
+head posterior sólo registra esta evidencia; su resultado exacto se comprueba
+en PR #13. **TMT-11 permanece parcial únicamente por revisión visual TMT-07 del
+dueño pendiente** dentro de este alcance: no es playtesting humano, nuevo combate
+live de dos nombres ni oráculo ROM. No iniciar beta/TMT-12 ni hacer merge/deploy.
