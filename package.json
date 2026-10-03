@@ -24,9 +24,12 @@
     "integration:generate": "node tools/integration/cli.mjs generate",
     "integration:check": "node tools/integration/cli.mjs check",
     "integration:test": "node tools/integration/verify.mjs",
-    "integration:assets": "node tools/integration/assets.mjs"
+    "integration:assets": "node tools/integration/assets.mjs",
+    "regression:check": "node tools/regression/simulator.mjs",
+    "ci:browser": "node tools/regression/browser.mjs"
   },
   "devDependencies": {
+    "playwright": "1.62.1",
     "typescript": "^5.9.2"
   },
   "engines": {

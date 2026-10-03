@@ -21,12 +21,12 @@ concurrency:
 jobs:
   workspace:
     name: Workspace (${{ matrix.mode }})
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
-        mode: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.network_diagnostics && '["core","network"]' || '["core"]') }}
+        include: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.network_diagnostics && '[{"mode":"core","runner":"ubuntu-24.04"},{"mode":"browser","runner":"macos-15"},{"mode":"network","runner":"ubuntu-24.04"}]' || '[{"mode":"core","runner":"ubuntu-24.04"},{"mode":"browser","runner":"macos-15"}]') }}
     defaults:
       run:
         shell: bash
@@ -81,10 +81,34 @@ jobs:
         env:
           CI: true
           CI_MODE: ${{ matrix.mode }}
-        run: npm run "ci:$CI_MODE"
+          NODE_OPTIONS: --max-old-space-size=4096 # full upstream server lint needs more than arm64 default 2 GiB
+        run: |
+          if [ "$CI_MODE" = browser ]; then
+            npm run ci:core
+          else
+            npm run "ci:$CI_MODE"
+          fi
+      - name: Install pinned browser (no host/security changes)
+        if: matrix.mode == 'browser'
+        run: npx --no-install playwright install chromium
+      - name: Native browser regression (sandbox required)
+        if: matrix.mode == 'browser'
+        env:
+          CI: true
+          TMT2_LOCAL_GUESTS: '0'
+        run: npm run ci:browser
+      - name: Preserve native browser report and developer-card screenshots
+        if: always() && matrix.mode == 'browser'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, reviewed 2026-10-03
+        with:
+          name: tmt11-native-browser-${{ github.sha }}
+          path: tmt2-data/.local/evidence/tmt11-browser/
+          include-hidden-files: true # exact report directory only; no config/sprites/credentials
+          if-no-files-found: warn # runner may fail before report creation; job remains failed
+          retention-days: 7
       - name: Explain scope and exclusions even on failure
         if: always()
         env:
           CI_MODE: ${{ matrix.mode }}
         run: |
-          node -e 'const fs=require("fs"); fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Profile: ${process.env.CI_MODE}. Core does NOT run the two named live-DNS tests; use workflow_dispatch network_diagnostics=true to run them with real exit status. Upstream slow tests remain excluded. Missing client assets can skip upstream tests. This is coordination CI, not production data validation or TMT2 gameplay. See docs/CI.md and docs/BASELINE_COMPARISON.md.\n`);'
+          node -e 'const fs=require("fs"); fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Profile: ${process.env.CI_MODE}. Core does NOT run the two named live-DNS tests; use workflow_dispatch network_diagnostics=true to run them with real exit status. Upstream slow tests remain excluded. Missing client assets can skip upstream tests. Core includes bounded adaptation simulator checks; browser regression requires its own successful step. Neither is owner review, live two-player acceptance or ROM fidelity. See docs/CI.md and docs/BASELINE_COMPARISON.md.\n`);'

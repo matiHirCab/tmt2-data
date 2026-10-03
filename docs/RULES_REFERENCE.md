@@ -1511,3 +1511,175 @@ cerrados, `git switch master` en cada repo devuelve a las ramas locales previas;
 las ramas feature/evidencia permanecen disponibles. No borrar assets/evidencia del
 usuario ni hacer reset --hard. Si se fusiona, revertir commits coordinados en orden
 inverso (data/client/server) como cambio revisable separado.
+
+
+## TMT-11 — Regresiones acotadas y gates pendientes (2026-10-03)
+
+Preparación independiente; **TMT-11 parcial**, sin afirmar fidelidad ROM ni dar
+por aprobada la revisión visual del dueño pendiente en TMT-07. TMT-08/TMT-10
+conservan sus contratos y límites; no se amplía catálogo ni se inicia TMT-12.
+
+`tools/regression/simulator.mjs` y `tests/fixtures/tmt11-adaptation.json` fijan
+cuatro casos del mod real: alpha/beta (gana beta, 21 turnos), beta/gamma (beta, 25),
+gamma/alpha (gamma, 17) y beta-Mega/alpha (beta, 20). Cada caso valida ambos
+premades con el servidor y termina en `win`. Dos ejecuciones completas deben dar
+objetos replay idénticos; sólo se excluyen timestamps y canales privados.
+Los hashes son caracterización de la adaptación aprobada, no nuevos oráculos de
+ROM. Cambios en dataset/eventos/ganador/semilla/orden fallan sin actualizar solos
+las expectativas. Seis pruebas unitarias sintéticas ejercitan fallos y alcance;
+no se usan fixtures sintéticos para certificar que el mod juega.
+
+Los controles ordinarios verifican EVs/nivel/Tera, inmunidad Ground de Pidgeot,
+Dex Gen8/Gen9 y disponibilidad de Mew antes/después; las regresiones de mecánicas
+TMT-06/08/09 continúan en la suite completa, sin sustituir el motor de daño.
+Los nuevos pins son masters fusionados server `db159373b132babf016cf78ced737dec05d23d97`
+y client `49af6c4d55835f69b4222956adf99f7b19b50fa7`; se verificó igualdad de árboles
+con los inputs revisados de TMT-10. Dataset 0.3.1 / hash
+`6c03764a0518d08bd6a5a92262d40f322308e291e47e9377be70fed91627118b`.
+
+Comandos: `npm test` (66/66), `npm run typecheck` y
+`npm run regression:check` (cuatro casos, repetidos, aprobados). Logs locales
+ignorados: `.local/evidence/tmt11-data-tests.log` y `tmt11-simulator.json`.
+`npm run ci:core` terminó con exit 0: datos 66/66, servidor 2424 passing /
+74 pending, cliente 77 passing / 1 skip. Builds, lint, typechecks, validación,
+paridad y regresiones aprobados. Lifecycle real HTTP/WS, rechazo de concurrencia,
+SIGTERM 143, lock eliminado y puertos liberados aprobados; log ignorado
+`.local/evidence/tmt11-ci-core.log`. Los dos tests DNS y suites `(slow)` mantienen
+la separación/exclusión documentada; pending/skip no cuentan como aprobados.
+Esto no constituye browser CI ni instalación limpia local. La ejecución remota
+[37128415787](https://github.com/matiHirCab/tmt2-data/actions/runs/37128415787)
+aprobó el commit de implementación `57e615e71f446902d50fdd3df9a736abab2c6e9d`
+desde checkout e instalación limpia de los tres lockfiles: datos 66/66, servidor
+2428 passing / 70 pending, cliente 77 passing / 1 skip; regresiones y lifecycle
+aprobados. El resultado del head posterior de documentación se registra en
+[PR #13](https://github.com/matiHirCab/tmt2-data/pull/13), sin pin autorreferencial.
+
+**Gates concretos pendientes:** Chromium con sandbox no inició: helper SUID
+mal configurado. No se ejecutó sin sandbox ni se alteraron controles/permisos.
+En aquel checkpoint la nueva autorización estaba pendiente. Después el usuario
+aprobó una sola sesión local efímera sin sandbox, ya cerrada; no autoriza cambiar
+CI ni activar excepciones de autenticación. La cobertura nativa en CI y la revisión
+visual del dueño siguen sin aprobación; no se marca Done por capturas históricas.
+
+El ZIP `sprites.zip` recibido se inspeccionó sin extracción/ejecución: dieciséis
+archivos tienen tamaños y SHA-256 iguales a su manifiesto. SHA-256 del archivo
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+Coincide archivo por archivo con el lote local previamente validado (16/16).
+Es el lote original de seis especies más UI; no aporta sprites de las nuevas
+adiciones ni prueba derechos de redistribución. No se añadieron assets al Git.
+
+
+### TMT-11: preparación del navegador y revisión del dueño
+
+Runner `tools/regression/browser.mjs` y política/test de red preparados:
+CLI/CI siempre `chromiumSandbox: true`; Playwright 1.62.1 y browser revision
+fijados por lockfile. La CI alojada usa su entorno normal, sin cambiar AppArmor,
+SUID, permisos, DNS, autenticación ni flags para desactivar sandbox. El resultado
+del nuevo paso debe verificarse en PR #13: la CI verde anterior sólo cubría core.
+La prueba local sin sandbox aprobada después se identifica como excepción local
+efímera, con reporte/launcher propios; no prueba que ese paso de CI pase.
+
+**Checklist de revisión visual TMT-07 para el dueño (aún sin respuesta):**
+- [ ] La pantalla es el cliente nativo Showdown esperado: escena, barras HP,
+  elecciones de movimiento y log legibles; no la página plana de desarrollo.
+  Capturas históricas `tmt07-native/originals-alpha-final.png` y
+  `originals-beta-final.png`, más el replay de aquel recorrido, conservan la
+  identidad del dataset de entonces; no son una partida nueva de 0.3.1.
+- [ ] La selección de premades y la información se entienden: editor actual
+  `tmt10/native-teambuilder-review.png`, `valid-alpha.png`, `valid-beta.png`,
+  `valid-gamma.png`; stats IV31/EV0 y avisos de importación inválida claros.
+- [ ] El replay nativo, su resultado y controles de perspectiva/reload son
+  comprensibles; captura original y nuevas capturas locales TMT-11 cuando el
+  runner termine. Rechazo de dataset incompatible visible, sin fallback oficial.
+- [ ] Se aceptan para esta etapa los límites declarados: arte original del lote
+  de seis especies/UI, tarjetas etiquetadas para arte faltante, audio ausente;
+  no fidelidad ROM ni playtesting humano inferidos de capturas automatizadas.
+
+Evidencia está bajo `.local/evidence/` ignorado; no se suben imágenes/assets al
+repositorio. Respuesta mínima propuesta al dueño: «Apruebo la interfaz nativa
+mostrada y sus límites», o señalar pantalla/punto concreto a corregir. Esa
+respuesta cierra sólo revisión visual; no reemplaza navegador CI ni mediciones ROM.
+
+
+**Resultado local de preparación (2026-10-03):** la sesión aprobada recorrió
+22 controles, incluidos dos perfiles independientes, alpha/beta/gamma aceptados
+por servidor real, EV/nivel ilegales rechazados y retenidos tras reload, cinco
+búsquedas de tipos, cuatro replays en cada perfil con win/perspectiva/reload y
+rechazo de drift. Sin intentos remotos en el recorrido final. **Resultado global
+fallido**, porque las solicitudes locales de imágenes dan 404: `sprites/home-centered/`
+para las nueve bases, `sprites/types/` para los tipos del catálogo,
+`sprites/itemicons-sheet.png` y `sprites/ani[-back]/substitute.gif`.
+Los consumidores estaban en masters sin cambios (server db159 / client49af);
+los checks nuevos detectan ese límite de recursos del cliente existente, no una
+mecánica añadida por TMT-11. No se descargaron assets ni se reescribió el cliente.
+El manifiesto del ZIP original no contiene esas rutas y no cierra el gap.
+
+Reportes separados: `.local/evidence/tmt11-native-local/results.json`,
+`local-launcher.json`, `agent-browser-home.png`, `native-editor.png` y los ocho
+`*-session[12].png`. El launcher deja explícito sandbox desactivado sólo en ese
+proceso local autorizado; el runner CLI/CI sigue requiriéndolo. SIGTERM143,
+lock/puertos liberados, config original byte-identical/noguestsecurity=false y
+Chrome/CDP40229 cerrado verificados. Sin nombres autenticados ni bypass auth.
+Los errores de selectors/namespace del harness se corrigieron antes del resultado
+final; no son fallos de la app ni se cuentan como controles aprobados.
+
+**Qué falta:** ejecutar/verificar el paso alojado con sandbox en su host normal,
+y corregir o resolver explícitamente los recursos ausentes sin ocultar 404 ni
+atribuirles derechos desconocidos; la suite permanece roja mientras los detecte.
+Los tests de aislamiento de formatos ordinarios siguen en core; su teambuilder
+online de muestras Smogon no forma parte del recorrido local acotado. Durante
+un probe descartado sus requests de muestras se bloquearon, nunca se consultaron
+ni usaron como datos TMT2. Revisión humana sigue abierta y separada de ambos tests.
+
+
+**Corrección nativa acotada (2026-10-03):** cliente
+`85552fa0f5c94b205f0a7c32010320218795ffe1` reutiliza front GIFs verificados o
+las tarjetas locales ya etiquetadas en el editor; tipos son etiquetas de texto
+(incluye Bird/Bird/Bird), item usa un badge genérico de código con nombre textual
+conservado; no precarga Substitute porque está excluido del catálogo. No se
+inventan originales ni se importan assets nuevos. Rendering normal no local
+conservado y comprobado. Cliente `npm test`: build, ambos typechecks, lint y
+80 passing / 1 inherited skip; tres regresiones nuevas. Dataset/hash sin cambios.
+
+La CI macOS de `bb1f236` falló antes de Chromium: cuatro fixtures aún usaban
+el alias `/var` de su tmpdir. Fixtures propios ahora resuelven el tmpdir confiable
+antes de crear su directorio; los guards de outputs no confiables y las pruebas
+que rechazan symlinks permanecen intactos. Core Ubuntu aprobó esa ejecución
+[37134431187](https://github.com/matiHirCab/tmt2-data/actions/runs/37134431187).
+No se alteraron permisos ni seguridad; resultado del nuevo head/browser se
+registra en PR #13. Merge coordinado: cliente → datos, servidor sin cambios.
+La excepción local sin sandbox anterior está cerrada y no se reutiliza; no hubo
+nuevo recorrido local después del fix. Revisión visual del dueño sigue pendiente.
+
+
+**CI alojada verificada (2026-10-03):**
+[37136473494](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494),
+head de código `be7d901f35ebbfead4eaaee8634679d3b048d023`, terminó **success**
+en core Ubuntu y navegador macOS15. Ambos hicieron checkout/instalación limpia
+por tres lockfiles, con server `db159373b132babf016cf78ced737dec05d23d97` y
+client `85552fa0f5c94b205f0a7c32010320218795ffe1`. Datos 68/68; servidor
+Ubuntu 2428 passing / 70 pending y macOS 2424 passing / 74 pending (disponibilidad
+SQLite opcional); cliente 80 passing / 1 inherited skip en ambos; builds,
+ambos lints/typechecks, validación/paridad, cuatro regresiones repetidas,
+manifiesto reproducible y lifecycle aprobados. Dos DNS separados y `(slow)`
+no ejecutados siguen explícitos; pending/skip no cuentan como pass.
+
+Navegador: **22 controles aprobados**, `chromiumSandbox: true`, `errors: []`,
+`blocked: []`, `authException: false`; editor nativo/WS Guest/servidor real,
+rechazo de import ilegítimo + reload, cinco filtros, cuatro replays en cada
+uno de dos contextos, perspectiva/reload/identidad y rechazo de drift. Cleanup
+SIGTERM143, puertos/lock liberados, config byte-identical/noguestsecurity=false.
+[Reporte y capturas](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494/artifacts/11278923702)
+(retención siete días, hasta 2026-10-10) muestran tarjetas developer de código,
+no sprites originales ausentes ni la sesión local anterior. Los 404 observados
+quedan cerrados para este recorrido mediante el fix explícito, no ignorando
+respuestas. No hace falta otro archivo de arte para este gate; arte original y
+sus derechos permanecen fuera de esa afirmación. No hubo nueva excepción local
+sin sandbox ni bypass auth. Cliente no tiene checks standalone activos; su
+commit fue comprobado aquí, no se atribuye un run inexistente al PR cliente.
+
+Esto cierra el gate técnico del navegador en CI para el código indicado. El
+head posterior sólo registra esta evidencia; su resultado exacto se comprueba
+en PR #13. **TMT-11 permanece parcial únicamente por revisión visual TMT-07 del
+dueño pendiente** dentro de este alcance: no es playtesting humano, nuevo combate
+live de dos nombres ni oráculo ROM. No iniciar beta/TMT-12 ni hacer merge/deploy.

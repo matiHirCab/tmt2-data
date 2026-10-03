@@ -15,7 +15,9 @@ const gif = Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const options = {ids: ['pidgeot-mega'], timeoutMs: 100, retries: 0};
 function temp(t) {
-  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tmt2 sprites '));
+  // Resolve the trusted OS temp-root alias before creating our own fixture.
+  // Production output validation still rejects every untrusted symlink.
+  const base = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'tmt2 sprites '));
   t.after(() => fs.rmSync(base, {recursive: true, force: true}));
   return base;
 }

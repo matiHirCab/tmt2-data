@@ -25,7 +25,7 @@ test('CI selection moves exactly the two known DNS cases, keeping unrelated IP a
   assert.equal(core.test('Battle random (slow) case'), false);
 });
 test('CI pin mismatch and dirty sibling rejection leave files untouched', t => {
-  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tmt2-ci-'));
+  const base = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'tmt2-ci-'));
   t.after(() => fs.rmSync(base, {recursive: true, force: true}));
   const c = {}; const pins = structuredClone(loadPins());
   for (const role of ['server', 'client']) {
@@ -50,6 +50,6 @@ test('workflow action references use complete SHA-1 pins instead of malformed or
   const references = [...workflow.matchAll(/^\s+uses:\s+(\S+)/gm)].map(match => match[1]);
   assert.ok(references.length > 0, 'Workflow must contain action references');
   for (const reference of references) {
-    assert.match(reference, /^actions\/(checkout|setup-node)@[a-f0-9]{40}$/);
+    assert.match(reference, /^actions\/(checkout|setup-node|upload-artifact)@[a-f0-9]{40}$/);
   }
 });
