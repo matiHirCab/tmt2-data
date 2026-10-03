@@ -61,10 +61,13 @@ jobs:
           npm ci --prefix ../Pokemon-Too-Many-Types-2 --no-audit --no-fund
           npm ci --prefix ../Pokemon-Too-Many-Types-2-client --no-audit --no-fund
           npm run sprites:install
-      - name: Build and verify exact pinned game before live journey
+      - name: Build exact pinned game (full core already passed run37148656543)
         env:
           NODE_OPTIONS: --max-old-space-size=4096
-        run: npm run ci:core
+        run: |
+          npm run workspace:build
+          npm run integration:check
+          npm run integration:test
       - name: Install pinned sandboxed Chromium
         run: npx --no-install playwright install chromium
       - name: User-approved loopback-only live challenge and cleanup

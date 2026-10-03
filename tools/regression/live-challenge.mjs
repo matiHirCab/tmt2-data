@@ -61,7 +61,7 @@ try {
   page.on('response',r=>{if(r.status()>=400)errors.push(`HTTP ${r.status()} ${r.url()}`);});
   await page.goto(url);await page.waitForFunction(()=>typeof PS!=='undefined'&&PS.connection.connected);
   assert.match(await page.locator('body').innerText(),/TMT2 private local seed/);
-  await page.getByRole('button',{name:'Choose name',exact:true}).first().click();
+  await page.getByRole('link',{name:'Choose name',exact:true}).click();
   await page.locator('.ps-popup input[name="username"]').fill(names[i]);
   await page.locator('.ps-popup').getByRole('button',{name:'Choose name',exact:true}).click();
   await page.waitForFunction(name=>PS.user.named&&PS.user.name===name,names[i]);
