@@ -1657,8 +1657,9 @@ nuevo recorrido local después del fix. Revisión visual del dueño sigue pendie
 head de código `be7d901f35ebbfead4eaaee8634679d3b048d023`, terminó **success**
 en core Ubuntu y navegador macOS15. Ambos hicieron checkout/instalación limpia
 por tres lockfiles, con server `db159373b132babf016cf78ced737dec05d23d97` y
-client `85552fa0f5c94b205f0a7c32010320218795ffe1`. Datos 68/68, servidor
-2428 passing / 70 pending, cliente 80 passing / 1 inherited skip; builds,
+client `85552fa0f5c94b205f0a7c32010320218795ffe1`. Datos 68/68; servidor
+Ubuntu 2428 passing / 70 pending y macOS 2424 passing / 74 pending (disponibilidad
+SQLite opcional); cliente 80 passing / 1 inherited skip en ambos; builds,
 ambos lints/typechecks, validación/paridad, cuatro regresiones repetidas,
 manifiesto reproducible y lifecycle aprobados. Dos DNS separados y `(slow)`
 no ejecutados siguen explícitos; pending/skip no cuentan como pass.
