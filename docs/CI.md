@@ -300,3 +300,15 @@ and released ports. The two live-DNS cases and upstream slow cases remain NOT RU
 optional legacy graphics.js/commands.js warnings remain explicit. The executor's
 Chromium sandbox availability has not changed; final browser verification uses the
 existing sandbox-required hosted macOS job, not a local no-sandbox workaround.
+
+
+## TMT-12 private readiness
+
+Scope approved2026-10-03: reproducible private evaluation, no bundled ROM/BPS/art,
+no redistribution-rights claim. After existing core/lifecycle, CI writes/checks
+`.local/private-beta.json`, then exercises `beta:dev` startup and SIGTERM cleanup
+through the same smoke harness. The snapshot resolves three current commits
+(no circular self-SHA), lockfiles, catalog and byte-verified local asset profile.
+The hosted fresh-lockfile/browser profile remains unchanged except these added
+readiness checks; it imports the recorded live match as Guests, not a new named
+challenge/security exception. See [private checklist/limits](PRIVATE_BETA.md).

@@ -5,7 +5,9 @@ import net from 'node:net';
 import {spawn, spawnSync} from 'node:child_process';
 import {config, root} from '../workspace/core.mjs';
 const c = config();
-const child = spawn(process.execPath, ['tools/workspace/cli.mjs', 'dev'], {
+const [mode,...extra]=process.argv.slice(2);
+assert(!extra.length&&(!mode||mode==='--private-beta'),'Usage: smoke.mjs [--private-beta]');
+const child = spawn(process.execPath, mode?['tools/beta/private.mjs','dev']:['tools/workspace/cli.mjs', 'dev'], {
   cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
 });
 const ended = new Promise((resolve, reject) => { child.once('exit', resolve); child.once('error', reject); });
