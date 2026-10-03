@@ -210,3 +210,69 @@ zero page/HTTP errors or blocked remote requests, no authentication exception,
 cleanup verified. Report/screenshots artifact11278923702 expires2026-10-10.
 Owner TMT-07 visual review remains open. The following evidence-only commit's
 exact run is tracked on PR#13, with unchanged consumer pins and dataset identity.
+
+
+The limited matching-sprite follow-up adds an explicit setup-only pinned artwork
+installation before core/browser. Runtime requests remain loopback-only. Browser
+CI requires this artwork and extends regression with decoding/hashing all thirty
+front/back/centered images, transparency and contained-size inspection, alongside
+native premades/battle replay/scale/reload. The review grid is test-only DOM,
+removed before normal native journey; it is not an alternative application UI.
+Original-sprite captures are local/private evaluation evidence, not a rights grant.
+Local executor source download returned proxy CONNECT403; no network/security
+settings were changed. Hosted CI must actually verify the source bytes; Git blob
+identities/paths were read from the official immutable repository tree, never
+invented from names or ROM mechanics. Failed setup remains a real CI failure.
+
+
+Publication/asset verification checkpoint: local73 data and83 client tests
+(1 inherited client skip), typechecks/lint and hash/path/priority fixtures pass.
+They do not prove the thirty actual new source images. Draft PR creation was
+rejected by automatic approval review citing the earlier native-UX publication
+pause; the client branch push had already succeeded. No workaround, data push,
+new browser/security exception or hosted setup run is used while explicit fresh
+publication approval is pending. No real downloaded SHA256/image evidence is
+invented; pinned Git blob hashes were read from official source trees.
+
+
+Final local checkpoint: `npm run ci:core` exited 0 on data implementation
+commit b3917d4 with client b21db5709f8e9a9d15b46bfe035fa519e3c0fd60 and
+server db159373b132babf016cf78ced737dec05d23d97. Data73/73, client83pass/1skip,
+server2424pass/74pending; bounded seed validation, builds, typechecks/lints,
+consumer parity/isolation, simulator regression and reproducible manifest passed.
+Lifecycle confirmed HTTP/WS, concurrent-operation rejection, SIGTERM143, lock
+removal and released 8000/8080 listeners. Live DNS diagnostics and slow upstream
+cases remain excluded by the documented policy, not reported as passing. This
+local run used the existing user artwork/fallbacks; it did not install or visually
+verify the new thirty official source files. No browser run or fresh hosted CI
+was performed for this branch. The later evidence-only commit changes no code.
+
+
+Publication resumed with explicit current authorization. Client draft
+[#8](https://github.com/matiHirCab/Pokemon-Too-Many-Types-2-client/pull/8) and
+data draft [#14](https://github.com/matiHirCab/tmt2-data/pull/14) supersede the
+paused checkpoint above. Initial coordinated run
+[37148132057](https://github.com/matiHirCab/tmt2-data/actions/runs/37148132057)
+succeeded on both runners for data59f66b4/clientb21db570. It downloaded all30
+immutable official source files, verified their Git blob hashes and full GIF/PNG
+structures, and recorded actual SHA256s. These digests are now explicitly pinned
+in client75a5cdef759cb30f391ebf7e9dfe6e3384f6c931; the final data pin follows it.
+Ubuntu: server2428pass/70pending; macOS:2424pass/74pending. Both data73pass,
+client83pass/1 inheritedskip. Sandboxed browser23 checks passed, all30 image
+decodes/hashes/dimensions/transparency verified, zero page/HTTP errors or blocked
+remote requests, no authentication exception; SIGTERM143/lock/ports/config cleanup
+passed. The reviewed screenshots show canonical sprites in native editor/replays
+and preserve Bird/Bird/Bird. Trainer/type/item code labels and absent audio remain
+explicit; captures are automated review evidence, not live two-player acceptance
+or a new owner fidelity/rights approval. Original user package remains unchanged
+and wins over matching official sprites when present; hosted CI uses the optional
+official-only profile because user binaries are not committed.
+
+Initial screenshot/report artifact
+[11283103504](https://github.com/matiHirCab/tmt2-data/actions/runs/37148132057/artifacts/11283103504)
+expires2026-10-10T19:36:56Z. ArchiveSHA256
+12934147c660662cdb03e58685df4e8182845b13eaf8b85dce4a3e790fdbbc15.
+Final exact-head verification is tracked on draft#14; this initial run does not
+substitute for its terminal result. Merge client#8 before data#14; no merge/deploy
+was performed. Local CONNECT403 affected the executor proxy; hosted runners
+downloaded from raw.githubusercontent.com without altering network/security.

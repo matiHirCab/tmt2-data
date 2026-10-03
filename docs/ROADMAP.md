@@ -265,3 +265,15 @@ rollback; instalación nueva completa un combate. Resolver licencia/redistribuci
 antes de incluir material no aprobado. Despliegue público fuera de esta DoD y con
 autorización separada.
 **Evidencia:** pendiente; todavía no existe beta TMT2 ni permiso de publicación nueva.
+
+
+### Limited visual follow-up, 2026-10-03 (TMT-07/TMT-11)
+
+User said placeholders are fine but requested actual sprites where possible,
+and authorized canonical Showdown art for matching Pokemon. This is limited
+feedback, **not blanket TMT-07 visual acceptance or public-release approval**.
+Optional byte-pinned local artwork for the existing nine bases and Mega Pidgeot
+was verified by sandboxed CI run37148132057: actual30 source files and native
+rendering passed; the final SHA256-pinned follow-up is tracked on draftPR14. No types/stats/rules,
+catalog additions or TMT-12 scope. User-supplied assets retain priority; rights
+and actual verification results stay explicit in the existing evidence/PR.
