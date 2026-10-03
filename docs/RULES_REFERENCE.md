@@ -1227,3 +1227,134 @@ requiere autorización nueva. No excepción guest ni browser nuevo ni trabajo TM
 Rollback:detener servicios, volver conjuntamente a los tres masters previos a TMT-08,
 instalar lockfiles y regenerar 0.1.0; conservar el ZIP fuera de Git. No mezclar hashes.
 La revisión visual pendiente TMT-07 no queda cerrada por estas pruebas de adaptación.
+
+## TMT-09 — Lote mínimo Bird/Crab (2026-10-02)
+
+Entorno verificado operativo después de la desconexión. Ramas nuevas desde los
+masters fusionados TMT-08: datos b4dccffe, servidor c7ec3c55, cliente 9c3bd50e.
+Sus árboles son idénticos a los aprobados; no se sobrescribieron cambios locales.
+Esos son los puntos de partida; los pins CI finales apuntan a las ramas coordinadas de este ticket;
+el pin de hechos heredados sigue siendo 2f5b2739. No se aplican ROMs ni se baja arte.
+
+Lote implementado: Pidgey Bird, Pidgeotto Bird/Bird y Krabby Crab. Las tres filas
+están en la transcripción del creador entregada por Matías el 2026-09-30,
+mensaje Sentinel_51eeebf3c58c8191af721b1ca6a7eceb: `21 Pidgey Bird`,
+`22 Pidgeotto Bird Bird`, `280 Krabby Crab`. No se inventan coordenadas de celdas:
+estas filas no fueron corroboradas de nuevo en el tab Species por este ejecutor.
+La URL del tab no es legible con web aquí; la hoja pública enlazada por el creador
+sí permite leer el chart. Esa distinción se conserva en procedencia por fila.
+
+El chart primario [Documentation del creador](https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing),
+columna rotulada CRAB, filas atacantes Normal3/Dark20/Water14/Rock8/Electric16/
+Grass15/Flying5:1×/1×/0.5×/1×/1×/0.5×/2×. Observado 2026-10-02 mediante el
+link Documentation del [release oficial](https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/).
+Sin revisión ROM numerada. Bird reutiliza los cruces ya registrados; no necesita
+inventar un nuevo chart ni un tipo ofensivo Crab.
+
+Sets gamma (todo nivel50/IV31/EV0/Hardy, sin ítem):
+- Pidgey, Keen Eye: Gust / Wing Attack / Quick Attack / Protect.
+- Pidgeotto, Keen Eye: Tackle / Wing Attack / Quick Attack / Protect.
+- Krabby, Shell Armor: Vise Grip / Water Pulse / Leer / Protect.
+
+El pin Gen9 contiene las habilidades y los cuatro movimientos nuevos
+`wingattack`, `visegrip`, `waterpulse`, `leer`; todos los learnsets seleccionados
+existen allí (algunos son entradas históricas permitidas por la adaptación).
+Stats, split físico/especial, secundarios, prioridad y Shell Armor se heredan
+explícitamente, no son hechos ROM. No se añade un ítem inventado.
+
+Resultado: nueve especies base más Mega Pidgeot = diez especies/formas,
+quince movimientos. Alpha y beta no cambian. Un tercer premade fijo **gamma** usa
+las tres adiciones y el selector nativo existente; no habilita combinaciones libres
+ni constituye TMT-10. El schema sólo amplía el límite de premades de 2 a 3.
+Pruebas enfocadas aprobadas: metadatos/procedencia, learnsets, damage de cada adición,
+Wing Attack físico, Leer (-1Def), confusión Water Pulse, bloqueo de críticos Shell
+Armor, defensas Crab y doble Bird, legalidad gamma y aislamiento; conservación
+TMT-08 y replay/hash deterministas. La CI coordinada final se registra debajo.
+
+El ZIP local conserva sólo las seis especies originales. Los nuevos sprites y la
+mega quedan explícitamente como cards, sin fallback remoto ni alterar los GIF pins.
+QA visual del dueño y sprite Mega Pidgeot siguen abiertos por separado.
+No publicación, TMT-10, issues ni despliegue bajo esta autorización.
+
+### Verificación y entrega TMT-09
+
+Dataset v0.3.0, SHA-256
+`848de03952b707a48efa8e5c708ff1d32116912f38b0e0496882482acbb20a76`.
+La preparación read-only desde los pins reproduce byte por byte
+`normalized/seed.json`; ambos catálogos son generados desde ese archivo.
+Los 70 cruces documentados incluyen los 63 anteriores y siete Crab.
+Los demás cruces siguen la política de adaptación explícita existente.
+
+- Datos: `npm test` — 59 aprobadas; `npm run typecheck` aprobado.
+- Servidor: Mocha enfocado con `--no-config test/main.js test/sim/tmt2-integration.js test/sim/tmt2-runtime.js test/sim/tmt2-mega.js test/sim/tmt2-catalog.js --reporter dot --exit` — 55 aprobadas.
+- Cliente: `node build` y `node --test test/tmt2-integration.test.js test/tmt2-native.test.js test/tmt2-private.test.js` — 23 aprobadas.
+- `node tools/integration/verify.mjs` — identidad, exportación de los tres premades, aislamiento y replay reproducible aprobados. El replay 0.2.0 queda intacto; sólo el registro 0.3.0 es compatible con el catálogo actual. Sus eventos de combate coinciden después de excluir únicamente la línea de identidad del dataset.
+- Los controles iniciales nuevos de Water Pulse y las aserciones source/version se corrigieron tras fallos de prueba; no se cambió RNG ni reglas de producción para hacerlas pasar.
+
+ZIP recién adjunto validado con `build-tools/import-tmt2-artwork` en un directorio nuevo temporal: 16 assets coinciden con el pin revisado; SHA-256 ZIP
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+No se reemplazaron recursos ni se incorporaron binarios al historial.
+Las tarjetas ausentes se derivan del pin de arte, no de archivos desaparecidos:
+si falta un GIF original requerido, el cliente sigue fallando explícitamente.
+
+Publicación eventual: servidor → cliente → datos, usando exactamente `ci/pins.json`.
+Estos commits sólo son locales; no hay autorización para publicar TMT-09.
+Rollback: conservar estas ramas y volver a los masters fusionados de inicio,
+regenerar/build con sus pins; nunca resetear trabajo local ni mezclar el replay 0.3.0
+con un catálogo anterior. No hubo cambios de configuración de seguridad ni servidor
+guest nuevo. No se repitió la batalla de dos navegadores ni QA visual del dueño;
+los nuevos sprites y la revisión visual siguen pendientes, no bloquean las pruebas
+de comportamiento de catálogo ni equivalen a TMT-10.
+
+`npm run ci:core` final — **exit 0** sobre el código coordinado en datos
+7dba6c0, servidor fa680b70fe9753b1ba7ed37bc5cc1329f309f590 y cliente
+0912c7b0a5797de35914a3027eb61882011e129b. Sólo el cierre de documentación
+se añade después de esa ejecución. Datos 59 pass; servidor 2420 pass / 74 pending;
+cliente 72 pass / 1 skip. Builds, tipos, lint, aislamiento, replay, snapshot
+reproducible y lifecycle HTTP/WS/SIGTERM/lock/puertos aprobados.
+Registro local ignorado: `.local/evidence/tmt09/ci-core-final.log`.
+
+No ejecutado: `ci:network` (dos casos DNS vivos separados) y casos upstream
+`(slow)` según política existente. Cuatro casos SQL opcionales permanecen
+pending porque `better-sqlite3` no está instalado localmente; el resto de pending
+y el skip del cliente conservan el baseline. El hook opcional de noticias sin PHP
+y la advertencia npm sobre NODE_OPTIONS se reportan, no impiden exit 0.
+La primera CI falló por una línea de iconos de 122 caracteres (límite120):
+se corrigió sin cambiar comportamiento, se creó un commit ordinario y se actualizó
+el pin. No se suprimieron warnings ni tests.
+
+#### Aclaración del baseline pendiente antes de publicación
+
+No hubo aumento local de pendientes de TMT-08 a TMT-09. El registro local final
+TMT-08 `.local/evidence/tmt08/core-active-final.log` contiene 2412 pass / 74 pending;
+el postmerge GitHub [37029721428](https://github.com/matiHirCab/tmt2-data/actions/runs/37029721428)
+registró 2416 pass / 70 pending. Son entornos distintos. TMT-09 local registra
+2420 pass / los mismos 74 pending, no cuatro nuevas exclusiones del catálogo.
+
+Comparación exacta por nombres completos: `git ls-tree` del servidor fusionado
+c7ec3c558663c153116a4ad6d535be56e3f6b517 seleccionó todos los archivos de pruebas
+anteriores; `git diff --name-only ... -- test` demuestra que el único archivo
+añadido/modificado es `test/sim/tmt2-catalog.js`. Inventarios Mocha `--dry-run
+--reporter json` con la misma política core, uno con esa lista baseline y otro
+con la lista actual, resultaron en 2486 vs 2494 casos y **listas idénticas de 74
+pending**. Esto sólo inventaría los tests: las aprobaciones de ejecución provienen
+de CI-core, no del dry-run. Comparación local reproducida:
+`.local/evidence/tmt09/pending-comparison.json` y `test-inventory.json`.
+
+Cuatro casos opcionales del grupo `SQLite worker wrapper` en `test/lib/sql.js`,
+sin cambios de código, usan `common.hasModule('better-sqlite3') ? describe :
+describe.skip`; aquí el módulo no se resuelve:
+- should require you to prepare a statement before running
+- should support both statement strings and corresponding statement classes
+- should support both inline and object params
+- should retrieve one line from Database.get
+
+TMT-09 añade ocho casos activos y aprobados: identidad/stats/learnsets,
+legalidad gamma y mutaciones, damage/split de las adiciones, defensas doble Bird
+y Crab, Leer, secundario Water Pulse, Shell Armor y combate gamma completo con
+aislamiento. Ninguna cobertura TMT-09 depende de SQLite. Los cuatro movimientos
+nuevos son Wing Attack (`wingattack`), Vise Grip (`visegrip`), Water Pulse
+(`waterpulse`) y Leer (`leer`): campos/callbacks/learnsets heredados del pin
+Showdown 2f5b273925862ac242b419086c1e7a8868b51da1, `data/moves.ts#ID`,
+no hechos de movimientos ROM. Conteo: nueve bases Rattata/Eevee/Froakie/Nosepass/
+Floragato/Pidgeot/Pidgey/Pidgeotto/Krabby más **Mega Pidgeot** = diez especies/formas.

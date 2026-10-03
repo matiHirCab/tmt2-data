@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "species": [
     {
       "id": "rattata",
@@ -61,12 +61,68 @@
         "protect"
       ],
       "item": "pidgeotite"
+    },
+    {
+      "id": "pidgey",
+      "ability": "keeneye",
+      "moves": [
+        "gust",
+        "wingattack",
+        "quickattack",
+        "protect"
+      ]
+    },
+    {
+      "id": "pidgeotto",
+      "ability": "keeneye",
+      "moves": [
+        "tackle",
+        "wingattack",
+        "quickattack",
+        "protect"
+      ]
+    },
+    {
+      "id": "krabby",
+      "ability": "shellarmor",
+      "moves": [
+        "visegrip",
+        "waterpulse",
+        "leer",
+        "protect"
+      ]
     }
   ],
   "forms": [
     {
       "id": "pidgeotmega",
       "baseSpecies": "pidgeot"
+    }
+  ],
+  "teams": [
+    {
+      "id": "alpha",
+      "species": [
+        "rattata",
+        "eevee",
+        "froakie"
+      ]
+    },
+    {
+      "id": "beta",
+      "species": [
+        "nosepass",
+        "floragato",
+        "pidgeot"
+      ]
+    },
+    {
+      "id": "gamma",
+      "species": [
+        "pidgey",
+        "pidgeotto",
+        "krabby"
+      ]
     }
   ]
 }

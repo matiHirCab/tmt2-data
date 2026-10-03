@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "kind": "production",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "contract": "tmt04-bounded-adaptation-seed-v1",
   "rules": {"generation":9,"format":"private-unranked-singles-premade","level":50,"teamSize":3,"iv":31,"ev":0,"source":"policy"},
   "scope": {"fullCatalog":false,"romFidelityProven":false,"excluded":["custom passives","other megas","selectable type-change moves","fourth type","unreviewed custom moves/abilities/items","all species outside premades"]},
   "sources": [
-    {"id":"showdown","kind":"showdown","version":"2f5b273925862ac242b419086c1e7a8868b51da1","locator":"https://github.com/matiHirCab/Pokemon-Too-Many-Types-2/tree/2f5b273925862ac242b419086c1e7a8868b51da1/data; selected historical learnset entries allowed by adaptation","sha256":"2fbdbfbc2faa5de0316ec97c6e04346260f18db60695c4c10d6a420cf60e9a69"},
+    {"id":"showdown","kind":"showdown","version":"2f5b273925862ac242b419086c1e7a8868b51da1","locator":"https://github.com/matiHirCab/Pokemon-Too-Many-Types-2/tree/2f5b273925862ac242b419086c1e7a8868b51da1/data; selected historical learnset entries allowed by adaptation","sha256":"44cd5544360e74c148cab1279b650ca26a60ffc6d12503d7f571be97130067cc"},
     {"id":"creatorchart","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing; five chart coordinates in chartObservations","sha256":"7fb64afb266bfb5c50ac4f86ed1f84ee33b780b5e21d53916619ca69f51e7a6d"},
     {"id":"policy","kind":"policy","version":"approved-2026-09-30","locator":"provenance/sources.json#userApprovals","sha256":"3d540d19c7f631df11d9341bc44cbd5c31c0782539c14017556bedff22111922"},
-    {"id":"creatorspecies","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"provenance/seed-types.json: user transcription corroborated by relayed primary-sheet cell observations","sha256":"9c6af5ceeb36128235599386fc4e45578ff2f2084d05966641e33a42e05ab8d4"},
-    {"id":"seedchart","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"provenance/seed-chart.json: exact primary chart coordinates","sha256":"5e1401bb8dc823b9c6ea0e8210dd8d82dd0704227c9c27dd0852f4fcbdc4963a"},
+    {"id":"creatorspecies","kind":"creator","version":"observed-2026-09-30-not-release-bound","locator":"provenance/seed-types.json: per-row creator transcription and primary corroboration classes","sha256":"d84be2b255f061b219c2003cf3527605c260fca5870bf11dfecf5c1f0a6feb8a"},
+    {"id":"seedchart","kind":"creator","version":"observed-2026-10-02-not-release-bound","locator":"provenance/seed-chart.json: registered primary cell or labelled row/column observations","sha256":"e3561ee98981b714a13705701e9c5d0533de08272e53cfd92527cb0320fcb632"},
     {"id":"creatormega","kind":"creator","version":"documented-v1.5.0","locator":"https://www.pokecommunity.com/threads/pok%C3%A9mon-too-many-types-2.539542/page-6; creator post #105, types only","sha256":"8e5219b7418b72aae4f6c908652d81e3ba682e3bb5503c686c33260927af3812"},
     {"id":"megachart","kind":"creator","version":"observed-2026-10-02-not-release-bound","locator":"https://docs.google.com/spreadsheets/d/1lclbDiHdUnETmFQRm0v_capEqSJaVBG2OsLuOJ6L9Kk/edit?usp=sharing; BE2, seven attacking rows in provenance/mega-pidgeot.json#holyDefense","sha256":"8e5219b7418b72aae4f6c908652d81e3ba682e3bb5503c686c33260927af3812"}
   ],
@@ -42,6 +42,7 @@
     {"id":"frog","name":"Frog","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
     {"id":"magic","name":"Magic","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
     {"id":"bird","name":"Bird","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
+    {"id":"crab","name":"Crab","passive":"none-adaptation","fieldSources":{"id":"creatorspecies","name":"creatorspecies","passive":"policy"}},
     {"id":"holy","name":"Holy","passive":"none-adaptation","fieldSources":{"id":"creatormega","name":"creatormega","passive":"policy"}}
   ],
   "species": [
@@ -50,7 +51,10 @@
     {"id":"froakie","name":"Froakie","types":["water","frog"],"baseStats":{"hp":41,"atk":56,"def":40,"spa":62,"spd":44,"spe":71},"abilities":["torrent"],"learnset":["pound","watergun","quickattack","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
     {"id":"nosepass","name":"Nosepass","types":["rock"],"baseStats":{"hp":30,"atk":45,"def":135,"spa":45,"spd":90,"spe":30},"abilities":["sturdy"],"learnset":["tackle","rockthrow","thunderwave","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
     {"id":"floragato","name":"Floragato","types":["grass","magic","cat"],"baseStats":{"hp":61,"atk":80,"def":63,"spa":60,"spd":63,"spe":83},"abilities":["overgrow"],"learnset":["scratch","magicalleaf","bite","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
-    {"id":"pidgeot","name":"Pidgeot","types":["bird","bird","bird"],"baseStats":{"hp":83,"atk":80,"def":75,"spa":70,"spd":70,"spe":101},"abilities":["keeneye"],"learnset":["tackle","gust","quickattack","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}}
+    {"id":"pidgeot","name":"Pidgeot","types":["bird","bird","bird"],"baseStats":{"hp":83,"atk":80,"def":75,"spa":70,"spd":70,"spe":101},"abilities":["keeneye"],"learnset":["tackle","gust","quickattack","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
+    {"id":"pidgey","name":"Pidgey","types":["bird"],"baseStats":{"hp":40,"atk":45,"def":40,"spa":35,"spd":35,"spe":56},"abilities":["keeneye"],"learnset":["gust","wingattack","quickattack","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
+    {"id":"pidgeotto","name":"Pidgeotto","types":["bird","bird"],"baseStats":{"hp":63,"atk":60,"def":55,"spa":50,"spd":50,"spe":71},"abilities":["keeneye"],"learnset":["tackle","wingattack","quickattack","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}},
+    {"id":"krabby","name":"Krabby","types":["crab"],"baseStats":{"hp":30,"atk":105,"def":90,"spa":25,"spd":25,"spe":50},"abilities":["shellarmor"],"learnset":["visegrip","waterpulse","leer","protect"],"fieldSources":{"id":"showdown","name":"showdown","types":"creatorspecies","baseStats":"showdown","abilities":"showdown","learnset":"showdown"}}
   ],
   "moves": [
     {"id":"tackle","name":"Tackle","type":"normal","category":"Physical","basePower":40,"accuracy":100,"pp":35,"priority":0,"flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#tackle","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
@@ -63,7 +67,11 @@
     {"id":"thunderwave","name":"Thunder Wave","type":"electric","category":"Status","basePower":0,"accuracy":90,"pp":20,"priority":0,"flags":{"protect":1,"reflectable":1,"mirror":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#thunderwave","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
     {"id":"scratch","name":"Scratch","type":"normal","category":"Physical","basePower":40,"accuracy":100,"pp":35,"priority":0,"flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#scratch","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
     {"id":"magicalleaf","name":"Magical Leaf","type":"grass","category":"Special","basePower":60,"accuracy":true,"pp":20,"priority":0,"flags":{"protect":1,"mirror":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#magicalleaf","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
-    {"id":"gust","name":"Gust","type":"flying","category":"Special","basePower":40,"accuracy":100,"pp":35,"priority":0,"flags":{"protect":1,"mirror":1,"distance":1,"metronome":1,"wind":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#gust","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}}
+    {"id":"gust","name":"Gust","type":"flying","category":"Special","basePower":40,"accuracy":100,"pp":35,"priority":0,"flags":{"protect":1,"mirror":1,"distance":1,"metronome":1,"wind":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#gust","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
+    {"id":"wingattack","name":"Wing Attack","type":"flying","category":"Physical","basePower":60,"accuracy":100,"pp":35,"priority":0,"flags":{"contact":1,"protect":1,"mirror":1,"distance":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#wingattack","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
+    {"id":"visegrip","name":"Vise Grip","type":"normal","category":"Physical","basePower":55,"accuracy":100,"pp":30,"priority":0,"flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#visegrip","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
+    {"id":"waterpulse","name":"Water Pulse","type":"water","category":"Special","basePower":60,"accuracy":100,"pp":20,"priority":0,"flags":{"protect":1,"mirror":1,"distance":1,"metronome":1,"pulse":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#waterpulse","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}},
+    {"id":"leer","name":"Leer","type":"normal","category":"Status","basePower":0,"accuracy":100,"pp":30,"priority":0,"flags":{"protect":1,"reflectable":1,"mirror":1,"metronome":1},"behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/moves.ts#leer","fieldSources":{"id":"showdown","name":"showdown","type":"showdown","category":"showdown","basePower":"showdown","accuracy":"showdown","pp":"showdown","priority":"showdown","flags":"showdown","behaviorRef":"showdown"}}
   ],
   "abilities": [
     {"id":"runaway","name":"Run Away","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#runaway","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
@@ -71,6 +79,7 @@
     {"id":"sturdy","name":"Sturdy","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#sturdy","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
     {"id":"overgrow","name":"Overgrow","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#overgrow","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
     {"id":"keeneye","name":"Keen Eye","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#keeneye","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
+    {"id":"shellarmor","name":"Shell Armor","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#shellarmor","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}},
     {"id":"noguard","name":"No Guard","behaviorRef":"server@2f5b273925862ac242b419086c1e7a8868b51da1:data/abilities.ts#noguard","fieldSources":{"id":"showdown","name":"showdown","behaviorRef":"showdown"}}
   ],
   "items": [
@@ -120,6 +129,7 @@
     {"attacker":"dark","defender":"frog","multiplier":1,"source":"seedchart"},
     {"attacker":"dark","defender":"magic","multiplier":1,"source":"seedchart"},
     {"attacker":"dark","defender":"bird","multiplier":1,"source":"seedchart"},
+    {"attacker":"dark","defender":"crab","multiplier":1,"source":"seedchart"},
     {"attacker":"dragon","defender":"bug","multiplier":1,"source":"showdown"},
     {"attacker":"dragon","defender":"dark","multiplier":1,"source":"showdown"},
     {"attacker":"dragon","defender":"dragon","multiplier":2,"source":"showdown"},
@@ -162,6 +172,7 @@
     {"attacker":"electric","defender":"frog","multiplier":2,"source":"seedchart"},
     {"attacker":"electric","defender":"magic","multiplier":0.5,"source":"seedchart"},
     {"attacker":"electric","defender":"bird","multiplier":2,"source":"seedchart"},
+    {"attacker":"electric","defender":"crab","multiplier":1,"source":"seedchart"},
     {"attacker":"fairy","defender":"bug","multiplier":1,"source":"showdown"},
     {"attacker":"fairy","defender":"dark","multiplier":2,"source":"showdown"},
     {"attacker":"fairy","defender":"dragon","multiplier":2,"source":"showdown"},
@@ -240,6 +251,7 @@
     {"attacker":"flying","defender":"frog","multiplier":2,"source":"seedchart"},
     {"attacker":"flying","defender":"magic","multiplier":1,"source":"seedchart"},
     {"attacker":"flying","defender":"bird","multiplier":1,"source":"seedchart"},
+    {"attacker":"flying","defender":"crab","multiplier":2,"source":"seedchart"},
     {"attacker":"ghost","defender":"bug","multiplier":1,"source":"showdown"},
     {"attacker":"ghost","defender":"dark","multiplier":0.5,"source":"showdown"},
     {"attacker":"ghost","defender":"dragon","multiplier":1,"source":"showdown"},
@@ -282,6 +294,7 @@
     {"attacker":"grass","defender":"frog","multiplier":2,"source":"seedchart"},
     {"attacker":"grass","defender":"magic","multiplier":1,"source":"seedchart"},
     {"attacker":"grass","defender":"bird","multiplier":0.5,"source":"seedchart"},
+    {"attacker":"grass","defender":"crab","multiplier":0.5,"source":"seedchart"},
     {"attacker":"ground","defender":"bug","multiplier":0.5,"source":"showdown"},
     {"attacker":"ground","defender":"dark","multiplier":1,"source":"showdown"},
     {"attacker":"ground","defender":"dragon","multiplier":1,"source":"showdown"},
@@ -342,6 +355,7 @@
     {"attacker":"normal","defender":"frog","multiplier":1,"source":"seedchart"},
     {"attacker":"normal","defender":"magic","multiplier":1,"source":"seedchart"},
     {"attacker":"normal","defender":"bird","multiplier":1,"source":"seedchart"},
+    {"attacker":"normal","defender":"crab","multiplier":1,"source":"seedchart"},
     {"attacker":"poison","defender":"bug","multiplier":1,"source":"showdown"},
     {"attacker":"poison","defender":"dark","multiplier":1,"source":"showdown"},
     {"attacker":"poison","defender":"dragon","multiplier":1,"source":"showdown"},
@@ -402,6 +416,7 @@
     {"attacker":"rock","defender":"frog","multiplier":1,"source":"seedchart"},
     {"attacker":"rock","defender":"magic","multiplier":1,"source":"seedchart"},
     {"attacker":"rock","defender":"bird","multiplier":2,"source":"seedchart"},
+    {"attacker":"rock","defender":"crab","multiplier":1,"source":"seedchart"},
     {"attacker":"steel","defender":"bug","multiplier":1,"source":"showdown"},
     {"attacker":"steel","defender":"dark","multiplier":1,"source":"showdown"},
     {"attacker":"steel","defender":"dragon","multiplier":1,"source":"showdown"},
@@ -444,6 +459,7 @@
     {"attacker":"water","defender":"frog","multiplier":0,"source":"seedchart"},
     {"attacker":"water","defender":"magic","multiplier":1,"source":"seedchart"},
     {"attacker":"water","defender":"bird","multiplier":1,"source":"seedchart"},
+    {"attacker":"water","defender":"crab","multiplier":0.5,"source":"seedchart"},
     {"attacker":"normal","defender":"holy","multiplier":1,"source":"megachart"},
     {"attacker":"dark","defender":"holy","multiplier":2,"source":"megachart"},
     {"attacker":"water","defender":"holy","multiplier":0.5,"source":"megachart"},
@@ -454,6 +470,7 @@
   ],
   "teams": [
     {"id":"alpha","sets":[{"species":"rattata","ability":"runaway","item":"none","moves":["tackle","quickattack","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"eevee","ability":"runaway","item":"none","moves":["tackle","quickattack","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"froakie","ability":"torrent","item":"none","moves":["pound","watergun","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]},
-    {"id":"beta","sets":[{"species":"nosepass","ability":"sturdy","item":"none","moves":["tackle","rockthrow","thunderwave","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"floragato","ability":"overgrow","item":"none","moves":["scratch","magicalleaf","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"pidgeot","ability":"keeneye","item":"pidgeotite","moves":["tackle","gust","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]}
+    {"id":"beta","sets":[{"species":"nosepass","ability":"sturdy","item":"none","moves":["tackle","rockthrow","thunderwave","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"floragato","ability":"overgrow","item":"none","moves":["scratch","magicalleaf","bite","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"pidgeot","ability":"keeneye","item":"pidgeotite","moves":["tackle","gust","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]},
+    {"id":"gamma","sets":[{"species":"pidgey","ability":"keeneye","item":"none","moves":["gust","wingattack","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"pidgeotto","ability":"keeneye","item":"none","moves":["tackle","wingattack","quickattack","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}},{"species":"krabby","ability":"shellarmor","item":"none","moves":["visegrip","waterpulse","leer","protect"],"nature":"Hardy","level":50,"ivs":{"hp":31,"atk":31,"def":31,"spa":31,"spd":31,"spe":31},"evs":{"hp":0,"atk":0,"def":0,"spa":0,"spd":0,"spe":0}}]}
   ]
 }

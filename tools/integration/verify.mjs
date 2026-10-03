@@ -38,7 +38,11 @@ try {
   }
 }finally{battle.destroy();}
 if(catalog.seed.forms?.length) {
-  const recorded=JSON.parse(fs.readFileSync(path.join(c.client,'test/fixtures/tmt2-mega-simulator-replay.json')));
-  assert.deepEqual(megaReplay(),recorded,'selected mega simulator replay must reproduce exactly (public channel, no wall clock)');
+  const recorded=JSON.parse(fs.readFileSync(path.join(c.client,'test/fixtures/tmt2-catalog-simulator-replay.json')));
+  const actual=megaReplay();
+  assert.deepEqual(actual,recorded,'selected mega simulator replay must reproduce exactly (public channel, no wall clock)');
+  const historical=JSON.parse(fs.readFileSync(path.join(c.client,'test/fixtures/tmt2-mega-simulator-replay.json')));
+  const events=r=>r.log.filter(line=>!line.startsWith('|tmt2data|'));
+  assert.deepEqual(events(actual),events(historical),'TMT-08 battle events must remain unchanged; historical identity stays untouched');
 }
-console.log('TMT-05/06/08 cross-repository identity, isolated catalog and pinned engine intrinsic passed; client/runtime tests run in consumer suites.');
+console.log('TMT-05/06/08/09 cross-repository identity, isolated catalog and pinned engine intrinsic passed; client/runtime tests run in consumer suites.');
