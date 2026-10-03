@@ -233,3 +233,16 @@ pause; the client branch push had already succeeded. No workaround, data push,
 new browser/security exception or hosted setup run is used while explicit fresh
 publication approval is pending. No real downloaded SHA256/image evidence is
 invented; pinned Git blob hashes were read from official source trees.
+
+
+Final local checkpoint: `npm run ci:core` exited 0 on data implementation
+commit b3917d4 with client b21db5709f8e9a9d15b46bfe035fa519e3c0fd60 and
+server db159373b132babf016cf78ced737dec05d23d97. Data73/73, client83pass/1skip,
+server2424pass/74pending; bounded seed validation, builds, typechecks/lints,
+consumer parity/isolation, simulator regression and reproducible manifest passed.
+Lifecycle confirmed HTTP/WS, concurrent-operation rejection, SIGTERM143, lock
+removal and released 8000/8080 listeners. Live DNS diagnostics and slow upstream
+cases remain excluded by the documented policy, not reported as passing. This
+local run used the existing user artwork/fallbacks; it did not install or visually
+verify the new thirty official source files. No browser run or fresh hosted CI
+was performed for this branch. The later evidence-only commit changes no code.

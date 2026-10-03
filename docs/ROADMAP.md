@@ -273,6 +273,7 @@ User said placeholders are fine but requested actual sprites where possible,
 and authorized canonical Showdown art for matching Pokemon. This is limited
 feedback, **not blanket TMT-07 visual acceptance or public-release approval**.
 Optional byte-pinned local artwork for the existing nine bases and Mega Pidgeot
-is being verified through the existing sandboxed CI. No types/stats/rules,
+is prepared for verification through the existing sandboxed CI; actual source
+bytes and visual results remain unverified while publication is blocked. No types/stats/rules,
 catalog additions or TMT-12 scope. User-supplied assets retain priority; rights
 and actual verification results stay explicit in the existing evidence/PR.
