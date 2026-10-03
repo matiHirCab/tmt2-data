@@ -1511,3 +1511,53 @@ cerrados, `git switch master` en cada repo devuelve a las ramas locales previas;
 las ramas feature/evidencia permanecen disponibles. No borrar assets/evidencia del
 usuario ni hacer reset --hard. Si se fusiona, revertir commits coordinados en orden
 inverso (data/client/server) como cambio revisable separado.
+
+
+## TMT-11 — Regresiones acotadas y gates pendientes (2026-10-03)
+
+Preparación independiente; **TMT-11 parcial**, sin afirmar fidelidad ROM ni dar
+por aprobada la revisión visual del dueño pendiente en TMT-07. TMT-08/TMT-10
+conservan sus contratos y límites; no se amplía catálogo ni se inicia TMT-12.
+
+`tools/regression/simulator.mjs` y `tests/fixtures/tmt11-adaptation.json` fijan
+cuatro casos del mod real: alpha/beta (gana beta, 21 turnos), beta/gamma (beta, 25),
+gamma/alpha (gamma, 17) y beta-Mega/alpha (beta, 20). Cada caso valida ambos
+premades con el servidor y termina en `win`. Dos ejecuciones completas deben dar
+objetos replay idénticos; sólo se excluyen timestamps y canales privados.
+Los hashes son caracterización de la adaptación aprobada, no nuevos oráculos de
+ROM. Cambios en dataset/eventos/ganador/semilla/orden fallan sin actualizar solos
+las expectativas. Seis pruebas unitarias sintéticas ejercitan fallos y alcance;
+no se usan fixtures sintéticos para certificar que el mod juega.
+
+Los controles ordinarios verifican EVs/nivel/Tera, inmunidad Ground de Pidgeot,
+Dex Gen8/Gen9 y disponibilidad de Mew antes/después; las regresiones de mecánicas
+TMT-06/08/09 continúan en la suite completa, sin sustituir el motor de daño.
+Los nuevos pins son masters fusionados server `db159373b132babf016cf78ced737dec05d23d97`
+y client `49af6c4d55835f69b4222956adf99f7b19b50fa7`; se verificó igualdad de árboles
+con los inputs revisados de TMT-10. Dataset 0.3.1 / hash
+`6c03764a0518d08bd6a5a92262d40f322308e291e47e9377be70fed91627118b`.
+
+Comandos: `npm test` (66/66), `npm run typecheck` y
+`npm run regression:check` (cuatro casos, repetidos, aprobados). Logs locales
+ignorados: `.local/evidence/tmt11-data-tests.log` y `tmt11-simulator.json`.
+`npm run ci:core` terminó con exit 0: datos 66/66, servidor 2424 passing /
+74 pending, cliente 77 passing / 1 skip. Builds, lint, typechecks, validación,
+paridad y regresiones aprobados. Lifecycle real HTTP/WS, rechazo de concurrencia,
+SIGTERM 143, lock eliminado y puertos liberados aprobados; log ignorado
+`.local/evidence/tmt11-ci-core.log`. Los dos tests DNS y suites `(slow)` mantienen
+la separación/exclusión documentada; pending/skip no cuentan como aprobados.
+Esto no constituye browser CI ni instalación limpia local; la ejecución remota
+de esta rama todavía está pendiente.
+
+**Gates concretos pendientes:** Chromium con sandbox no inició: helper SUID
+mal configurado. No se ejecutó sin sandbox ni se alteraron controles/permisos.
+La nueva autorización solicitada sigue pendiente. Falta automatizar los flujos
+nativos en CI y la revisión visual del dueño de TMT-07; no se reaprovecha permiso
+cerrado ni se marca Done por capturas históricas.
+
+El ZIP `sprites.zip` recibido se inspeccionó sin extracción/ejecución: dieciséis
+archivos tienen tamaños y SHA-256 iguales a su manifiesto. SHA-256 del archivo
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`.
+Coincide archivo por archivo con el lote local previamente validado (16/16).
+Es el lote original de seis especies más UI; no aporta sprites de las nuevas
+adiciones ni prueba derechos de redistribución. No se añadieron assets al Git.

@@ -39,7 +39,7 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Hecho en adaptación aprobada: Mega Pidgeot; CI local completa |
 | 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Hecho: lote Bird/Crab, 10 especies/formas y 15 movimientos |
 | 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Completado: editor nativo y legalidad |
-| 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Pendiente |
+| 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Parcial: regresiones deterministas; navegador CI y revisión visual TMT-07 pendientes |
 | 4 | [TMT-12](#tmt-12--beta-reproducible) | TMT-11 + gate de derechos/proveniencia | Pendiente |
 
 ## Etapa 1 — Fundamentos verificables
@@ -242,11 +242,14 @@ ausentes quedan explícitos; publicar esta preparación no los convierte en apro
 
 ### TMT-11 — Regresión de fidelidad y aislamiento
 
-**Prerrequisitos:** TMT-07, TMT-08 y TMT-10. **Estado:** pendiente.
+**Prerrequisitos:** TMT-07, TMT-08 y TMT-10. **Estado:** parcial (2026-10-03).
+Cuatro combates/replays deterministas y controles de aislamiento incorporados al
+core; el recorrido de navegador en CI y la revisión visual del dueño de TMT-07
+siguen pendientes. Esta preparación independiente no completa los prerrequisitos.
 **DoD:** casos oráculo, combates/replays reproducibles y flujos de navegador en CI
 desde instalación limpia; formatos Showdown ajenos intactos. Fallos, exclusiones y
 límites se reportan explícitamente, sin convertir baseline fallido en aprobado.
-**Evidencia:** pendiente.
+**Evidencia:** [regresiones acotadas y gates pendientes](RULES_REFERENCE.md#tmt-11--regresiones-acotadas-y-gates-pendientes-2026-10-03).
 
 ### TMT-12 — Beta reproducible
 

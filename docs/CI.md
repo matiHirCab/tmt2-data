@@ -118,3 +118,32 @@ snapshot. See [STAGE_1_VALIDATION.md](STAGE_1_VALIDATION.md) for exact current r
 TMT-04 adds selected bounded seed validation after own tests/typecheck, before
 fork builds. `normalized/seed.json` now passes its bounded adaptation contract, including
 registered creator rows and chart coverage. Fixture success cannot bypass that gate. The validator runs offline against committed schema/evidence/pins.
+
+## TMT-11: deterministic adaptation regression (partial)
+
+`npm run regression:check` runs four complete actual-mod battles twice with fixed
+PRNG seeds: alpha/beta, beta/gamma, gamma/alpha and beta Mega/alpha. It checks
+byte-identical replay objects, winners, turn/event counts and log hashes against
+`tests/fixtures/tmt11-adaptation.json`. Only spectator projection and wall-clock
+`|t:|` records are normalized. There is no automatic expectation update command;
+a changed dataset or battle output requires a reviewed expectation change.
+These are characterization checks of the approved adaptation, **not independent
+ROM measurements**. The existing damage/STAB/Mega oracle cases in server
+`test/sim/tmt2-runtime.js`, `test/sim/tmt2-mega.js` and `test/sim/tmt2-catalog.js`
+remain in the configured server suite; their classifications/limits remain intact.
+
+Core executes the regression after fork builds/parity verification. Independent
+ordinary Gen9 battles before/after the TMT battles retain Normal/Flying Pidgeot,
+Ground immunity, EV influence, non-seed levels and Terastallization eligibility;
+Gen9/Gen8 format Dexes and ordinary Mew availability remain isolated. Consumer
+pins now name the exact merged TMT-10 master commits, whose trees were verified
+identical to the reviewed feature inputs; this is not a repair of failed TMT-10 CI.
+
+The browser-in-CI portion of TMT-11 is **not implemented or passed**. The local
+sandboxed Chromium launch failed because its SUID sandbox helper is misconfigured.
+No helper permissions, global settings or auth controls were changed, and no
+no-sandbox process was launched. The earlier one-off browser approval is closed;
+the requested fresh bounded browser exception remains unanswered. Existing native
+TMT-07/TMT-10 browser captures are historical evidence, not new CI execution or
+owner acceptance. TMT-11 remains partial while that browser coverage and the
+TMT-07 owner visual review are missing. No unused browser dependency is added.

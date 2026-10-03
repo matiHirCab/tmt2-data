@@ -1,0 +1,61 @@
+{
+  "kind": "tmt11-pinned-adaptation-characterization-v1",
+  "romOracle": false,
+  "fullCatalog": false,
+  "datasetHash": "6c03764a0518d08bd6a5a92262d40f322308e291e47e9377be70fed91627118b",
+  "reference": "Approved TMT-02 adaptation; unchanged TMT-06/08/09/10 rules and pinned source, not new ROM observations",
+  "cases": [
+    {
+      "id": "alpha-beta",
+      "seed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "winner": "beta",
+      "turns": 21,
+      "eventCount": 222,
+      "logSha256": "5595436f0c9ed7a105fb0f9aaf85ee75b1ede95ab9927bdacd4c71753681e350"
+    },
+    {
+      "id": "beta-gamma",
+      "seed": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "winner": "beta",
+      "turns": 25,
+      "eventCount": 253,
+      "logSha256": "ee93df6e3e9e894f64f4d56e7e8b378bb4379689ee77c9416a05921a639f3d75"
+    },
+    {
+      "id": "gamma-alpha",
+      "seed": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "winner": "gamma",
+      "turns": 17,
+      "eventCount": 171,
+      "logSha256": "491af9134dcf8efa0ccc0087587f0ba99ae944f9b546e8639c85c4d1f63c3292"
+    },
+    {
+      "id": "beta-mega-alpha",
+      "seed": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "winner": "beta",
+      "turns": 20,
+      "eventCount": 217,
+      "logSha256": "c20e1f50b0fa4ef02ee885adb2f008df1f1edc1c8892f0468777851ca55bd950"
+    }
+  ]
+}
