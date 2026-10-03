@@ -50,6 +50,6 @@ test('workflow action references use complete SHA-1 pins instead of malformed or
   const references = [...workflow.matchAll(/^\s+uses:\s+(\S+)/gm)].map(match => match[1]);
   assert.ok(references.length > 0, 'Workflow must contain action references');
   for (const reference of references) {
-    assert.match(reference, /^actions\/(checkout|setup-node)@[a-f0-9]{40}$/);
+    assert.match(reference, /^actions\/(checkout|setup-node|upload-artifact)@[a-f0-9]{40}$/);
   }
 });
