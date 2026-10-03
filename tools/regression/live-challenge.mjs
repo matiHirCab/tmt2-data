@@ -109,7 +109,12 @@ try {
   assert(images.every(f=>f.loaded&&f.width>0&&f.height>0));
   const files=await page.evaluate(()=>window.BattleTMT2Assets.files);
   for(const image of images)assert(files[image.src.replace(/^tmt2\//,'')],`Unpinned live sprite ${image.src}`);
+  const relativeSide=s.side==='p1'?1:0;
+  await room.locator(`[data-tooltip="activepokemon|${relativeSide}|0"]`).hover();
+  const shownTypes=page.locator('#tooltipwrapper .textaligned-typeicons').first().locator('.tmt2-type');
+  await shownTypes.first().waitFor();assert.deepEqual(await shownTypes.allTextContents(),['Bird','Bird','Bird']);
   await shot(page,`live-start-session${i+1}`);checks.push({check:'real front/back sprites and triple Bird types in live state',session:i+1,images,passed:true});
+  await page.mouse.move(1400,950);
  }
  const deadline=Date.now()+240000;
  let actions=0;
