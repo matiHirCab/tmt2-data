@@ -160,7 +160,7 @@ try {
   await download.saveAs(path.join(dir,`live-replay-session${i+1}.json`));
   const replay=JSON.parse(fs.readFileSync(path.join(dir,`live-replay-session${i+1}.json`),'utf8'));
   assert(replay.log.includes(wins[0][0]));
-  await page.goto(url);await page.locator('input[aria-label="Load local replay JSON"]').setInputFiles(path.join(dir,`live-replay-session${i+1}.json`));
+  await page.goto(url);await page.locator('input[type="file"]').setInputFiles(path.join(dir,`live-replay-session${i+1}.json`));
   await page.waitForFunction(()=>Object.values(PS.rooms).some(r=>r.id.startsWith('battle-uploaded')&&r.battle?.ended));
   await shot(page,`live-replay-session${i+1}`);
   checks.push({check:'actual completed live replay downloaded and viewed locally',session:i+1,datasetHash:replay.datasetHash,passed:true});

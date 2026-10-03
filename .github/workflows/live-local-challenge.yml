@@ -1,4 +1,4 @@
-name: Approved isolated live challenge (final sprite heads)
+name: Finalize actual live challenge replay (authentication normal)
 on:
   pull_request:
     branches: [master]
@@ -30,7 +30,8 @@ jobs:
       - name: Retain test harness then select immutable game data head
         run: |
           mkdir -p .local/live-proof
-          cp tools/regression/live-challenge.mjs .local/live-proof/live-challenge.mjs
+          cp tools/regression/verify-actual-live-replay.mjs .local/live-proof/verify-actual-live-replay.mjs
+          cp tools/regression/live-completed-replay.json .local/live-proof/live-completed-replay.json
           git checkout --detach b186cc1d67da28785e1c347a2c73e7fe1625fd2c
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -70,16 +71,19 @@ jobs:
           npm run integration:test
       - name: Install pinned sandboxed Chromium
         run: npx --no-install playwright install chromium
-      - name: User-approved loopback-only live challenge and cleanup
+      - name: Verify completed actual live replay with authentication normal
         env:
-          TMT2_APPROVED_LIVE_TEST: '2026-10-03'
-        run: node .local/live-proof/live-challenge.mjs
+          TMT2_LOCAL_GUESTS: '0'
+          TMT2_REQUIRE_SHOWDOWN_ART: '1'
+        run: node .local/live-proof/verify-actual-live-replay.mjs
       - name: Preserve actual live screenshots, replay and cleanup report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: final-sprites-live-challenge-${{ github.run_id }}
-          path: tmt2-data/.local/evidence/live-challenge-final-sprites/
+          path: |
+            tmt2-data/.local/evidence/live-challenge-final-sprites/
+            tmt2-data/.local/evidence/tmt11-native-local/
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 7
