@@ -186,3 +186,10 @@ regression; original art and its rights remain separate. Test fixtures resolve
 the trusted OS temp root (macOS `/var` alias) before creating their directories;
 untrusted output symlink guards are unchanged. Client merges before this data
 pin. Actual hosted browser result, rather than core success, closes its CI gate.
+
+
+The macOS full-core run at be77925 passed all 68 own tests, generation/parity
+and simulator regressions, then server ESLint exhausted Node's default ~2GiB heap
+before Chromium. The CI profile now explicitly gives its Node processes a 4GiB
+heap via step-scoped NODE_OPTIONS; no lint/test exclusions or host/security
+changes. Actual rerun results remain required; increasing a budget is not a pass.

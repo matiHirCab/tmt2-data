@@ -81,6 +81,7 @@ jobs:
         env:
           CI: true
           CI_MODE: ${{ matrix.mode }}
+          NODE_OPTIONS: --max-old-space-size=4096 # full upstream server lint needs more than arm64 default 2 GiB
         run: |
           if [ "$CI_MODE" = browser ]; then
             npm run ci:core
