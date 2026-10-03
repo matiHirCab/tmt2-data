@@ -72,11 +72,17 @@ jobs:
         run: npm install --global "npm@$NPM_VERSION" --ignore-scripts --no-audit --no-fund
       - name: Verify checkout and tool pins before installation
         run: node tools/ci/pins.mjs verify
-      - name: Install all three lockfiles
+      - name: Prepare private beta from clean lockfile checkouts
+        env:
+          CI_MODE: ${{ matrix.mode }}
         run: |
-          npm ci --no-audit --no-fund
-          npm ci --prefix ../Pokemon-Too-Many-Types-2 --no-audit --no-fund
-          npm ci --prefix ../Pokemon-Too-Many-Types-2-client --no-audit --no-fund
+          if [ "$CI_MODE" = network ]; then
+            npm ci --no-audit --no-fund
+            npm ci --prefix ../Pokemon-Too-Many-Types-2 --no-audit --no-fund
+            npm ci --prefix ../Pokemon-Too-Many-Types-2-client --no-audit --no-fund
+          else
+            npm run beta:prepare
+          fi
       - name: Install byte-pinned matching Showdown art (setup only)
         if: matrix.mode != 'network'
         run: npm run sprites:install

@@ -76,3 +76,10 @@ SHA-256 hashes and failures are recorded; ZIP is created only on full success.
 See [Windows commands, limits and provenance](docs/DEVELOPMENT.md#official-sprite-downloader).
 This is local evaluation tooling, not permission to redistribute artwork or
 proof that the native client's visual integration is complete.
+
+
+## Private beta
+
+[Private reproducible beta setup/checklist/feedback](docs/PRIVATE_BETA.md) uses
+`beta:prepare`, `beta:check`, `beta:dev` and `beta:feedback`. It bundles no ROM,
+patch or game art; public redistribution and exact ROM fidelity remain unapproved.

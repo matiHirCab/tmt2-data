@@ -480,3 +480,10 @@ perfiles Guest del cliente nativo. No inicia desafíos nuevos ni activa excepcio
 guest. Para rollback de esta adición, revertir su commit en una rama revisable;
 los cuatro controles sembrados previos siguen independientes. No cambiar el hash
 de captura ni la procedencia automáticamente para hacer pasar un dataset nuevo.
+
+
+Para el alcance privado TMT-12 aprobado, seguir [PRIVATE_BETA.md](PRIVATE_BETA.md).
+`beta:prepare` es la instalación explícita por tres lockfiles; los comandos de
+coordinación anteriores siguen sin instalar dependencias automáticamente.
+`beta:dev` revalida su snapshot después del build y antes de abrir listeners;
+no habilita unsigned names. Mantener derechos públicos/fidelidad pendientes.

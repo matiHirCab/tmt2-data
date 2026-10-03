@@ -5,7 +5,9 @@ import net from 'node:net';
 import {spawn, spawnSync} from 'node:child_process';
 import {config, root} from '../workspace/core.mjs';
 const c = config();
-const child = spawn(process.execPath, ['tools/workspace/cli.mjs', 'dev'], {
+const [mode,...extra]=process.argv.slice(2);
+assert(!extra.length&&(!mode||mode==='--private-beta'),'Usage: smoke.mjs [--private-beta]');
+const child = spawn(process.execPath, mode?['tools/beta/private.mjs','dev']:['tools/workspace/cli.mjs', 'dev'], {
   cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
 });
 const ended = new Promise((resolve, reject) => { child.once('exit', resolve); child.once('error', reject); });
@@ -39,6 +41,11 @@ try {
   for (const command of ['build', 'manifest:write', 'manifest:check']) {
     const result = spawnSync(process.execPath, ['tools/workspace/cli.mjs', command], {cwd: root, encoding: 'utf8', timeout: 10000});
     assert.equal(result.status, 1); assert.match(result.stderr, /already locked/);
+  }
+  if(mode){
+    const probe=spawnSync(process.execPath,['tools/beta/private.mjs','prepare'],{cwd:root,encoding:'utf8',timeout:10000});
+    assert.equal(probe.status,1);assert.match(probe.stderr,/already locked/);
+    assert(!probe.stdout.includes('lockfile install'),'Concurrent prepare must not start npm ci');
   }
   child.kill('SIGTERM');
   assert.equal(await timeout(ended, 10000, 'shutdown timed out'), 143);

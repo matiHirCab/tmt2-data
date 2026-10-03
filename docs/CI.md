@@ -300,3 +300,38 @@ and released ports. The two live-DNS cases and upstream slow cases remain NOT RU
 optional legacy graphics.js/commands.js warnings remain explicit. The executor's
 Chromium sandbox availability has not changed; final browser verification uses the
 existing sandbox-required hosted macOS job, not a local no-sandbox workaround.
+
+
+## TMT-12 private readiness
+
+Scope approved2026-10-03: reproducible private evaluation, no bundled ROM/BPS/art,
+no redistribution-rights claim. After existing core/lifecycle, CI writes/checks
+`.local/private-beta.json`, then exercises `beta:dev` startup and SIGTERM cleanup
+through the same smoke harness. The snapshot resolves three current commits
+(no circular self-SHA), lockfiles, catalog and byte-verified local asset profile.
+The hosted fresh-lockfile/browser profile remains unchanged except these added
+readiness checks; it imports the recorded live match as Guests, not a new named
+challenge/security exception. See [private checklist/limits](PRIVATE_BETA.md).
+
+Hosted core/browser jobs now exercise `beta:prepare` directly on fresh clean
+checkouts instead of maintaining a separate installer sequence. The optional
+network-only diagnostic keeps its minimal three npm-ci commands. Official art
+setup remains explicit and separate; subsequent core builds/snapshot record that
+actual profile. No new action permissions, security flags or runner are introduced.
+
+Local initial failures are preserved: prepare installed/built successfully but
+rejected the native root-relative `/js/lib/ps-polyfill.js` URL; normalization was
+fixed while filesystem paths still reject traversal/symlinks. The first private
+launch smoke found its outer2s supervisor grace could kill the inner supervisor
+before lock cleanup; beta's outer grace is now5s. The stale owned lock was removed
+only after verifying its recorded PID dead and listeners absent. Focused repeated
+launch then passed SIGTERM143, lock removal and released ports; no auth exception.
+
+Local final implementation verification: `beta:prepare` installed all three
+lockfiles and passed builds/parity/snapshot; `beta:check`, two byte-identical
+snapshots and `beta:feedback` passed. Full `ci:core`: data86pass, client83pass/1skip,
+server2424pass/74pending, builds/types/lint/seed/parity/isolation/four simulator
+replays/actual recording/manifest plus both normal and private-beta lifecycle
+smokes passed. No new live match/security exception. Optional PHP news refresh
+warned `php: not found` as in the baseline build; it did not supply upstream Dex
+data or turn a failed required check green. Final hosted check tracked on the PR.

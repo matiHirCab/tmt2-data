@@ -45,6 +45,9 @@ try {
     }
   } finally { release(); }
   if (!process.exitCode && mode === 'core') {
-    process.exitCode = await supervise([node(c.data, ['tools/ci/smoke.mjs'], 'coordinated lifecycle smoke')]);
+    process.exitCode = await supervise([node(c.data, ['tools/ci/smoke.mjs'], 'coordinated lifecycle smoke'),
+      node(c.data, ['tools/beta/private.mjs','snapshot'], 'private beta snapshot with exact local assets'),
+      node(c.data, ['tools/beta/private.mjs','check'], 'private beta reproducibility check'),
+      node(c.data, ['tools/ci/smoke.mjs','--private-beta'], 'private beta launch and clean shutdown')]);
   }
 } catch (e) { console.error(`[ci] ${e.message}`); process.exitCode = 1; }

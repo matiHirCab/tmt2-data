@@ -20,7 +20,8 @@ Primer formato aprobado 2026-09-30: singles privado, no clasificado, dos equipos
 prefijados de 3, nivel50, IV31 y EV0. **Decisión competitiva del usuario**,
 no regla demostrada del ROM ni inferencia del postgame.
 Fuera del MVP: catálogo completo, ladder aleatoria, torneos y rediseño visual.
-Publicar una beta o desplegarla requiere autorización separada.
+Preparar la beta privada fue aprobado2026-10-03 en TMT-12. Publicar una beta
+pública o desplegarla requiere autorización separada.
 
 Estados: **pendiente**, **en progreso**, **parcial/bloqueado**, **implementado local
 (pendiente CI remoto)**, **terminado**. «Terminado» exige toda la DoD y evidencia,
@@ -35,12 +36,12 @@ No convertir una hipótesis, descripción, CRC o nombre de archivo en un hecho R
 | 2 | [TMT-04](#tmt-04--semilla-verificada-y-esquema) | TMT-01, TMT-02 | Completado: seed acotado de adaptación, esquema y validación |
 | 2 | [TMT-05](#tmt-05--mod-formato-oculto-y-dex-cliente-integrados) | TMT-04 | Terminado: tres PRs fusionados, CI remota verificada |
 | 2 | [TMT-06](#tmt-06--mecánicas-semilla-no-evs-y-legalidad) | TMT-05 | Terminado: PRs fusionados y CI remota verificada |
-| 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Parcial: recorrido nativo automatizado y QA visual/replay con originales verificados; revisión del usuario pendiente |
+| 2 | [TMT-07](#tmt-07--primer-combate-privado-de-dos-jugadores) | TMT-03, TMT-06 | Terminado bajo adaptación: recorrido nativo, sprites y replay verificados; feedback positivo del usuario |
 | 3 | [TMT-08](#tmt-08--megas-y-cambios-de-tipo-verificados) | TMT-06 | Hecho en adaptación aprobada: Mega Pidgeot; CI local completa |
 | 3 | [TMT-09](#tmt-09--ampliar-catálogo-mvp) | TMT-06; TMT-08 cuando aplique | Hecho: lote Bird/Crab, 10 especies/formas y 15 movimientos |
 | 3 | [TMT-10](#tmt-10--teambuilder-y-equipos-realmente-legales) | TMT-09 | Completado: editor nativo y legalidad |
-| 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Parcial: regresiones/core/navegador CI aprobados; revisión visual TMT-07 pendiente |
-| 4 | [TMT-12](#tmt-12--beta-reproducible) | TMT-11 + gate de derechos/proveniencia | Pendiente |
+| 4 | [TMT-11](#tmt-11--regresión-de-fidelidad-y-aislamiento) | TMT-07, TMT-08, TMT-10 | Terminado bajo adaptación: core y 25 checks nativos aprobados; sin oráculo ROM |
+| 4 | [TMT-12](#tmt-12--beta-reproducible) | TMT-11 + alcance privado aprobado; distribución pública bloqueada | En progreso: beta privada reproducible |
 
 ## Etapa 1 — Fundamentos verificables
 
@@ -167,8 +168,9 @@ fidelidad ROM. La prueba local del simulador no cumple el recorrido de TMT-07.
 
 ### TMT-07 — Primer combate privado de dos jugadores
 
-**Prerrequisitos:** TMT-03 y TMT-06. **Estado:** parcial hasta revisión visual del
-usuario. El recorrido actual con sprites reales también fue completado: dos
+**Prerrequisitos:** TMT-03 y TMT-06. **Estado:** terminado en adaptación privada.
+Feedback positivo del usuario sobre presentación/sprites y continuación aceptado
+el2026-10-03; no es playtesting humano ni aprobación de fidelidad ROM/distribución. El recorrido actual con sprites reales también fue completado: dos
 sesiones locales independientes eligieron alpha/beta, enviaron/aceptaron el desafío
 y coincidieron en la victoria de SpriteBeta (turno22, 47 decisiones nativas).
 La importación posterior falló por un selector del harness; una ejecución separada
@@ -244,7 +246,7 @@ ausentes quedan explícitos; publicar esta preparación no los convierte en apro
 
 ### TMT-11 — Regresión de fidelidad y aislamiento
 
-**Prerrequisitos:** TMT-07, TMT-08 y TMT-10. **Estado:** parcial (2026-10-03).
+**Prerrequisitos:** TMT-07, TMT-08 y TMT-10. **Estado:** terminado en adaptación aprobada (2026-10-03).
 Cuatro combates/replays deterministas y controles de aislamiento incorporados al
 core. Instalación limpia alojada aprobó core y 22 controles del navegador nativo
 con sandbox obligatorio, sin errores/404/fallback remoto; [CI verificada](https://github.com/matiHirCab/tmt2-data/actions/runs/37136473494)
@@ -254,8 +256,10 @@ con hash y procedencia explícitos.
 La corrección reutiliza sprites locales,
 labels y tarjetas explícitas, sin nuevos originales. El recorrido local anterior
 falló por 404 y permanece como evidencia histórica, no se reescribe como pass.
-Revisión visual del dueño de TMT-07 sigue pendiente: CI automatizada no completa
-ese prerrequisito ni demuestra fidelidad ROM; no iniciar TMT-12.
+Presentación nativa aceptada por feedback positivo del usuario; la adaptación
+tiene core y25 checks nativos aprobados en [CI postmerge PR16](https://github.com/matiHirCab/tmt2-data/actions/runs/37156603923).
+Esto no demuestra fidelidad ROM ni aprueba redistribución; TMT-12 tiene decisión
+de alcance privado separada abajo.
 **DoD:** casos oráculo, combates/replays reproducibles y flujos de navegador en CI
 desde instalación limpia; formatos Showdown ajenos intactos. Fallos, exclusiones y
 límites se reportan explícitamente, sin convertir baseline fallido en aprobado.
@@ -263,13 +267,25 @@ límites se reportan explícitamente, sin convertir baseline fallido en aprobado
 
 ### TMT-12 — Beta reproducible
 
-**Prerrequisitos:** TMT-11 y aprobación de derechos/proveniencia de datos/assets.
-**Estado:** pendiente.
+**Prerrequisitos:** TMT-11; alcance privado explícitamente aprobado.
+**Estado:** en progreso — beta privada reproducible, validación final pendiente.
+**Cambio de alcance autorizado 2026-10-03:** el usuario respondió «Yes» a preparar
+beta privada sin empaquetar ROMs, parches o game assets y dejar release pública
+pendiente (Sentinel_fba8113884d08191902da34e9f0bdcf4). El DoD original se conserva
+abajo para distribución futura: su gate de derechos **no se declara aprobado**.
+Para este ticket privado se exige instalación por lockfiles, snapshot exacto de
+tres commits/dataset/assets externos, launch nativo seguro, checklist de dos
+jugadores, replay compatible, límites y feedback; se reutiliza la evidencia live
+ya verificada, sin nueva excepción guest ni nuevo playtesting humano.
+[Guía/commands/checklist](PRIVATE_BETA.md), `tools/beta/private.mjs` y
+`tests/private-beta.test.mjs`. Derechos/redistribución pública siguen pendientes;
+no seleccionar licencia para fuentes ajenas ni borrar assets existentes.
 **DoD:** fijar tres commits + dataset + assets; docs de instalación, límites y
 rollback; instalación nueva completa un combate. Resolver licencia/redistribución
 antes de incluir material no aprobado. Despliegue público fuera de esta DoD y con
 autorización separada.
-**Evidencia:** pendiente; todavía no existe beta TMT2 ni permiso de publicación nueva.
+**Evidencia:** snapshot local y validación de CI referenciados en PRIVATE_BETA/CI;
+publicación pública/despliegue no autorizados.
 
 
 ### Limited visual follow-up, 2026-10-03 (TMT-07/TMT-11)

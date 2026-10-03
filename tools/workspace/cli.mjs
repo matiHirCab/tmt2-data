@@ -63,7 +63,12 @@ try {
         await free(c.serverPort); await free(c.clientPort);
         const result = await supervise(builds);
         if (result) process.exitCode = result;
-        else process.exitCode = await supervise([
+        else {
+          if(process.env.TMT2_PRIVATE_BETA_CHECK==='1'){
+            const {betaSnapshot,checkSnapshot}=await import('../beta/private.mjs');
+            checkSnapshot(JSON.parse(fs.readFileSync(path.join(root,'.local/private-beta.json'))),betaSnapshot(c));
+          }
+          process.exitCode = await supervise([
           node(c.server, [path.join(root, 'tools/workspace/server.cjs'), String(c.serverPort),
             ...(process.env.TMT2_LOCAL_GUESTS === '1' ? ['--local-guests'] : [])], 'local server'),
           node(c.client, [path.join(root, 'tools/workspace/static.mjs'), path.join(c.client, 'play.pokemonshowdown.com'), String(c.clientPort)], 'local client'),
@@ -78,6 +83,7 @@ try {
           }
           if (!stopped()) throw Error('Services did not become ready within startup timeout');
         }});
+        }
       }
     } finally { release(); }
   }

@@ -28,7 +28,12 @@
     "regression:check": "node tools/regression/simulator.mjs",
     "ci:browser": "node tools/regression/browser.mjs",
     "sprites:install": "node tools/sprites/install-pinned.mjs",
-    "regression:live-recording": "node tools/regression/live-recording.mjs"
+    "regression:live-recording": "node tools/regression/live-recording.mjs",
+    "beta:prepare": "node tools/beta/private.mjs prepare",
+    "beta:snapshot": "node tools/beta/private.mjs snapshot",
+    "beta:check": "node tools/beta/private.mjs check",
+    "beta:dev": "node tools/beta/private.mjs dev",
+    "beta:feedback": "node tools/beta/private.mjs feedback"
   },
   "devDependencies": {
     "playwright": "1.62.1",
