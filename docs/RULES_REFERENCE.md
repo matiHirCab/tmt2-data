@@ -1546,8 +1546,13 @@ paridad y regresiones aprobados. Lifecycle real HTTP/WS, rechazo de concurrencia
 SIGTERM 143, lock eliminado y puertos liberados aprobados; log ignorado
 `.local/evidence/tmt11-ci-core.log`. Los dos tests DNS y suites `(slow)` mantienen
 la separación/exclusión documentada; pending/skip no cuentan como aprobados.
-Esto no constituye browser CI ni instalación limpia local; la ejecución remota
-de esta rama todavía está pendiente.
+Esto no constituye browser CI ni instalación limpia local. La ejecución remota
+[37128415787](https://github.com/matiHirCab/tmt2-data/actions/runs/37128415787)
+aprobó el commit de implementación `57e615e71f446902d50fdd3df9a736abab2c6e9d`
+desde checkout e instalación limpia de los tres lockfiles: datos 66/66, servidor
+2428 passing / 70 pending, cliente 77 passing / 1 skip; regresiones y lifecycle
+aprobados. El resultado del head posterior de documentación se registra en
+[PR #13](https://github.com/matiHirCab/tmt2-data/pull/13), sin pin autorreferencial.
 
 **Gates concretos pendientes:** Chromium con sandbox no inició: helper SUID
 mal configurado. No se ejecutó sin sandbox ni se alteraron controles/permisos.
