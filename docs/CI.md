@@ -143,8 +143,12 @@ The native browser runner is now prepared as `npm run ci:browser`, separately
 from `ci:core`; a successful core run cannot substitute for its own result.
 Playwright 1.62.1 is lockfile-pinned. The core workflow installs its pinned Chromium
 revision with `npx --no-install playwright install chromium` (no sudo/with-deps,
-permission/security changes), then runs the native browser step. The hosted
-Ubuntu 24.04 agent must support the sandbox: `chromiumSandbox: true` is explicit
+permission/security changes), then runs the native browser step. The browser job uses a standard hosted macOS 15 agent, separately from the
+Ubuntu 24.04 core/network jobs; it first runs the same full core profile.
+The previous unchanged Ubuntu 24.04 browser attempt failed with `No usable
+sandbox` before service startup. No AppArmor/sysctl/SUID settings were changed;
+selecting a normally sandbox-capable host retains the required browser sandbox.
+Its actual result is recorded on PR #13, not assumed from platform choice: `chromiumSandbox: true` is explicit
 because Playwright's default is false ([launch API](https://playwright.dev/docs/api/class-browsertype#browser-type-launch-option-chromium-sandbox)).
 There is no no-sandbox fallback or bypass option in the CLI/CI. If that host lacks
 sandbox capabilities/libraries, the browser step fails with its real error; it

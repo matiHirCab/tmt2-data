@@ -21,12 +21,12 @@ concurrency:
 jobs:
   workspace:
     name: Workspace (${{ matrix.mode }})
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
-        mode: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.network_diagnostics && '["core","network"]' || '["core"]') }}
+        include: ${{ fromJSON(github.event_name == 'workflow_dispatch' && inputs.network_diagnostics && '[{"mode":"core","runner":"ubuntu-24.04"},{"mode":"browser","runner":"macos-15"},{"mode":"network","runner":"ubuntu-24.04"}]' || '[{"mode":"core","runner":"ubuntu-24.04"},{"mode":"browser","runner":"macos-15"}]') }}
     defaults:
       run:
         shell: bash
@@ -81,12 +81,17 @@ jobs:
         env:
           CI: true
           CI_MODE: ${{ matrix.mode }}
-        run: npm run "ci:$CI_MODE"
+        run: |
+          if [ "$CI_MODE" = browser ]; then
+            npm run ci:core
+          else
+            npm run "ci:$CI_MODE"
+          fi
       - name: Install pinned browser (no host/security changes)
-        if: matrix.mode == 'core'
+        if: matrix.mode == 'browser'
         run: npx --no-install playwright install chromium
       - name: Native browser regression (sandbox required)
-        if: matrix.mode == 'core'
+        if: matrix.mode == 'browser'
         env:
           CI: true
           TMT2_LOCAL_GUESTS: '0'
