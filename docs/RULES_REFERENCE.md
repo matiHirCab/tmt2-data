@@ -1358,3 +1358,71 @@ nuevos son Wing Attack (`wingattack`), Vise Grip (`visegrip`), Water Pulse
 Showdown 2f5b273925862ac242b419086c1e7a8868b51da1, `data/moves.ts#ID`,
 no hechos de movimientos ROM. Conteo: nueve bases Rattata/Eevee/Froakie/Nosepass/
 Floragato/Pidgeot/Pidgey/Pidgeotto/Krabby más **Mega Pidgeot** = diez especies/formas.
+
+
+### TMT-10 — Editor nativo y equipos legales (2026-10-03)
+
+Se verificaron las fusiones TMT-09: server `3e3089c41de054e37603e688748a7c14501a592b`,
+client `39f8b4c7ddb027c22ae2fd780f8ab6806e090bbd`, data
+`1936bdf838f5362af9d3f04c1a361891e7ff8318`. Sus árboles son idénticos a las ramas
+revisadas y los pins anteriores siguen accesibles; no hubo una reparación de
+historia. CI postmerge [37120511608](https://github.com/matiHirCab/tmt2-data/actions/runs/37120511608)
+aprobó 59 tests data, 2424 server / 70 pending y 72 client / 1 skip.
+
+**Cambio funcional acotado:** el TeamEditor existente ofrece alpha/beta/gamma,
+import/export local y errores orientativos que coinciden con el gate del servidor.
+Se mantienen los tres premades completos: no autoriza combinaciones libres.
+Los formularios nativos de stats/detalles muestran level50/IV31/EV0/Hardy y no
+permiten editar EVs, IVs, nivel, naturaleza o Tera; los stats reflejan esos valores
+aunque el texto importado sea ilegal. Importar conserva los errores para corregirlos,
+sin convertir silenciosamente EV252 en EV0. Validate conserva el comando `/utm`
+y `/vtm` nativo: el servidor decide la aceptación. Los IDs de salas locales del
+editor resuelven a room=null en `server/users.ts`, permitiendo estos comandos
+globales; esto no cambia autenticación ni la política de salas.
+
+DexSearch encuentra Grass/Magic/Cat en cualquiera de los tres slots y Bird/Crab.
+Conserva Bird/Bird/Bird en el catálogo y excluye Mega Pidgeot como especie inicial,
+pero no del Dex de batalla/replay. Recursos de samples/Smogon/pokepaste y publicación
+de equipos no se usan para TMT2; los formatos ordinarios conservan su comportamiento.
+
+La revisión de metadatos 0.3.1 añade únicamente shortDesc de movimientos, habilidades
+y Pidgeotite desde `Dex.text` del pin Showdown
+`2f5b273925862ac242b419086c1e7a8868b51da1`, con fieldSources y hash heredado.
+No-item tiene descripción policy. Schema valida texto no vacío (máximo 1000 caracteres).
+Hash seed `6c03764a0518d08bd6a5a92262d40f322308e291e47e9377be70fed91627118b`;
+no añade especies, movimientos, hechos ROM ni callbacks. Las fixtures históricas
+0.2.0/0.3.0 quedan intactas; la nueva fixture 0.3.1 reproduce los mismos eventos
+de batalla TMT-08, cambiando únicamente identidad de dataset.
+
+**Cobertura:** cuatro tests nuevos del editor ejecutan TeamEditorState real y
+renderizan StatForm/DetailsForm con Preact: stats fijos, import/export, campos no
+editables, búsqueda, aislamiento y descripciones del Dex. Cuatro tests server
+ejercitan textos/packed teams legales y negativos. La verificación coordinada
+compara 24 entradas válidas/ilegales con el gate autoritativo sin mutar los datos,
+además de stats reales y replay. Estas pruebas no son capturas de navegador.
+
+**Límite visual:** Chromium sandboxed aborta antes de cargar una página:
+`setuid_sandbox_host.cc:166`, helper SUID sin propietario/permisos requeridos.
+No se cambiaron permisos ni seguridad. La autorización puntual para un navegador
+efímero sin sandbox, restringido a loopback, fue solicitada y sigue pendiente;
+no se reutiliza ninguna excepción TMT-07. El recorrido visual, reload y popup
+autoritativo en el editor no se declaran aprobados. TMT-10 permanece en curso.
+
+El nuevo sprites.zip adjunto es idéntico al previamente registrado: SHA256
+`533b8f4315c3c144d8397dc881600d92a5258ecd3c430025e420a1c85754d4ab`,
+17 entradas / 16 assets más manifest. Inspección de nombres/tamaños sin ejecutar
+contenido; no se añadió el ZIP ni arte binario a Git. No cubre los originales
+ausentes de gamma/Mega ni resuelve derechos de redistribución.
+
+**Verificación local final:** `npm run ci:core` aprobó data60 / 0 fail, server2424 /
+74 pending, client76 / 1 skip / 0 fail, builds, ambos typechecks del cliente,
+lint server/client, dataset y parity/replay. Su lifecycle HTTP/WS, rechazo de
+operación concurrente, SIGTERM143, eliminación del lock y puertos liberados pasó.
+Log `.local/evidence/tmt10/ci-core-final.log`. La primera ejecución falló por
+indentación del nuevo test server; se corrigió exclusivamente con eslint --fix
+y se volvió a ejecutar core completo, sin cambiar reglas de lint o excluir tests.
+Dos `seed:prepare --output NEW.json` reproducen byte a byte normalized/seed.json;
+`integration:check`, regeneración y nuevo check no cambian archivos consumidores.
+`npm run ci:network` no ejecutado; dos casos DNS y upstream slow siguen separados.
+Los 74 pendientes locales incluyen los cuatro SQLite opcionales ya documentados;
+no son cuatro fallos TMT-10. El hook PHP opcional del build continúa ausente.

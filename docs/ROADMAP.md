@@ -219,7 +219,7 @@ de Chromium, con autorización temporal específica solicitada.
 **DoD:** búsqueda por cualquiera de los tres tipos, tooltips de stats/ítems/
 habilidades/movimientos correctos, import/export probado, sin manipulación de EVs,
 equipos legales aceptados y errores de servidor claros para los ilegales.
-**Evidencia:** pendiente; un selector visible no equivale a equipos legales.
+**Evidencia:** [contrato, cambios y pruebas TMT-10](RULES_REFERENCE.md#tmt-10--editor-nativo-y-equipos-legales-2026-10-03). Tests del editor y gate implementados; recorrido visual/reload/popup real pendientes. Un selector visible no equivale a equipos legales.
 **Preparación concreta (2026-10-03, sin implementación):** después de revisar y
 fusionar TMT-09, verificar los tres masters/pins y abrir ramas nuevas.
 1. Extender los controles nativos existentes: búsqueda por cada slot de tipo,
