@@ -1491,3 +1491,23 @@ liberados, lock retirado y config persistente noguestsecurity=false verificada.
 No se modificó ninguna política de seguridad. QA automatizado, **no playtesting
 humano ni fidelidad ROM**. La revisión visual del dueño y arte original de gamma/
 Mega siguen separados del DoD funcional: no se declara acabado gráfico completo.
+
+**CI-core local sobre las correcciones finales:** `npm run ci:core` aprobado con
+data60 / 0 fail, server2424 / 74 pending, client77 / 1 skip / 0 fail, builds, lint,
+typechecks, parity/replay y lifecycle HTTP/WS/SIGTERM/lock/puertos. Log
+`.local/evidence/tmt10/ci-core-visual-final.log`. Pins exactos: server
+`84d4617ea62a8d13b871310d11e55ae71df86e18`, client
+`cb3d0b41664bd797a2dc42a616427485298af1f5`. No tests DNS/slow reetiquetados como
+aprobados. Pendientes SQLite/skip/assets conservan los límites anteriores.
+TMT-10 cumple el DoD funcional bajo adaptación: búsqueda, información/estadísticas
+fijas, import/export, ausencia de edición EV y aceptación/rechazo claros reales.
+No autoriza combos libres ni inicia TMT-11. PRs siguen en borrador: server
+[#5](https://github.com/matiHirCab/Pokemon-Too-Many-Types-2/pull/5), client
+[#6](https://github.com/matiHirCab/Pokemon-Too-Many-Types-2-client/pull/6), data
+[#12](https://github.com/matiHirCab/tmt2-data/pull/12); orden eventual server→client→data.
+CI remoto debe comprobar cada head publicado final antes del merge.
+Rollback de revisión sin destruir trabajo: con los checkouts limpios y servicios
+cerrados, `git switch master` en cada repo devuelve a las ramas locales previas;
+las ramas feature/evidencia permanecen disponibles. No borrar assets/evidencia del
+usuario ni hacer reset --hard. Si se fusiona, revertir commits coordinados en orden
+inverso (data/client/server) como cambio revisable separado.
