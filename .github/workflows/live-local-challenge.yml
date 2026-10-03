@@ -1,0 +1,82 @@
+name: Approved isolated live challenge (final sprite heads)
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+concurrency:
+  group: approved-live-challenge-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  live:
+    # This proof-only branch corresponds to the specific October3 user approval.
+    # It is not a general future auth exemption or a production workflow.
+    if: github.head_ref == 'test/live-challenge-final-sprites'
+    runs-on: macos-15
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+        working-directory: tmt2-data
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          path: tmt2-data
+          fetch-depth: 0
+          persist-credentials: false
+          clean: false
+          set-safe-directory: false
+      - name: Retain test harness then select immutable game data head
+        run: |
+          mkdir -p .local/live-proof
+          cp tools/regression/live-challenge.mjs .local/live-proof/live-challenge.mjs
+          git checkout --detach b186cc1d67da28785e1c347a2c73e7fe1625fd2c
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: matiHirCab/Pokemon-Too-Many-Types-2
+          ref: db159373b132babf016cf78ced737dec05d23d97
+          path: Pokemon-Too-Many-Types-2
+          fetch-depth: 0
+          persist-credentials: false
+          clean: false
+          set-safe-directory: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: matiHirCab/Pokemon-Too-Many-Types-2-client
+          ref: 75a5cdef759cb30f391ebf7e9dfe6e3384f6c931
+          path: Pokemon-Too-Many-Types-2-client
+          persist-credentials: false
+          clean: false
+          set-safe-directory: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.19.0
+          package-manager-cache: false
+      - name: Install exact tools and lockfiles
+        run: |
+          npm install --global npm@11.9.0 --ignore-scripts --no-audit --no-fund
+          node tools/ci/pins.mjs verify
+          npm ci --no-audit --no-fund
+          npm ci --prefix ../Pokemon-Too-Many-Types-2 --no-audit --no-fund
+          npm ci --prefix ../Pokemon-Too-Many-Types-2-client --no-audit --no-fund
+          npm run sprites:install
+      - name: Build and verify exact pinned game before live journey
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+        run: npm run ci:core
+      - name: Install pinned sandboxed Chromium
+        run: npx --no-install playwright install chromium
+      - name: User-approved loopback-only live challenge and cleanup
+        env:
+          TMT2_APPROVED_LIVE_TEST: '2026-10-03'
+        run: node .local/live-proof/live-challenge.mjs
+      - name: Preserve actual live screenshots, replay and cleanup report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: final-sprites-live-challenge-${{ github.run_id }}
+          path: tmt2-data/.local/evidence/live-challenge-final-sprites/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7
