@@ -38,6 +38,8 @@ export function betaSnapshot(c=config()) {
   assert.equal(require(path.join(c.server,'config/config.js')).noguestsecurity,false,'Persistent guest security must remain enabled');
   const catalog=JSON.parse(fs.readFileSync(path.join(c.client,'tmt2/catalog.json')));
   const base=path.join(c.client,'play.pokemonshowdown.com');
+  checkedAssetFile(base,'data/tmt2-native-assets.json');
+  checkedAssetFile(base,'testclient-new.html');
   const native=JSON.parse(fs.readFileSync(path.join(base,'data/tmt2-native-assets.json')));
   assert.equal(native.datasetHash,catalog.metadata.datasetHash,'Native asset dataset drift');
   assert.equal(native.generator,'tmt2-native-v1');

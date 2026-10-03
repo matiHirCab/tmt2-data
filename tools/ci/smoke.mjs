@@ -42,6 +42,11 @@ try {
     const result = spawnSync(process.execPath, ['tools/workspace/cli.mjs', command], {cwd: root, encoding: 'utf8', timeout: 10000});
     assert.equal(result.status, 1); assert.match(result.stderr, /already locked/);
   }
+  if(mode){
+    const probe=spawnSync(process.execPath,['tools/beta/private.mjs','prepare'],{cwd:root,encoding:'utf8',timeout:10000});
+    assert.equal(probe.status,1);assert.match(probe.stderr,/already locked/);
+    assert(!probe.stdout.includes('lockfile install'),'Concurrent prepare must not start npm ci');
+  }
   child.kill('SIGTERM');
   assert.equal(await timeout(ended, 10000, 'shutdown timed out'), 143);
   assert.equal(fs.existsSync(path.join(root, '.local/operation.lock')), false);
