@@ -27,6 +27,7 @@ try {
       node(c.client, ['build'], 'pinned client build and local seed runtime'),
       node(c.data, ['tools/integration/verify.mjs'], 'cross-repository catalog/version and Dex isolation'),
       node(c.data, ['tools/regression/simulator.mjs'], 'TMT-11 pinned adaptation replay regression and ordinary format isolation'),
+      node(c.data, ['tools/regression/live-recording.mjs'], 'actual native battle recording integrity and current dataset compatibility'),
       npm(c.server, ['run', 'lint'], 'server lint'),
       npm(c.server, ['run', 'tsc'], 'server typecheck'),
       node(c.server, ['node_modules/mocha/bin/mocha.js', '--grep', coreGrep, '--forbid-only'], 'server tests excluding exactly two live DNS cases and upstream (slow)'),

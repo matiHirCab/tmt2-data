@@ -1683,3 +1683,49 @@ head posterior sólo registra esta evidencia; su resultado exacto se comprueba
 en PR #13. **TMT-11 permanece parcial únicamente por revisión visual TMT-07 del
 dueño pendiente** dentro de este alcance: no es playtesting humano, nuevo combate
 live de dos nombres ni oráculo ROM. No iniciar beta/TMT-12 ni hacer merge/deploy.
+
+
+### Captura live y regresión permanente, 2026-10-03
+
+Los PRs cliente#8 y datos#14 fueron fusionados por el usuario. Masters verificados:
+cliente `275dd5e37afdb220e646fef6b4e88f6e07138275`, datos
+`f88694a9665cb5d04437fda4dfd0f35b990eee34`; servidor
+`db159373b132babf016cf78ced737dec05d23d97`. Los árboles cliente/datos coinciden
+con los heads probados y conservan esos commits como ancestros. No se cambian
+pins por el mero SHA de merge. [CI postmerge](https://github.com/matiHirCab/tmt2-data/actions/runs/37154643172)
+terminó aprobada en core y navegador.
+
+El [registro de procedencia](../provenance/tmt07-live-recording.json) fija los
+commits utilizados, URLs/digests de artefactos y el SHA256 de la
+[captura auténtica](../tests/fixtures/tmt07-live-sprites.json). SpriteAlpha/alpha
+contra SpriteBeta/beta: 47 decisiones mediante controles nativos, victoria
+SpriteBeta en turno22, resultado consistente en ambos navegadores. Pidgeot muestra
+Bird/Bird/Bird y sprites front/back reales. Es automatización de navegador, no
+playtesting humano ni oráculo ROM. El log conserva sus bytes y tiempos originales;
+no es un combate regenerado con semilla RNG ni contiene mensajes privados de
+request/autenticación. La evidencia histórica de equipos y reglas proviene del
+servidor/pins y reporte de origen; el protocolo espectador por sí solo no demuestra
+los IVs/EVs ni todos los movimientos de cada set.
+
+[El job live](https://github.com/matiHirCab/tmt2-data/actions/runs/37151791118)
+**falló** después del combate por un selector incorrecto de importación del harness.
+No se oculta: combate y limpieza terminaron correctamente, y
+[el replay separado](https://github.com/matiHirCab/tmt2-data/actions/runs/37152352388)
+se verificó con sandbox y autenticación normal, dos vistas, cambio de perspectiva
+y reload. La excepción guest del combate original fue temporal/en memoria y
+loopback, retirada con SIGTERM, listeners libres y configuración persistente
+inalterada/false. No se renueva ni forma parte de la regresión actual.
+
+`npm run regression:live-recording` rechaza bytes alterados, drift respecto al
+catálogo actual, roster/nivel/forma/player/turnos/resultados alterados, protocolos
+privados/errores y atribuciones ROM/humanas falsas. `ci:core` ejecuta esta validación;
+`ci:browser` añade la captura a los cuatro replays deterministas ya existentes.
+Dos perfiles Guest la importan en el cliente nativo, reproducen/avanzan al final,
+cambian perspectiva y recargan conservando dataset. Esto es playback compatible de
+un desafío previamente observado, **no un desafío live nuevo en cada CI**.
+Los artefactos remotos caducan; el log espectador fijado permanece en Git.
+
+Revisión visual del usuario pendiente: su aceptación limitada de sprites no se
+convierte en aceptación integral. Trainers/badges/cards provisionales, audio ausente,
+derechos de redistribución y fidelidad ROM siguen explícitos. TMT-11 sigue parcial y
+TMT-12 no se inicia por estas comprobaciones.

@@ -276,3 +276,27 @@ Final exact-head verification is tracked on draft#14; this initial run does not
 substitute for its terminal result. Merge client#8 before data#14; no merge/deploy
 was performed. Local CONNECT403 affected the executor proxy; hosted runners
 downloaded from raw.githubusercontent.com without altering network/security.
+
+
+#### Captura real persistente (2026-10-03)
+
+`npm run regression:live-recording` y `ci:core` verifican el log espectador de
+alpha/beta contra bytes/procedencia y catálogo actual. `ci:browser` reproduce ese
+quinto caso en dos perfiles independientes: 25 comprobaciones con el perfil de
+30 sprites oficiales, autenticación normal y sandbox obligatorio. Los cuatro
+casos sembrados del simulador siguen separados de esta captura no sembrada.
+Cambiar dataset requiere revisar compatibilidad o recoger nueva evidencia; nunca
+actualizar el hash automáticamente para ocultar drift. Ver
+[procedencia y límites](../provenance/tmt07-live-recording.json) y
+[evidencia canónica](RULES_REFERENCE.md#captura-live-y-regresion-permanente-2026-10-03).
+No nuevos flags de seguridad, fuentes remotas de runtime ni exclusiones de tests.
+
+Local verification of this addition: `npm run ci:core` exited0, data79/79,
+client83pass/1 inheritedskip, server2424pass/74pending. Builds, typechecks/lints,
+canonical seed validation, generated consumer parity/isolation, four simulator
+replays, captured live replay integrity and deterministic snapshot passed.
+Lifecycle verified HTTP/WS, concurrent-operation rejection, SIGTERM143, lock removal
+and released ports. The two live-DNS cases and upstream slow cases remain NOT RUN;
+optional legacy graphics.js/commands.js warnings remain explicit. The executor's
+Chromium sandbox availability has not changed; final browser verification uses the
+existing sandbox-required hosted macOS job, not a local no-sandbox workaround.

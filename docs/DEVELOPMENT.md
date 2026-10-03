@@ -471,3 +471,12 @@ https://github.com/smogon/sprites/blob/bad55c7b7e7292f459366505460d41dcab08d4cd/
 Rollback: stop dev, select the previous reviewed branches/commits and rebuild.
 Keep the supplied user cache intact. The optional official cache can be moved
 aside explicitly; scripts never reset/delete user inputs or replace directories.
+
+
+El replay del desafío alpha/beta observado también forma parte de CI:
+`npm run regression:live-recording` verifica su captura y compatibilidad actual;
+`npm run ci:browser` prueba importación/playback/cambio de vista/reload en dos
+perfiles Guest del cliente nativo. No inicia desafíos nuevos ni activa excepciones
+guest. Para rollback de esta adición, revertir su commit en una rama revisable;
+los cuatro controles sembrados previos siguen independientes. No cambiar el hash
+de captura ni la procedencia automáticamente para hacer pasar un dataset nuevo.
