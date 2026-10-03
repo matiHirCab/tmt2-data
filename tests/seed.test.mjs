@@ -114,3 +114,16 @@ test('TMT-09 production rejects incomplete gamma, altered duplicate types and un
   d=>{d.chart=d.chart.filter(p=>!(p.attacker==='flying'&&p.defender==='crab'));},
  ]){const d=structuredClone(selected);mutate(d);assert.equal(validateSeed(d).valid,false);}
 });
+
+test('TMT-10 selected tooltip metadata is explicitly inherited or policy, never attributed to ROM',()=>{
+ assert.equal(selected.version,'0.3.1');
+ for(const group of ['moves','abilities','items']) for(const record of selected[group]) {
+  assert(record.shortDesc.length>0);assert(record.shortDesc.length<=1000);
+  assert.equal(record.fieldSources.shortDesc,record.id==='none'?'policy':'showdown');
+ }
+ assert.match(selected.moves.find(m=>m.id==='waterpulse').shortDesc,/20%.*confuse/);
+ assert.match(selected.abilities.find(a=>a.id==='shellarmor').shortDesc,/critical/i);
+ assert.match(selected.items.find(i=>i.id==='pidgeotite').shortDesc,/Mega Evolve/);
+ const altered=structuredClone(selected);altered.moves[0].shortDesc='Invented effect';
+ assert.equal(validateSeed(altered).valid,false);
+});
