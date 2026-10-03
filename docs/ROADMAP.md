@@ -218,6 +218,25 @@ referencias y pruebas. No se atribuyen esos campos a la ROM.
 habilidades/movimientos correctos, import/export probado, sin manipulación de EVs,
 equipos legales aceptados y errores de servidor claros para los ilegales.
 **Evidencia:** pendiente; un selector visible no equivale a equipos legales.
+**Preparación concreta (2026-10-03, sin implementación):** después de revisar y
+fusionar TMT-09, verificar los tres masters/pins y abrir ramas nuevas.
+1. Extender los controles nativos existentes: búsqueda por cada slot de tipo,
+   incluyendo Bird/Bird/Bird sin deduplicar los datos; formas sólo como información,
+   nunca como starting form ilegal.
+2. Mostrar stats nivel50/IV31/EV0/Hardy e ítem/habilidad/movimientos desde el mismo
+   catálogo, ocultando edición EV e indicando la adaptación y arte ausente.
+3. Probar import/export y aceptación de los tres premades completos por el servidor;
+   mostrar sus errores para mezclas, EVs/IVs/level alterados, referencias ausentes y
+   formas iniciales inválidas. Conservar el contrato locked-premade aprobado:
+   combinaciones libres requieren una decisión explícita antes de ampliar el gate.
+4. Añadir regresiones de búsqueda/tooltips/import/export/errores y aislamiento;
+   ejecutar CI-core y recorrido del teambuilder nativo con reload. Si se repite
+   gameplay con nombres unsigned, solicitar autorización temporal específica antes
+   de activar una nueva excepción de seguridad.
+No catálogo nuevo, megas adicionales, framework/rediseño ni implementación de
+TMT-10 durante la publicación de TMT-09. La revisión visual del dueño y los sprites
+ausentes quedan explícitos; publicar esta preparación no los convierte en aprobados.
+
 
 ## Etapa 4 — Fidelidad y beta
 
