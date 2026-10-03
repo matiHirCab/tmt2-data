@@ -193,3 +193,9 @@ and simulator regressions, then server ESLint exhausted Node's default ~2GiB hea
 before Chromium. The CI profile now explicitly gives its Node processes a 4GiB
 heap via step-scoped NODE_OPTIONS; no lint/test exclusions or host/security
 changes. Actual rerun results remain required; increasing a budget is not a pass.
+
+Hosted browser reports and screenshots of source-coded developer cards are
+retained for seven days as a pinned upload-artifact action output, even if the
+browser step fails. Only its exact evidence directory is uploaded, no imported
+original artwork, local config or credentials. Missing evidence does not make a
+failed job pass. These captures support owner review but cannot imply acceptance.

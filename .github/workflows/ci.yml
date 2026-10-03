@@ -97,6 +97,15 @@ jobs:
           CI: true
           TMT2_LOCAL_GUESTS: '0'
         run: npm run ci:browser
+      - name: Preserve native browser report and developer-card screenshots
+        if: always() && matrix.mode == 'browser'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4, reviewed 2026-10-03
+        with:
+          name: tmt11-native-browser-${{ github.sha }}
+          path: tmt2-data/.local/evidence/tmt11-browser/
+          include-hidden-files: true # exact report directory only; no config/sprites/credentials
+          if-no-files-found: warn # runner may fail before report creation; job remains failed
+          retention-days: 7
       - name: Explain scope and exclusions even on failure
         if: always()
         env:
