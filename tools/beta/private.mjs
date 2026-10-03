@@ -16,18 +16,19 @@ export function verifyPrivatePolicy(env=process.env) {
 export function checkedAssetFile(base,name,digest) {
   assert(typeof name==='string'&&name.length>0&&!name.includes('\\')&&
     !name.startsWith('/')&&!name.split('/').some(p=>!p||p==='.'||p==='..'),'Unsafe asset path');
-  assert.match(digest,/^[a-f0-9]{64}$/);
+  if(digest!==undefined)assert.match(digest,/^[a-f0-9]{64}$/);
   let at=base;
   assert(!fs.lstatSync(at).isSymbolicLink(),'Asset root symlink');
   for(const part of name.split('/')){at=path.join(at,part);assert(!fs.lstatSync(at).isSymbolicLink(),'Asset symlink');}
-  assert.equal(hash(fs.readFileSync(at)),digest,`Asset drift: ${name}`);
-  return [name,digest];
+  const actual=hash(fs.readFileSync(at));
+  if(digest!==undefined)assert.equal(actual,digest,`Asset drift: ${name}`);
+  return [name,actual];
 }
 export function entrypointFiles(html) {
   const names=[...html.matchAll(/<(?:script|link|img)\b[^>]*\b(?:src|href)=["']([^"']+)["']/g)].map(m=>m[1].split('?')[0]);
   assert(names.length>0,'Empty native entrypoint');
   for(const name of names)assert(!name.includes(':')&&!name.startsWith('//'),'Remote entrypoint resource');
-  return [...new Set(['testclient-new.html',...names])].sort();
+  return [...new Set(['testclient-new.html',...names.map(name=>name.replace(/^\/(?!\/)/,''))])].sort();
 }
 export function betaSnapshot(c=config()) {
   verifyPrivatePolicy();verifyPins(c);assertGenerated(c);readVerifiedLiveReplay(c);
@@ -42,7 +43,7 @@ export function betaSnapshot(c=config()) {
   assert.equal(native.generator,'tmt2-native-v1');
   for(const required of ['js/server/chat-formatter.js','data/tmt2-native-assets.js'])assert(native.outputs[required],'Incomplete native asset manifest');
   const runtime=Object.fromEntries(entrypointFiles(fs.readFileSync(path.join(base,'testclient-new.html'),'utf8'))
-    .map(name=>checkedAssetFile(base,name,hash(fs.readFileSync(path.join(base,name))))));
+    .map(name=>checkedAssetFile(base,name)));
   const outputs=Object.fromEntries(Object.entries(native.outputs).sort().map(([name,digest])=>checkedAssetFile(base,name,digest)));
   const art=Object.fromEntries(Object.entries(native.artwork.files).sort().map(([id,file])=>
     [id,Object.fromEntries([checkedAssetFile(base,file.path,file.sha256)])]));

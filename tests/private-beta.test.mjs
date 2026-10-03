@@ -61,7 +61,7 @@ test('feedback context uses pinned identities without exporting paths/config/sou
 });
 
 test('native entrypoint inventories local resources deterministically and rejects empty/remote pages',()=>{
-  const html='<script src="js/client.js?cache"></script><link href="style/client.css"><img src="logo.png"><script src="js/client.js"></script>';
+  const html='<script src="js/client.js?cache"></script><link href="/style/client.css"><img src="logo.png"><script src="js/client.js"></script>';
   assert.deepEqual(entrypointFiles(html),['js/client.js','logo.png','style/client.css','testclient-new.html']);
   for(const html of ['empty','<script src="https://remote.invalid/a.js"></script>','<script src="//remote.invalid/a.js"></script>'])assert.throws(()=>entrypointFiles(html));
 });
