@@ -31,7 +31,7 @@ const options = {ids: ['rattata'], withUI: true, timeoutMs: 100, retries: 0};
 const expectedUI = ['sprites/trainers/rosa.png', 'sprites/trainers/lyra.png',
   'sprites/pokemonicons-sheet.png', 'sprites/pokemonicons-pokeball-sheet.png'];
 function temp(t) {
-  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tmt2 UI assets '));
+  const base = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'tmt2 UI assets '));
   t.after(() => fs.rmSync(base, {recursive: true, force: true}));
   return base;
 }

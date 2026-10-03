@@ -176,3 +176,13 @@ Local permission can help debug selectors and collect review captures; it cannot
 close the hosted-CI gate or owner review. TMT-11 stays partial until its remaining
 gates are actually verified; see ROADMAP and the owner checklist below in
 RULES_REFERENCE. Historical TMT-07/TMT-10 captures retain their original limits.
+
+
+TMT-11 resource follow-up pins client `85552fa0f5c94b205f0a7c32010320218795ffe1`:
+native editor uses existing verified front GIFs/labeled cards, text type badges
+and a source-coded generic item label. Unsupported Substitute is not preloaded
+locally. No additional artwork/network fallback is required for this bounded
+regression; original art and its rights remain separate. Test fixtures resolve
+the trusted OS temp root (macOS `/var` alias) before creating their directories;
+untrusted output symlink guards are unchanged. Client merges before this data
+pin. Actual hosted browser result, rather than core success, closes its CI gate.

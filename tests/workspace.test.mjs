@@ -7,7 +7,7 @@ import {execFileSync, spawn} from 'node:child_process';
 import net from 'node:net';
 import {config, manifest, datasetIdentity, preflight, supervise, root, lockWorkspace, writeSnapshot, clientAssetStatus} from '../tools/workspace/core.mjs';
 function fixture(t) {
-  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tmt2 workspace '));
+  const base = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'tmt2 workspace '));
   t.after(() => fs.rmSync(base, {recursive: true, force: true}));
   for (const [dir, name] of [['tmt2-data', 'tmt2-data'], ['Pokemon-Too-Many-Types-2', 'pokemon-showdown'], ['Pokemon-Too-Many-Types-2-client', 'pokemon-showdown-client']]) {
     const cwd = path.join(base, dir); fs.mkdirSync(cwd);

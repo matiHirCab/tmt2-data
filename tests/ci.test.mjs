@@ -25,7 +25,7 @@ test('CI selection moves exactly the two known DNS cases, keeping unrelated IP a
   assert.equal(core.test('Battle random (slow) case'), false);
 });
 test('CI pin mismatch and dirty sibling rejection leave files untouched', t => {
-  const base = fs.mkdtempSync(path.join(os.tmpdir(), 'tmt2-ci-'));
+  const base = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'tmt2-ci-'));
   t.after(() => fs.rmSync(base, {recursive: true, force: true}));
   const c = {}; const pins = structuredClone(loadPins());
   for (const role of ['server', 'client']) {

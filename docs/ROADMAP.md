@@ -245,7 +245,9 @@ ausentes quedan explícitos; publicar esta preparación no los convierte en apro
 **Prerrequisitos:** TMT-07, TMT-08 y TMT-10. **Estado:** parcial (2026-10-03).
 Cuatro combates/replays deterministas y controles de aislamiento incorporados al
 core; runner nativo/CI preparado con sandbox obligatorio. La prueba local recorre
-22 controles pero falla por 404 de recursos locales del cliente existente.
+22 controles funcionales; el resultado original falla por 404 de recursos locales.
+Corrección nativa acotada implementada con fallbacks explícitos; pendiente verificar
+su recorrido alojado con sandbox.
 Navegador en CI y revisión visual del dueño de TMT-07 siguen pendientes. Esta preparación independiente no completa los prerrequisitos.
 **DoD:** casos oráculo, combates/replays reproducibles y flujos de navegador en CI
 desde instalación limpia; formatos Showdown ajenos intactos. Fallos, exclusiones y

@@ -1630,3 +1630,23 @@ Los tests de aislamiento de formatos ordinarios siguen en core; su teambuilder
 online de muestras Smogon no forma parte del recorrido local acotado. Durante
 un probe descartado sus requests de muestras se bloquearon, nunca se consultaron
 ni usaron como datos TMT2. Revisión humana sigue abierta y separada de ambos tests.
+
+
+**Corrección nativa acotada (2026-10-03):** cliente
+`85552fa0f5c94b205f0a7c32010320218795ffe1` reutiliza front GIFs verificados o
+las tarjetas locales ya etiquetadas en el editor; tipos son etiquetas de texto
+(incluye Bird/Bird/Bird), item usa un badge genérico de código con nombre textual
+conservado; no precarga Substitute porque está excluido del catálogo. No se
+inventan originales ni se importan assets nuevos. Rendering normal no local
+conservado y comprobado. Cliente `npm test`: build, ambos typechecks, lint y
+80 passing / 1 inherited skip; tres regresiones nuevas. Dataset/hash sin cambios.
+
+La CI macOS de `bb1f236` falló antes de Chromium: cuatro fixtures aún usaban
+el alias `/var` de su tmpdir. Fixtures propios ahora resuelven el tmpdir confiable
+antes de crear su directorio; los guards de outputs no confiables y las pruebas
+que rechazan symlinks permanecen intactos. Core Ubuntu aprobó esa ejecución
+[37134431187](https://github.com/matiHirCab/tmt2-data/actions/runs/37134431187).
+No se alteraron permisos ni seguridad; resultado del nuevo head/browser se
+registra en PR #13. Merge coordinado: cliente → datos, servidor sin cambios.
+La excepción local sin sandbox anterior está cerrada y no se reutiliza; no hubo
+nuevo recorrido local después del fix. Revisión visual del dueño sigue pendiente.

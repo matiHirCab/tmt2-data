@@ -22,7 +22,7 @@ test('generator rejects broken production/fixtures and does not normalize ordere
  const d=catalog(seed);d.seed.teams.reverse();assert.notEqual(encode(d),encode(catalog(seed)));
 });
 test('generated-target ownership protects unrelated files and symlink paths',()=>{
- const dir=fs.mkdtempSync(path.join(os.tmpdir(),'tmt05-'));
+ const dir=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'tmt05-'));
  try{
   const f=path.join(dir,'catalog.json');fs.writeFileSync(f,'{"personal":true}');assert.throws(()=>assertOwnedTarget(f),/unowned/);assert.equal(fs.readFileSync(f,'utf8'),'{"personal":true}');
   fs.symlinkSync(f,path.join(dir,'link.json'));assert.throws(()=>assertOwnedTarget(path.join(dir,'link.json')),/Unsafe/);
